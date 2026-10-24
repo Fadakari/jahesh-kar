@@ -1,12 +1,13 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-from django.db import transaction
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.shortcuts import get_object_or_404, redirect
+from django.conf import settings
 from courses.models import Course
-from .models import Order, Enrollment
+from .models import Order, Enrollment, PaymentGatewaySetting
 from .serializers import OrderSerializer, EnrollmentSerializer
+from .payment_service import PaymentGatewayService
 
 
 class CheckoutView(APIView):
@@ -27,30 +28,40 @@ class CheckoutView(APIView):
                 "course_slug": course.slug,
             }, status=status.HTTP_200_OK)
 
-        with transaction.atomic():
-            order = Order.create_order(user=request.user, course=course)
-            # In simulation / direct enrollment, mark order completed
-            order.status = "completed"
-            order.save()
+        # Create Order
+        order = Order.create_order(user=request.user, course=course)
 
-            enrollment = Enrollment.objects.create(
-                user=request.user,
-                course=course,
-                order=order
-            )
+        # Request payment through configured gateway
+        result = PaymentGatewayService.request_payment(request, order)
 
-            # Update student count
-            course.students_count += 1
-            course.save(update_fields=["students_count"])
+        if not result.get("success"):
+            return Response({"error": result.get("error", "خطا در اتصال به درگاه پرداخت.")}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({
-            "success": True,
-            "message": "ثبت نام در دوره با موفقیت انجام شد!",
-            "tracking_code": order.tracking_code,
-            "course_title": course.title,
-            "course_slug": course.slug,
-            "enrolled_at": enrollment.enrolled_at,
-        }, status=status.HTTP_201_CREATED)
+        return Response(result, status=status.HTTP_200_OK if result.get("mode") == "simulation" else status.HTTP_200_OK)
+
+
+class PaymentVerifyView(APIView):
+    """
+    دریافت بازگشت کاربر از درگاه پرداخت و هدایت به صفحه نتیجه در فرانت‌اند
+    """
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        authority = request.query_params.get("Authority") or request.query_params.get("authority")
+        status_param = request.query_params.get("Status") or request.query_params.get("status")
+
+        if not authority:
+            return redirect("/dashboard?payment=error&message=شناسه_پرداخت_یافت_نشد")
+
+        res = PaymentGatewayService.verify_payment(request, authority, status_param)
+        order = res.get("order")
+
+        if res.get("success") and order:
+            # هدایت کاربر به داشبورد و نمایش پیام موفقیت با کد رهگیری
+            return redirect(f"/dashboard?payment=success&tracking={order.tracking_code}&course={order.course.slug}")
+        else:
+            course_slug = order.course.slug if order else ""
+            return redirect(f"/course/{course_slug}?payment=failed&error={res.get('error', 'پرداخت_ناموفق')}")
 
 
 class MyCoursesView(APIView):

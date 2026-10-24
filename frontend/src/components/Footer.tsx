@@ -73,15 +73,18 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          <div>
-            <h5 className="text-white font-bold text-base mb-4">ارتباط با ما</h5>
-            <p className="text-slate-400 text-sm leading-relaxed mb-3">
-              جهت هرگونه سوال یا راهنمایی پیرامون ثبت نام در دوره‌ها با ما در ارتباط باشید:
-            </p>
-            <div className="space-y-2 text-sm text-slate-300 font-medium">
-              <div>تلفن تماس: ۰۲۱-۸۸۸۸۹۹۹۹</div>
-              <div>ایمیل: support@jaheshkar.ir</div>
+          <div className="space-y-4">
+            <h5 className="text-white font-bold text-base mb-2">نماد اعتماد الکترونیکی</h5>
+            <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl border border-white/10 inline-flex items-center justify-center hover:bg-white/20 transition-all [&_img]:w-24 [&_img]:h-24 [&_img]:bg-white [&_img]:rounded-xl [&_img]:p-1">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq' alt='' style='cursor:pointer' code='1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'></a>`
+                }}
+              />
             </div>
+            <p className="text-[11px] text-slate-400">
+              دارای نماد اعتماد الکترونیکی معتبر از مرکز توسعه تجارت الکترونیکی
+            </p>
           </div>
         </div>
 

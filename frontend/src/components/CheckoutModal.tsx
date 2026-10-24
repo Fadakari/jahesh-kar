@@ -39,6 +39,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
     try {
       const res = await api.post('/orders/checkout/', { course_id: course.id });
+
+      // If bank gateway redirect (e.g. ZarinPal)
+      if (res.data.mode === 'redirect' && res.data.payment_url) {
+        window.location.href = res.data.payment_url;
+        return;
+      }
+
       setTrackingCode(res.data.tracking_code || 'JK-DIRECT');
       setIsSuccess(true);
 

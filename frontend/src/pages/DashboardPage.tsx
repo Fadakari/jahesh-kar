@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
+import confetti from 'canvas-confetti';
 import { Enrollment, Order } from '../types';
 import { 
   GraduationCap, 
@@ -12,17 +13,33 @@ import {
   CheckCircle2, 
   ExternalLink, 
   ShieldAlert,
-  Loader2
+  Loader2,
+  Sparkles
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const { user, isLoading, refreshUser } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const paymentStatus = searchParams.get('payment');
+  const trackingParam = searchParams.get('tracking');
+  const courseSlugParam = searchParams.get('course');
 
   const [activeTab, setActiveTab] = useState<'courses' | 'orders' | 'profile'>('courses');
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+    if (paymentStatus === 'success') {
+      confetti({
+        particleCount: 100,
+        spread: 80,
+        origin: { y: 0.5 },
+      });
+    }
+  }, [paymentStatus]);
 
   // Profile form
   const [fullNameInput, setFullNameInput] = useState('');
@@ -89,6 +106,34 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       
+      {/* Payment Success Alert if returned from Bank Gateway */}
+      {paymentStatus === 'success' && (
+        <div className="bg-emerald-50 border-2 border-emerald-500/40 rounded-3xl p-6 sm:p-8 text-emerald-900 shadow-lg shadow-emerald-500/10 space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-lg font-black text-emerald-950">پرداخت شما با موفقیت انجام شد!</h2>
+              <p className="text-xs text-emerald-700 mt-0.5">
+                دسترسی کامل به دوره برای شما فعال شد. کد رهگیری: <span className="font-mono font-bold">{trackingParam}</span>
+              </p>
+            </div>
+          </div>
+          {courseSlugParam && (
+            <div className="pt-2">
+              <Link
+                to={`/course/${courseSlugParam}/watch`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition-colors"
+              >
+                <PlayCircle className="w-4 h-4" />
+                <span>شروع تماشای دوره</span>
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* User Header Profile Card */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
