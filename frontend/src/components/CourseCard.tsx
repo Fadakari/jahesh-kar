@@ -21,7 +21,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         {/* Cover Image & Badges */}
         <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
           <img
-            src={course.cover_image_url || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80'}
+            src={course.cover_image_url || '/courses/default-course.jpg'}
             alt={course.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
@@ -114,10 +114,20 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
               course.is_enrolled
                 ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                : course.is_free
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
+                : course.is_sales_enabled === false
+                ? 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                 : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs hover:shadow-md'
             }`}
           >
-            {course.is_enrolled ? 'تماشای دوره' : 'مشاهده و ثبت‌نام'}
+            {course.is_enrolled
+              ? 'تماشای دوره'
+              : course.is_free
+              ? 'ثبت‌نام رایگان'
+              : course.is_sales_enabled === false
+              ? 'فروش به‌زودی'
+              : 'مشاهده و خرید'}
           </Link>
         </div>
       </div>

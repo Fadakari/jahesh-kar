@@ -4,9 +4,13 @@ from .models import Order, Enrollment, PaymentGatewaySetting
 
 @admin.register(PaymentGatewaySetting)
 class PaymentGatewaySettingAdmin(admin.ModelAdmin):
-    list_display = ["title", "gateway_provider", "is_active", "has_merchant_display", "is_sandbox", "updated_at"]
-    list_editable = ["gateway_provider", "is_active", "is_sandbox"]
+    list_display = ["title", "is_sales_enabled", "gateway_provider", "is_active", "has_merchant_display", "is_sandbox", "updated_at"]
+    list_editable = ["is_sales_enabled", "gateway_provider", "is_active", "is_sandbox"]
     fieldsets = (
+        ("وضعیت کلی فروش دوره‌ها", {
+            "fields": ("is_sales_enabled",),
+            "description": "اگر می‌خواهید فروش دوره‌های پولی تا زمان اتصال درگاه غیرفعال باشد، این تیک را بردارید. دوره‌های رایگان در هر صورت قابل ثبت‌نام خواهند بود."
+        }),
         ("انتخاب و وضعیت درگاه پرداخت", {
             "fields": ("title", "gateway_provider", "is_active"),
             "description": "برای شروع فوری، گزینه «شبیه‌ساز تستی» فعال است. هر زمان که درگاه زرین‌پال یا سایر درگاه‌ها تایید شد، کافیست نوع درگاه را روی زرین‌پال بگذارید و مرچنت کد را وارد کنید."

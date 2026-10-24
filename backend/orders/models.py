@@ -13,6 +13,11 @@ class PaymentGatewaySetting(models.Model):
     ]
 
     title = models.CharField(max_length=100, default="تنظیمات درگاه فعال", verbose_name="عنوان تنظیمات")
+    is_sales_enabled = models.BooleanField(
+        default=False,
+        verbose_name="فعال بودن امکان خرید و فروش دوره‌های پولی",
+        help_text="اگر این تیک غیرفعال باشد، دکمه‌های خرید در سایت قفل شده و به کاربر پیام می‌دهد که فروش موقتاً تا زمان اتصال درگاه غیرفعال است."
+    )
     gateway_provider = models.CharField(
         max_length=30,
         choices=GATEWAY_CHOICES,

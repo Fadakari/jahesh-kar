@@ -17,6 +17,14 @@ class PaymentGatewayService:
     def request_payment(cls, request, order: Order) -> dict:
         gateway_setting = PaymentGatewaySetting.get_active_setting()
 
+        # اگر دوره پولی است و فروش توسط مدیر سایت هنوز فعال نشده:
+        if order.amount > 0 and not gateway_setting.is_sales_enabled:
+            return {
+                "success": False,
+                "error": "فروش این دوره موقتاً غیرفعال است (درگاه پرداخت بانکی در حال راه‌اندازی و اتصال می‌باشد).",
+                "sales_disabled": True,
+            }
+
         # ۱. اگر دوره رایگان بود یا درگاه روی حالت شبیه‌ساز تنظیم شده بود:
         if order.amount == 0 or gateway_setting.gateway_provider == "simulation":
             with transaction.atomic():

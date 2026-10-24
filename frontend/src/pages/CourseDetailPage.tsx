@@ -351,7 +351,7 @@ export const CourseDetailPage: React.FC = () => {
               {/* Cover */}
               <div className="aspect-video relative bg-slate-900">
                 <img
-                  src={course.cover_image_url || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80'}
+                  src={course.cover_image_url || '/courses/default-course.jpg'}
                   alt={course.title}
                   className="w-full h-full object-cover"
                 />
@@ -403,13 +403,34 @@ export const CourseDetailPage: React.FC = () => {
                     <GraduationCap className="w-5 h-5" />
                     ورود به کلاس و تماشای ویدیوها
                   </Link>
+                ) : course.is_free ? (
+                  <button
+                    onClick={() => setCheckoutModalOpen(true)}
+                    className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Sparkles className="w-5 h-5" />
+                    ثبت‌نام رایگان در دوره
+                  </button>
+                ) : course.is_sales_enabled === false ? (
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold leading-relaxed text-center">
+                      🔒 فروش این دوره موقتاً غیرفعال است (درگاه پرداخت بانکی در حال اتصال می‌باشد).
+                    </div>
+                    <button
+                      disabled
+                      className="w-full py-4 rounded-2xl bg-slate-200 text-slate-400 font-bold text-sm cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      <Lock className="w-4 h-4" />
+                      فروش موقتاً غیرفعال است
+                    </button>
+                  </div>
                 ) : (
                   <button
                     onClick={() => setCheckoutModalOpen(true)}
                     className="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-black text-sm shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/40 transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Sparkles className="w-5 h-5" />
-                    {course.is_free ? 'ثبت‌نام رایگان در دوره' : 'خرید و شروع یادگیری'}
+                    خرید و شروع یادگیری
                   </button>
                 )}
 

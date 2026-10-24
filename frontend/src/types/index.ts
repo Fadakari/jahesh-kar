@@ -62,6 +62,7 @@ export interface Course {
   direct_lessons?: SimpleLesson[];
   lessons_count: number;
   is_enrolled: boolean;
+  is_sales_enabled?: boolean;
   created_at?: string;
   updated_at?: string;
 }

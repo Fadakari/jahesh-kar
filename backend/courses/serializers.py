@@ -74,6 +74,7 @@ class CourseListSerializer(serializers.ModelSerializer):
     cover_image_url = serializers.SerializerMethodField()
     lessons_count = serializers.IntegerField(source="total_lessons_count", read_only=True)
     is_enrolled = serializers.SerializerMethodField()
+    is_sales_enabled = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
@@ -96,7 +97,14 @@ class CourseListSerializer(serializers.ModelSerializer):
             "cover_image_url",
             "lessons_count",
             "is_enrolled",
+            "is_sales_enabled",
         ]
+
+    def get_is_sales_enabled(self, obj):
+        if obj.is_free:
+            return True
+        from orders.models import PaymentGatewaySetting
+        return PaymentGatewaySetting.get_active_setting().is_sales_enabled
 
     def get_cover_image_url(self, obj):
         request = self.context.get("request")
@@ -121,6 +129,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
     cover_image_url = serializers.SerializerMethodField()
     intro_video_url = serializers.SerializerMethodField()
     is_enrolled = serializers.SerializerMethodField()
+    is_sales_enabled = serializers.SerializerMethodField()
     lessons_count = serializers.IntegerField(source="total_lessons_count", read_only=True)
 
     class Meta:
@@ -151,9 +160,16 @@ class CourseDetailSerializer(serializers.ModelSerializer):
             "direct_lessons",
             "lessons_count",
             "is_enrolled",
+            "is_sales_enabled",
             "created_at",
             "updated_at",
         ]
+
+    def get_is_sales_enabled(self, obj):
+        if obj.is_free:
+            return True
+        from orders.models import PaymentGatewaySetting
+        return PaymentGatewaySetting.get_active_setting().is_sales_enabled
 
     def get_cover_image_url(self, obj):
         request = self.context.get("request")

@@ -25,8 +25,15 @@ export const DashboardPage: React.FC = () => {
   const paymentStatus = searchParams.get('payment');
   const trackingParam = searchParams.get('tracking');
   const courseSlugParam = searchParams.get('course');
+  const enrolledParam = searchParams.get('enrolled');
 
   const [activeTab, setActiveTab] = useState<'courses' | 'orders' | 'profile'>('courses');
+
+  useEffect(() => {
+    if (enrolledParam || searchParams.get('tab') === 'courses') {
+      setActiveTab('courses');
+    }
+  }, [enrolledParam, searchParams]);
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -237,25 +244,35 @@ export const DashboardPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {enrollments.map((enr) => {
                 const c = enr.course;
+                const isJustEnrolled = enrolledParam === c.slug;
                 return (
                   <div
                     key={enr.id}
-                    className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-xs flex flex-col justify-between"
+                    className={`bg-white rounded-3xl overflow-hidden border transition-all flex flex-col justify-between ${
+                      isJustEnrolled
+                        ? 'border-emerald-500 ring-2 ring-emerald-500 shadow-xl shadow-emerald-500/10'
+                        : 'border-slate-200/90 shadow-xs'
+                    }`}
                   >
                     <div>
                       <div className="aspect-video relative bg-slate-900">
                         <img
-                          src={c.cover_image_url || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80'}
+                          src={c.cover_image_url || '/courses/default-course.jpg'}
                           alt={c.title}
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500 text-white flex items-center gap-1 shadow-md">
                           <CheckCircle2 className="w-3.5 h-3.5" />
-                          فعال
+                          {isJustEnrolled ? 'ثبت‌نام جدید' : 'فعال'}
                         </div>
                       </div>
 
                       <div className="p-5 space-y-2">
+                        {isJustEnrolled && (
+                          <div className="inline-block px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-bold">
+                            🎉 دوره تازه خریداری شده شما
+                          </div>
+                        )}
                         <h3 className="text-base font-bold text-slate-900 line-clamp-2">
                           {c.title}
                         </h3>
@@ -272,10 +289,10 @@ export const DashboardPage: React.FC = () => {
                     <div className="p-5 pt-0">
                       <Link
                         to={`/course/${c.slug}/watch`}
-                        className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
+                        className="w-full py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
                       >
                         <PlayCircle className="w-4 h-4" />
-                        تماشای جلسات دوره
+                        تماشای ویدیوها و دانلود فایل‌ها
                       </Link>
                     </div>
                   </div>

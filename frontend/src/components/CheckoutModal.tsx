@@ -65,9 +65,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }
   };
 
-  const goToPlayer = () => {
+  const goToMyCourses = () => {
     onClose();
-    navigate(`/course/${course.slug}/watch`);
+    navigate(`/dashboard?tab=courses&enrolled=${course.slug}`);
   };
 
   return (
@@ -198,13 +198,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               {trackingCode}
             </div>
 
-            <div className="pt-4">
+            <div className="pt-4 space-y-2">
               <button
-                onClick={goToPlayer}
-                className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                onClick={goToMyCourses}
+                className="w-full py-4 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Sparkles className="w-5 h-5" />
-                ورود به تماشای دوره
+                رفتن به دوره‌های من و مشاهده ویدیوها
               </button>
             </div>
           </div>
