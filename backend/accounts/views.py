@@ -6,6 +6,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.conf import settings
 from .models import User, PhoneOTP
+from .sms_service import RayganSMSService
 from .serializers import (
     UserSerializer,
     SendOTPSerializer,
@@ -24,23 +25,15 @@ class SendOTPView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         phone_number = serializer.validated_data["phone_number"]
-        otp = PhoneOTP.generate_otp(phone_number)
+        result = RayganSMSService.send_auto_code(phone_number)
 
-        # In production, send SMS via Kavenegar / Ghasedak / FarazSMS:
-        # send_sms(phone_number, f"کد تایید جهش کار: {otp.code}")
-        print(f"\n==========================================")
-        print(f"[جهش کار SMS] کد ورود برای {phone_number}: {otp.code}")
-        print(f"==========================================\n")
+        if not result.get("success"):
+            return Response(
+                {"error": result.get("error", "خطا در ارسال پیامک تایید.")},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        response_data = {
-            "success": True,
-            "message": f"کد تایید به شماره {phone_number} ارسال شد.",
-        }
-        # In development / debug mode, return the code directly to make testing effortless!
-        if settings.DEBUG:
-            response_data["dev_code"] = otp.code
-
-        return Response(response_data, status=status.HTTP_200_OK)
+        return Response(result, status=status.HTTP_200_OK)
 
 
 class VerifyOTPView(APIView):
@@ -55,17 +48,13 @@ class VerifyOTPView(APIView):
         code = serializer.validated_data["code"].strip()
         full_name = serializer.validated_data.get("full_name", "").strip()
 
-        # Find latest valid OTP
-        otp = PhoneOTP.objects.filter(phone_number=phone_number, code=code, is_used=False).first()
-        if not otp or not otp.is_valid():
+        # Check code validity via RayganSMS service or local fallback
+        is_valid = RayganSMSService.check_code(phone_number, code)
+        if not is_valid:
             return Response(
                 {"error": "کد تایید اشتباه است یا منقضی شده است."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-        # Mark OTP as used
-        otp.is_used = True
-        otp.save()
 
         # Get or create user
         user = User.objects.filter(phone_number=phone_number).first()
