@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ShieldCheck, Headphones, Award, Heart } from 'lucide-react';
+import { useSiteSettings } from '../context/SiteSettingsContext';
+import { Sparkles, ShieldCheck, Headphones, Award, Heart, Phone, Mail, Send } from 'lucide-react';
 
 export const Footer: React.FC = () => {
+  const { settings } = useSiteSettings();
+
   return (
     <footer className="bg-slate-900 text-slate-300 pt-16 pb-12 mt-24 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,14 +48,51 @@ export const Footer: React.FC = () => {
           
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <span className="text-2xl font-black text-white">جهش کار</span>
+              {settings?.logo_url ? (
+                <img
+                  src={settings.logo_url}
+                  alt={settings.site_title || 'جهش کار'}
+                  className="h-10 w-auto max-w-[160px] object-contain brightness-0 invert"
+                />
+              ) : (
+                <>
+                  <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <span className="text-2xl font-black text-white">{settings?.site_title || 'جهش کار'}</span>
+                </>
+              )}
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-md">
-              جهش کار مرجع تخصصی دوره‌های مهارتی و پروژه‌محور برای ورود پرقدرت به بازار کار تکنولوژی و کسب درآمد است. ما فاصله بین یادگیری تئوری و شغل واقعی را به حداقل رسانده‌ایم.
+              {settings?.footer_about || 'جهش کار مرجع تخصصی دوره‌های مهارتی و پروژه‌محور برای ورود پرقدرت به بازار کار تکنولوژی و کسب درآمد است. ما فاصله بین یادگیری تئوری و شغل واقعی را به حداقل رسانده‌ایم.'}
             </p>
+
+            {/* Dynamic Contacts */}
+            <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-400">
+              {settings?.contact_phone && (
+                <div className="flex items-center gap-1.5">
+                  <Phone className="w-3.5 h-3.5 text-indigo-400" />
+                  <span dir="ltr">{settings.contact_phone}</span>
+                </div>
+              )}
+              {settings?.contact_email && (
+                <div className="flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>{settings.contact_email}</span>
+                </div>
+              )}
+              {settings?.telegram_url && (
+                <a
+                  href={settings.telegram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-sky-400 hover:underline"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>کانال تلگرام</span>
+                </a>
+              )}
+            </div>
           </div>
 
           <div>
@@ -90,7 +130,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom copyright */}
         <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-          <p>© تمامی حقوق مادی و معنوی برای «جهش کار» محفوظ است.</p>
+          <p>© تمامی حقوق مادی و معنوی برای «{settings?.site_title || 'جهش کار'}» محفوظ است.</p>
           <div className="flex items-center gap-1">
             <span>توسعه یافته با</span>
             <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />

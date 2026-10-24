@@ -28,6 +28,18 @@ assert res.status_code == 200, f"Categories failed: {res.status_code}"
 categories = res.json()
 print(f"[OK] Categories fetched: {len(categories)} found")
 
+# 1.1 Test Site Settings & Dynamic FAQs
+res = client.get('/api/core/settings/')
+assert res.status_code == 200, f"Settings failed: {res.status_code}"
+settings_data = res.json()
+print(f"[OK] Site Settings fetched: Title = '{settings_data.get('site_title')}', Hero = '{settings_data.get('hero_title')}'")
+
+res = client.get('/api/core/faqs/')
+assert res.status_code == 200, f"FAQs failed: {res.status_code}"
+faqs_data = res.json()
+print(f"[OK] Dynamic FAQs fetched: {len(faqs_data)} questions active")
+assert len(faqs_data) >= 1, "Expected at least 1 FAQ"
+
 # 2. Test Courses List
 res = client.get('/api/courses/')
 assert res.status_code == 200, f"Courses failed: {res.status_code}"

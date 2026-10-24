@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import { Course, Category } from '../types';
 import { CourseCard } from '../components/CourseCard';
+import { FaqSection } from '../components/FaqSection';
+import { useSiteSettings } from '../context/SiteSettingsContext';
 import { 
   Search, 
   Sparkles, 
@@ -28,6 +30,7 @@ const categoryIcons: Record<string, any> = {
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
+  const { settings } = useSiteSettings();
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -71,17 +74,23 @@ export const HomePage: React.FC = () => {
             {/* Pill */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs font-bold shadow-xs">
               <Sparkles className="w-4 h-4 text-indigo-600 animate-spin" />
-              <span>پلتفرم تخصصی جهش به سمت شغل دلخواه</span>
+              <span>{settings?.hero_badge || 'پلتفرم تخصصی جهش به سمت شغل دلخواه'}</span>
             </div>
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight sm:leading-snug">
-              با <span className="bg-gradient-to-l from-indigo-600 via-indigo-700 to-cyan-600 bg-clip-text text-transparent">جهش کار</span>، مهارت‌های پولساز یاد بگیر و وارد بازار کار شو
+              {settings?.hero_title ? (
+                <span>{settings.hero_title}</span>
+              ) : (
+                <>
+                  با <span className="bg-gradient-to-l from-indigo-600 via-indigo-700 to-cyan-600 bg-clip-text text-transparent">جهش کار</span>، مهارت‌های پولساز یاد بگیر و وارد بازار کار شو
+                </>
+              )}
             </h1>
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
-              آموزش‌های ویدیویی صفر تا صد، کاربردی و پروژه‌محور در حوزه‌های برنامه‌نویسی، هوش مصنوعی، طراحی و مهارت‌های فریلنسری با بالاترین استانداردهای آموزشی
+              {settings?.hero_subtitle || 'آموزش‌های ویدیویی صفر تا صد، کاربردی و پروژه‌محور در حوزه‌های برنامه‌نویسی، هوش مصنوعی، طراحی و مهارت‌های فریلنسری با بالاترین استانداردهای آموزشی'}
             </p>
 
             {/* Search Bar */}
@@ -213,13 +222,13 @@ export const HomePage: React.FC = () => {
         <div className="rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 p-8 sm:p-12 text-white relative overflow-hidden">
           <div className="relative z-10 max-w-2xl space-y-4">
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/30 text-indigo-300 border border-indigo-500/40">
-              چرا یادگیری با جهش کار؟
+              {settings?.features_badge || 'چرا یادگیری با جهش کار؟'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black leading-snug">
-              از آموزش تئوری خسته شدید؟ اینجا فقط روی پروژه‌های واقعی کار می‌کنید
+              {settings?.features_title || 'از آموزش تئوری خسته شدید؟ اینجا فقط روی پروژه‌های واقعی کار می‌کنید'}
             </h2>
             <p className="text-slate-300 text-sm leading-relaxed">
-              هر دوره شامل کدهای نمونه، سناریوهای واقعی استخدام و ویدیوی پیش‌نمایش رایگان برای ارزیابی کیفیت تدریس قبل از ثبت‌نام است.
+              {settings?.features_subtitle || 'تمام دوره‌ها متناسب با نیاز روز بازار کار و به همراه پشتیبانی مستقیم مدرسان و فایل‌های سورس‌کد تهیه شده‌اند.'}
             </p>
             <div className="pt-2 flex flex-wrap gap-4">
               <Link
@@ -232,6 +241,9 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Dynamic FAQs Section */}
+      <FaqSection />
 
     </div>
   );

@@ -97,3 +97,26 @@ export interface Order {
   status: 'pending' | 'completed' | 'canceled';
   created_at: string;
 }
+
+export interface SiteSetting {
+  site_title: string;
+  logo_url: string | null;
+  hero_badge: string;
+  hero_title: string;
+  hero_subtitle: string;
+  features_badge: string;
+  features_title: string;
+  features_subtitle: string;
+  contact_phone: string;
+  contact_email: string;
+  telegram_url: string;
+  instagram_url: string;
+  footer_about: string;
+}
+
+export interface FAQ {
+  id: number;
+  question: string;
+  answer: string;
+  order: number;
+}

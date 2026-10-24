@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useSiteSettings } from '../context/SiteSettingsContext';
 import { 
   BookOpen, 
   User as UserIcon, 
@@ -15,6 +16,7 @@ import {
 
 export const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
+  const { settings } = useSiteSettings();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -26,17 +28,27 @@ export const Navbar: React.FC = () => {
           {/* Logo & Navigation */}
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
-                <Sparkles className="w-6 h-6 animate-pulse" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-indigo-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent">
-                  جهش کار
-                </span>
-                <span className="text-[11px] font-medium text-slate-500 -mt-1">
-                  پلتفرم مهارت و ورود به بازار کار
-                </span>
-              </div>
+              {settings?.logo_url ? (
+                <img
+                  src={settings.logo_url}
+                  alt={settings.site_title || 'جهش کار'}
+                  className="h-11 w-auto max-w-[180px] object-contain group-hover:scale-105 transition-transform"
+                />
+              ) : (
+                <>
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
+                    <Sparkles className="w-6 h-6 animate-pulse" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-indigo-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent">
+                      {settings?.site_title || 'جهش کار'}
+                    </span>
+                    <span className="text-[11px] font-medium text-slate-500 -mt-1">
+                      {settings?.hero_badge || 'پلتفرم مهارت و ورود به بازار کار'}
+                    </span>
+                  </div>
+                </>
+              )}
             </Link>
 
             <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">

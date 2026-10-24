@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/accounts/', include('accounts.urls')),
     path('api/courses/', include('courses.urls')),
     path('api/orders/', include('orders.urls')),
+    path('api/core/', include('core.urls')),
 ]
 
 # Serve media files in development / fallback
