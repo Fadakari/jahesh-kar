@@ -40,8 +40,8 @@ export const HomePage: React.FC = () => {
           api.get('/courses/'),
           api.get('/courses/categories/'),
         ]);
-        setCourses(coursesRes.data);
-        setCategories(catRes.data);
+        setCourses(Array.isArray(coursesRes?.data) ? coursesRes.data : []);
+        setCategories(Array.isArray(catRes?.data) ? catRes.data : []);
       } catch (err) {
         console.error('Failed to load courses', err);
       } finally {
@@ -145,7 +145,7 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {categories.map((cat) => {
+          {Array.isArray(categories) && categories.map((cat) => {
             const Icon = categoryIcons[cat.icon] || BookOpen;
             return (
               <Link
@@ -201,7 +201,7 @@ export const HomePage: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {courses.slice(0, 4).map((c) => (
+            {Array.isArray(courses) && courses.slice(0, 4).map((c) => (
               <CourseCard key={c.id} course={c} />
             ))}
           </div>

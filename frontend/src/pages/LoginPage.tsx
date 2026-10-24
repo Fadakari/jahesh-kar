@@ -6,13 +6,32 @@ import {
   KeyRound, 
   Lock, 
   Sparkles, 
-  CheckCircle2, 
   Loader2,
   AlertCircle,
   ArrowRight,
-  ShieldCheck,
   UserCheck
 } from 'lucide-react';
+
+// Helper to convert Persian/Arabic numerals to ASCII standard
+const toAsciiDigits = (str: string): string => {
+  const p2e: Record<string, string> = {
+    '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4',
+    '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9',
+    '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
+    '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9',
+  };
+  return str.replace(/[۰-۹٠-٩]/g, (w) => p2e[w] || w);
+};
+
+const normalizePhone = (str: string): string => {
+  let cleaned = toAsciiDigits(str).trim();
+  cleaned = cleaned.replace(/[\s\-()_./\\]+/g, '');
+  if (cleaned.startsWith('+98')) cleaned = '0' + cleaned.slice(3);
+  else if (cleaned.startsWith('0098')) cleaned = '0' + cleaned.slice(4);
+  else if (cleaned.startsWith('98') && cleaned.length === 12) cleaned = '0' + cleaned.slice(2);
+  else if (!cleaned.startsWith('0') && cleaned.length === 10 && cleaned.startsWith('9')) cleaned = '0' + cleaned;
+  return cleaned;
+};
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -21,13 +40,12 @@ export const LoginPage: React.FC = () => {
 
   const { sendOtp, verifyOtp, loginWithPassword } = useAuth();
 
-  // Unified flow: step 1 = enter phone, step 2 = enter otp
+  // Unified flow: step 1 = enter phone, step 2 = enter otp, step 3 = password
   const [step, setStep] = useState<'phone' | 'otp' | 'password'>('phone');
   
   // Phone & OTP state
   const [phone, setPhone] = useState('');
   const [otpCode, setOtpCode] = useState('');
-  const [devCode, setDevCode] = useState<string | null>(null);
 
   // Password Login state (alternative for admin)
   const [username, setUsername] = useState('');
@@ -40,23 +58,23 @@ export const LoginPage: React.FC = () => {
   // 1. Send OTP (unified for both new and existing users)
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanPhone = phone.trim().replace(/\s+/g, '');
-    if (!cleanPhone || cleanPhone.length < 10) {
-      setError('لطفا شماره موبایل معتبر ۱۱ رقمی (مثلاً 09123456789) وارد کنید.');
+    const cleanPhone = normalizePhone(phone);
+    if (!cleanPhone || cleanPhone.length !== 11 || !cleanPhone.startsWith('09')) {
+      setError('لطفا شماره موبایل معتبر ۱۱ رقمی (مانند 09123456789) وارد کنید.');
       return;
     }
 
     setLoading(true);
     setError(null);
     try {
-      const res = await sendOtp(cleanPhone);
+      await sendOtp(cleanPhone);
       setStep('otp');
-      if (res.dev_code) {
-        setDevCode(res.dev_code);
-        setOtpCode(res.dev_code); // Auto-fill in dev for zero-friction testing!
-      }
     } catch (err: any) {
-      const msg = err.response?.data?.phone_number?.[0] || err.response?.data?.error || 'خطا در ارسال پیامک تایید.';
+      const msg = 
+        err.response?.data?.phone_number?.[0] || 
+        err.response?.data?.error || 
+        err.response?.data?.detail || 
+        'خطا در ارسال پیامک تایید. لطفاً لحظاتی دیگر تلاش کنید.';
       setError(msg);
     } finally {
       setLoading(false);
@@ -66,7 +84,8 @@ export const LoginPage: React.FC = () => {
   // 2. Verify OTP (automatically logs in or creates account)
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!otpCode || otpCode.trim().length < 4) {
+    const cleanOtp = toAsciiDigits(otpCode).trim();
+    if (!cleanOtp || cleanOtp.length < 4) {
       setError('لطفا کد تایید را به درستی وارد کنید.');
       return;
     }
@@ -74,10 +93,16 @@ export const LoginPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      await verifyOtp(phone.trim(), otpCode.trim());
+      const cleanPhone = normalizePhone(phone);
+      await verifyOtp(cleanPhone, cleanOtp);
       navigate(redirectPath);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'کد تایید اشتباه است یا منقضی شده.');
+      const msg = 
+        err.response?.data?.code?.[0] || 
+        err.response?.data?.error || 
+        err.response?.data?.detail || 
+        'کد تایید اشتباه است یا منقضی شده است.';
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -87,17 +112,21 @@ export const LoginPage: React.FC = () => {
   const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username || !password) {
-      setError('نام کاربری و کلمه عبور را وارد کنید.');
+      setError('نام کاربری و رمز عبور را وارد کنید.');
       return;
     }
 
     setLoading(true);
     setError(null);
     try {
-      await loginWithPassword(username.trim(), password);
+      await loginWithPassword(toAsciiDigits(username.trim()), password);
       navigate(redirectPath);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'نام کاربری یا رمز عبور اشتباه است.');
+      const msg = 
+        err.response?.data?.error || 
+        err.response?.data?.detail || 
+        'نام کاربری یا رمز عبور اشتباه است.';
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -124,7 +153,7 @@ export const LoginPage: React.FC = () => {
             </h2>
             <p className="text-xs text-slate-500 mt-1">
               {step === 'phone' && 'اگر قبلا ثبت‌نام نکرده‌اید، با وارد کردن شماره حسابتان خودکار ساخته می‌شود'}
-              {step === 'otp' && `کد تایید به شماره ${phone} ارسال شد`}
+              {step === 'otp' && `کد پیامک‌شده به شماره ${phone} را وارد کنید`}
               {step === 'password' && 'ویژه مدیران سامانه یا کاربران دارای رمز عبور'}
             </p>
           </div>
@@ -190,7 +219,7 @@ export const LoginPage: React.FC = () => {
                 ورود با نام‌کاربری و رمز عبور
               </button>
 
-              <span className="text-[11px] text-slate-400">بدون نیاز به ثبت نام مجزا</span>
+              <span className="text-[11px] text-slate-400">ثبت‌نام خودکار با شماره</span>
             </div>
           </form>
         )}
@@ -198,30 +227,9 @@ export const LoginPage: React.FC = () => {
         {/* STEP 2: OTP Code input */}
         {step === 'otp' && (
           <form onSubmit={handleVerifyOtp} className="space-y-5">
-            
-            {/* Dev mode test code notice with auto-fill button */}
-            {devCode && (
-              <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200/90 text-amber-900 text-xs space-y-2">
-                <div className="font-bold flex items-center gap-1.5 text-amber-800">
-                  <ShieldCheck className="w-4 h-4 text-amber-600" />
-                  <span>محیط توسعه لوکال (شبیه‌ساز پیامک فعال است)</span>
-                </div>
-                <div className="text-[11px] text-amber-700 leading-relaxed">
-                  کد آزمایشی برای شما: <span className="font-mono font-black text-indigo-700 text-sm px-1.5 py-0.5 bg-white rounded-md border border-amber-200">{devCode}</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setOtpCode(devCode)}
-                  className="w-full py-1.5 px-3 rounded-xl bg-amber-200/80 hover:bg-amber-300 text-amber-950 font-bold text-[11px] transition-colors cursor-pointer text-center"
-                >
-                  کلیک برای درج خودکار کد تستی
-                </button>
-              </div>
-            )}
-
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <label className="font-bold text-slate-700">کد تایید ۵ رقمی</label>
+                <label className="font-bold text-slate-700">کد تایید پیامک‌شده</label>
                 <button
                   type="button"
                   onClick={() => {
@@ -272,10 +280,10 @@ export const LoginPage: React.FC = () => {
         {step === 'password' && (
           <form onSubmit={handlePasswordLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">نام کاربری یا شماره موبایل</label>
+              <label className="text-xs font-bold text-slate-700">نام کاربری یا شماره همراه</label>
               <input
                 type="text"
-                placeholder="admin یا student"
+                placeholder="نام کاربری یا شماره همراه"
                 dir="ltr"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -285,7 +293,7 @@ export const LoginPage: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">کلمه عبور</label>
+              <label className="text-xs font-bold text-slate-700">رمز عبور</label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2" />
                 <input
@@ -297,12 +305,6 @@ export const LoginPage: React.FC = () => {
                   className="w-full pr-11 pl-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
                 />
               </div>
-            </div>
-
-            <div className="text-[11px] text-slate-500 bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-1">
-              <div>اکانت‌های پیش‌فرض تست:</div>
-              <div>• مدیر: <code className="text-indigo-600 font-bold">admin / admin123456</code></div>
-              <div>• دانشجو: <code className="text-indigo-600 font-bold">student / user123456</code></div>
             </div>
 
             <button

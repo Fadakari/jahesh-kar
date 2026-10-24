@@ -21,7 +21,7 @@ class PaymentGatewayService:
         if order.amount > 0 and not gateway_setting.is_sales_enabled:
             return {
                 "success": False,
-                "error": "فروش این دوره موقتاً غیرفعال است (درگاه پرداخت بانکی در حال راه‌اندازی و اتصال می‌باشد).",
+                "error": "فروش این دوره در حال حاضر غیرفعال است.",
                 "sales_disabled": True,
             }
 

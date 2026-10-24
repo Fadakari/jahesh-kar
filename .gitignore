@@ -1,3 +1,13 @@
+# Environment & Secrets
+.env
+*.env
+backend/.env
+!.env.example
+!backend/.env.example
+
+# Deployment zip archives
+upload_packages/
+
 # Virtual Environment
 venv/
 .venv/

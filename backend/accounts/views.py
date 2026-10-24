@@ -18,6 +18,7 @@ from .serializers import (
 
 class SendOTPView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def post(self, request):
         serializer = SendOTPSerializer(data=request.data)
@@ -38,6 +39,7 @@ class SendOTPView(APIView):
 
 class VerifyOTPView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def post(self, request):
         serializer = VerifyOTPSerializer(data=request.data)
@@ -93,6 +95,7 @@ class VerifyOTPView(APIView):
 
 class PasswordRegisterView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def post(self, request):
         serializer = PasswordRegisterSerializer(data=request.data)
@@ -119,6 +122,7 @@ class PasswordRegisterView(APIView):
 
 class PasswordLoginView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def post(self, request):
         serializer = PasswordLoginSerializer(data=request.data)

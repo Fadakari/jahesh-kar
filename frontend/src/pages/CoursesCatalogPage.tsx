@@ -26,7 +26,7 @@ export const CoursesCatalogPage: React.FC = () => {
     const fetchCats = async () => {
       try {
         const res = await api.get('/courses/categories/');
-        setCategories(res.data);
+        setCategories(Array.isArray(res?.data) ? res.data : []);
       } catch (err) {
         console.error(err);
       }
@@ -45,7 +45,7 @@ export const CoursesCatalogPage: React.FC = () => {
         if (searchQuery) params.q = searchQuery;
 
         const res = await api.get('/courses/', { params });
-        setCourses(res.data);
+        setCourses(Array.isArray(res?.data) ? res.data : []);
       } catch (err) {
         console.error(err);
       } finally {
@@ -124,7 +124,7 @@ export const CoursesCatalogPage: React.FC = () => {
             همه موارد
           </button>
 
-          {categories.map((c) => (
+          {Array.isArray(categories) && categories.map((c) => (
             <button
               key={c.id}
               onClick={() => updateParam('category', c.slug)}
@@ -216,7 +216,7 @@ export const CoursesCatalogPage: React.FC = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => (
+          {Array.isArray(courses) && courses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </div>

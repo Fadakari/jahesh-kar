@@ -413,15 +413,15 @@ export const CourseDetailPage: React.FC = () => {
                   </button>
                 ) : course.is_sales_enabled === false ? (
                   <div className="space-y-3">
-                    <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold leading-relaxed text-center">
-                      🔒 فروش این دوره موقتاً غیرفعال است (درگاه پرداخت بانکی در حال اتصال می‌باشد).
+                    <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold leading-relaxed text-center">
+                      🔒 ثبت‌نام و خرید این دوره در حال حاضر غیرفعال است.
                     </div>
                     <button
                       disabled
                       className="w-full py-4 rounded-2xl bg-slate-200 text-slate-400 font-bold text-sm cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       <Lock className="w-4 h-4" />
-                      فروش موقتاً غیرفعال است
+                      فروش در حال حاضر غیرفعال است
                     </button>
                   </div>
                 ) : (

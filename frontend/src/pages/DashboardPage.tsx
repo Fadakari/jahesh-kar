@@ -72,8 +72,8 @@ export const DashboardPage: React.FC = () => {
             api.get('/orders/my-courses/'),
             api.get('/orders/my-orders/'),
           ]);
-          setEnrollments(enrRes.data);
-          setOrders(ordRes.data);
+          setEnrollments(Array.isArray(enrRes?.data) ? enrRes.data : []);
+          setOrders(Array.isArray(ordRes?.data) ? ordRes.data : []);
         } catch (err) {
           console.error(err);
         } finally {
