@@ -7,9 +7,9 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse
 
 # Custom Admin Branding
-admin.site.site_header = "مدیریت آموزشگاه جهش کار"
-admin.site.site_title = "جهش کار"
-admin.site.index_title = "پنل مدیریت دوره‌ها، ویدیوها و کاربران"
+admin.site.site_header = "مدیریت آکادمی آواز آموز"
+admin.site.site_title = "آواز آموز"
+admin.site.index_title = "پنل مدیریت دوره‌ها، ویدیوها، تنظیمات و کاربران"
 
 urlpatterns = [
     path('admin/', admin.site.urls),

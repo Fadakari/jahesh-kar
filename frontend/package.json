@@ -20,6 +20,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "axios": "^1.20.0",
     "canvas-confetti": "^1.9.4",
+    "hls.js": "^1.7.3",
     "lucide-react": "^1.61.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

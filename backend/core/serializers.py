@@ -21,6 +21,7 @@ class SiteSettingSerializer(serializers.ModelSerializer):
             "telegram_url",
             "instagram_url",
             "footer_about",
+            "enamad_html",
         ]
 
     def get_logo_url(self, obj):

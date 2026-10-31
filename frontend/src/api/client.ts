@@ -27,9 +27,17 @@ api.interceptors.request.use((config) => {
     config.baseURL = window.__API_URL__;
   }
 
-  const token = localStorage.getItem('jaheshkar_token');
+  const token =
+    localStorage.getItem('avazamouz_token') ||
+    localStorage.getItem('jaheshkar_token');
   if (token) {
-    config.headers.Authorization = `Token ${token}`;
+    const authHeader =
+      token.startsWith('Bearer ') || token.startsWith('Token ')
+        ? token
+        : token.startsWith('eyJ')
+          ? `Bearer ${token}`
+          : `Token ${token}`;
+    config.headers.Authorization = authHeader;
   }
   return config;
 });

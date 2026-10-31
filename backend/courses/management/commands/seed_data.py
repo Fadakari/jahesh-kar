@@ -3,15 +3,15 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from courses.models import Category, Course, Section, Lesson
 from orders.models import Order, Enrollment
+from core.models import SiteSetting, FAQ
 
 User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = "Seeds database with realistic Persian sample data for JaheshKar"
+    help = "Seeds database with realistic Persian sample data for AvazAmuz (آموزش مداحی)"
 
     def handle(self, *args, **options):
-        # Ensure utf-8 output on Windows consoles
         if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
             try:
                 sys.stdout.reconfigure(encoding='utf-8')
@@ -19,109 +19,115 @@ class Command(BaseCommand):
                 pass
 
         try:
-            self.stdout.write("Creating initial JaheshKar data...")
+            self.stdout.write("Creating initial AvazAmuz data...")
         except Exception:
             pass
 
         # 1. Superuser
-        admin_user, created = User.objects.get_or_create(
+        admin_user, _ = User.objects.get_or_create(
             username="admin",
             defaults={
-                "full_name": "مدیریت جهش کار",
+                "full_name": "مدیریت آکادمی آواز آموز",
                 "phone_number": "09120000000",
-                "email": "admin@jaheshkar.ir",
+                "email": "admin@avazamouz.ir",
                 "is_staff": True,
                 "is_superuser": True,
                 "is_verified": True,
             }
         )
-        if created:
-            admin_user.set_password("admin123456")
-            admin_user.save()
-            self.stdout.write(self.style.SUCCESS("Admin user created: admin / admin123456"))
-        else:
-            admin_user.set_password("admin123456")
-            admin_user.save()
+        admin_user.set_password("admin123456")
+        admin_user.save()
 
         # 2. Student user
-        student_user, s_created = User.objects.get_or_create(
+        student_user, _ = User.objects.get_or_create(
             username="student",
             defaults={
-                "full_name": "علی رضایی",
+                "full_name": "محمدحسین رضایی",
                 "phone_number": "09351234567",
-                "email": "student@jaheshkar.ir",
+                "email": "student@avazamouz.ir",
                 "is_verified": True,
             }
         )
-        if s_created:
-            student_user.set_password("user123456")
-            student_user.save()
-            self.stdout.write(self.style.SUCCESS("Test student user created: student / user123456"))
+        student_user.set_password("user123456")
+        student_user.save()
 
-        # 3. Categories
-        cat_web, _ = Category.objects.get_or_create(
-            slug="web-dev",
-            defaults={"title": "برنامه‌نویسی و وب", "icon": "Code2", "description": "توسعه وب، فرانت‌اند و بک‌اند مدرن"}
+        # 3. Categories (آموزش مداحی و صداسازی)
+        cat_seda, _ = Category.objects.get_or_create(
+            slug="vocal-training",
+            defaults={
+                "title": "صداسازی و پرورش حنجره",
+                "icon": "Mic",
+                "description": "تکنیک‌های تنفس دیافراگمی، طنین صدا، تحریر، تقویت اوج و بهداشت صوتی مداح"
+            }
         )
-        cat_ai, _ = Category.objects.get_or_create(
-            slug="ai-data",
-            defaults={"title": "هوش مصنوعی و پایتون", "icon": "Cpu", "description": "یادگیری ماشین، هوش مصنوعی مولد و تحلیل داده"}
+        cat_radif, _ = Category.objects.get_or_create(
+            slug="maqamat-radif",
+            defaults={
+                "title": "دستگاه‌ها و نغمات آوازی",
+                "icon": "Music",
+                "description": "آموزش ردیف‌ها و دستگاه‌های سنتی متناسب با مرثیه‌خوانی، مولودی و ادعیه"
+            }
         )
-        cat_design, _ = Category.objects.get_or_create(
-            slug="ui-ux",
-            defaults={"title": "طراحی رابط کاربری UI/UX", "icon": "Palette", "description": "طراحی محصول، فیگما و تجربه کاربری"}
+        cat_maqtal, _ = Category.objects.get_or_create(
+            slug="maqtal-study",
+            defaults={
+                "title": "مقتل‌شناسی و شعر آیینی",
+                "icon": "BookOpen",
+                "description": "بررسی مقاتل معتبر، درک مفاهیم روایی و گزینش اشعار فاخر اهل‌بیت (ع)"
+            }
         )
-        cat_career, _ = Category.objects.get_or_create(
-            slug="career",
-            defaults={"title": "ورود به بازار کار و فریلنسری", "icon": "Briefcase", "description": "رزومه‌نویسی، مصاحبه فنی و درآمد دلاری"}
+        cat_majles, _ = Category.objects.get_or_create(
+            slug="speech-majles",
+            defaults={
+                "title": "فن بیان و مجلس‌داری",
+                "icon": "Volume2",
+                "description": "مدیریت جلسه، آداب ستایشگری، زبان بدن، اوج و فرود و ارتباط با مستمعین"
+            }
         )
 
-        # Reliable sample video URLs (using fast CDN test mp4 videos)
         sample_intro = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
         sample_vid1 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         sample_vid2 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-        sample_vid3 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
 
         # 4. Courses
-        # Course 1: Full-stack Python & React
+        # Course 1: صداسازی جامع
         c1, _ = Course.objects.get_or_create(
-            slug="fullstack-python-react",
+            slug="mastering-maddahi-vocals",
             defaults={
-                "title": "دوره جامع فول‌استک پایتون (جنگو) و ری‌اکت برای بازار کار",
-                "category": cat_web,
-                "short_description": "آموزش گام‌به‌گام و پروژه محور از صفر تا ساخت و استقرار سامانه‌های واقعی وب",
-                "description": """در این دوره جامع شما از پایه‌ای‌ترین مفاهیم تا عمیق‌ترین تکنیک‌های روز معماری نرم‌افزار را فرا خواهید گرفت.
-هدف این دوره تنها آموزش کدنویسی نیست، بلکه تربیت یک مهندس نرم‌افزار آماده استخدام در شرکت‌های معتبر و کسب درآمد بالا است.
-در طول دوره ۳ پروژه بزرگ تجاری به همراه سیستم پرداخت آنلاین، داکرایز کردن و دیپلوی روی هاست و سرور را پیاده‌سازی خواهیم کرد.""",
-                "instructor_name": "مهندس سامان کریمی",
-                "instructor_title": "توسعه‌دهنده ارشد نرم‌افزار و مشاور فنی استارتاپ‌ها",
-                "instructor_bio": "بیش از ۸ سال سابقه برنامه‌نویسی تجاری در ایران و پروژه‌های بین‌المللی",
+                "title": "دوره جامع صداسازی علمی، تقویت حنجره و بهداشت صوت در مداحی",
+                "category": cat_seda,
+                "short_description": "آموزش گام‌به‌گام از تنفس صحیح دیافراگمی تا اجرای اوج‌های ممتد بدون گرفتگی صدا",
+                "description": """در این دوره جامع شما با متدهای علمی بین‌المللی صداسازی ترکیب شده با سبک‌های مداحی سنتی و مدرن آشنا می‌شوید.
+بسیاری از مادحین به دلیل ناآگاهی از نحوه استفاده از تارهای صوتی دچار خستگی زودرس یا آسیب حنجره می‌شوند.
+در این دوره از پایه نحوه تقویت حجم صدا، تحریرهای متنوع، وسعت صوتی و اجرای با آرامش را فرا خواهید گرفت.""",
+                "instructor_name": "استاد حاج مرتضی تهرانی",
+                "instructor_title": "مدرس ارشد صداسازی مذهبی و قاری قرآن کریم",
+                "instructor_bio": "بیش از ۱۵ سال سابقه تدریس صداسازی تخصصی و تربیت صدها مداح برجسته کشوری",
                 "price": 890000,
                 "discount_price": 590000,
                 "level": "all",
-                "duration": "۲۴ ساعت",
-                "students_count": 342,
+                "duration": "۱۸ ساعت",
+                "students_count": 480,
                 "rating": 4.9,
                 "cover_image_url": "/media/courses/covers/course-1-fullstack.jpg",
                 "intro_video_url": sample_intro,
-                "what_you_will_learn": "تسلط کامل به پایتون مدرن و فریم‌ورک جنگو\nطراحی API‌های استاندارد REST با DRF\nساخت فرانت‌اند مدرن، سریع و واکنش‌گرا با React و Tailwind\nاحراز هویت پیامکی و امن با توکن\nاتصال به درگاه پرداخت شتابی و مدیریت سفارشات\nدیپلوی روی هاست اشتراکی و سرور لینوکس",
-                "prerequisites": "علاقه‌مندی به یادگیری؛ آشنایی ابتدایی با مبانی کامپیوتر کافی است.",
+                "what_you_will_learn": "تنفس عمیق دیافراگمی و تسلط بر بازدم پایدار\nشناخت و استفاده از رزوناتورهای سر، دهان و سینه\nتکنیک‌های تقویت اوج‌خوانی بدون فشار به حنجره\nتمرینات ویژه انعطاف و غلتش تارهای صوتی\nبهداشت صوتی و تغذیه اختصاصی مداح قبل از مجالس",
+                "prerequisites": "علاقه‌مندی به مداحی؛ این دوره از پایه طراحی شده و نیاز به زمینه قبلی ندارد.",
                 "is_published": True,
             }
         )
 
-        # Sections & Lessons for Course 1
-        sec1, _ = Section.objects.get_or_create(course=c1, title="فصل اول: مقدمه، نقشه راه و آمادگی محیط توسعه", defaults={"order": 1})
+        sec1, _ = Section.objects.get_or_create(course=c1, title="فصل اول: آناتومی حنجره و مبانی تنفس صحیح", defaults={"order": 1})
         Lesson.objects.get_or_create(
             course=c1,
             section=sec1,
             order=1,
             defaults={
-                "title": "معرفی دوره و نقشه راه درآمدزایی از فول‌استک",
-                "duration": "08:45",
+                "title": "معرفی دوره و رازهای ماندگاری صدای مادحین کهن",
+                "duration": "10:15",
                 "is_free_preview": True,
                 "video_url": sample_intro,
-                "description": "در این جلسه با کل ساختار دوره، تکنولوژی‌ها و نیازمندی‌های بازار کار آشنا می‌شوید."
+                "description": "بررسی نقشه راه دوره و مقدمه‌ای بر ساختار حنجره و نحوه تولید صوت."
             }
         )
         Lesson.objects.get_or_create(
@@ -129,176 +135,142 @@ class Command(BaseCommand):
             section=sec1,
             order=2,
             defaults={
-                "title": "نصب پایتون، VS Code و راه‌اندازی Virtual Environment",
-                "duration": "14:20",
+                "title": "تمرینات عملی تنفس شکمی و دیافراگمی",
+                "duration": "16:40",
                 "is_free_preview": True,
                 "video_url": sample_vid1,
-                "description": "آماده‌سازی یک محیط توسعه حرفه‌ای، تمیز و بدون دردسر برای کار تیمی."
+                "description": "یادگیری تکنیک‌های کنترل نفس برای جملات طولانی در روضه و نوحه."
             }
         )
 
-        sec2, _ = Section.objects.get_or_create(course=c1, title="فصل دوم: معماری بک‌اند با Django و DRF", defaults={"order": 2})
+        sec2, _ = Section.objects.get_or_create(course=c1, title="فصل دوم: طنین، پرتاب صدا و تحریرها", defaults={"order": 2})
         Lesson.objects.get_or_create(
             course=c1,
             section=sec2,
             order=3,
             defaults={
-                "title": "طراحی دیتابیس، مدل‌ها و ارتباطات یکپارچه",
-                "duration": "22:15",
+                "title": "رزوناتورهای صوتی و پرتاب صدای شفاف بدون میکروفون",
+                "duration": "21:30",
                 "is_free_preview": False,
                 "video_url": sample_vid2,
-                "description": "تعریف مدل‌ها، ارتباطات یک‌به‌چند، ایندکس‌گذاری و مهاجرت‌ها در دیتابیس."
-            }
-        )
-        Lesson.objects.get_or_create(
-            course=c1,
-            section=sec2,
-            order=4,
-            defaults={
-                "title": "پیاده‌سازی ورود با پیامک (OTP) و احراز هویت با نام‌کاربری",
-                "duration": "18:40",
-                "is_free_preview": False,
-                "video_url": sample_vid3,
-                "description": "طراحی اندپوینت‌های امن احراز هویت، انقضای توکن و ثبت نام خودکار کاربر."
+                "description": "هدایت ارتعاشات به حفره‌های جمجمه و دهان جهت افزایش شفافیت صدا."
             }
         )
 
-        # Course 2: AI & Python
+        # Course 2: دستگاه‌ها و نغمات در مداحی
         c2, _ = Course.objects.get_or_create(
-            slug="ai-practical-prompt-engineering",
+            slug="radif-and-melodies-in-maddahi",
             defaults={
-                "title": "مسترکلاس هوش مصنوعی کاربردی و اتوماسیون با پایتون",
-                "category": cat_ai,
-                "short_description": "چگونه با هوش مصنوعی و اسکریپت‌های پایتون، وظایف روزمره را در ۵ ثانیه انجام دهیم؟",
-                "description": """این دوره برای تمام افرادی که می‌خواهند از هوش مصنوعی برای چندبرابر کردن سرعت کار و درآمدزایی استفاده کنند طراحی شده است.
-یاد می‌گیرید چطور مدل‌های زبانی را به کدهای پایتون متصل کنید و بات‌های هوشمند خلق نمایید.""",
-                "instructor_name": "دکتر نیما شمس",
-                "instructor_title": "پژوهشگر هوش مصنوعی و داده‌کاو",
-                "instructor_bio": "فعال در حوزه هوش مصنوعی و مدل‌های پردازش زبان طبیعی",
-                "price": 650000,
-                "discount_price": 420000,
+                "title": "آموزش گوشه‌ها و دستگاه‌های آوازی در مرثیه‌خوانی و ادعیه",
+                "category": cat_radif,
+                "short_description": "تسلط بر دستگاه‌های شور، دشتی، ابوعطا، همایون و چهارگاه با نمونه‌های اجرایی مجالس",
+                "description": """یک مداح موفق باید بداند هر شعر و روضه را در چه مقامی بخواند تا بیشترین تاثیر عاطفی را بر دل مستمع بگذارد.
+در این دوره مقامات و گوشه‌های اصیل متناسب با ادعیه، مناجات، روضه‌خوانی و نوحه‌سرایی آموزش داده می‌شود.""",
+                "instructor_name": "استاد سیدعلی حسینی",
+                "instructor_title": "ردیف‌دان و کارشناس موسیقی و الحان آیینی",
+                "instructor_bio": "شاگرد اساتید مطرح آوازی و با سابقه تولید نواهای آیینی ماندگار",
+                "price": 750000,
+                "discount_price": 490000,
                 "level": "intermediate",
-                "duration": "۱۵ ساعت",
-                "students_count": 210,
+                "duration": "۱۴ ساعت",
+                "students_count": 310,
                 "rating": 4.8,
                 "cover_image_url": "/media/courses/covers/course-2-ai.jpg",
                 "intro_video_url": sample_intro,
-                "what_you_will_learn": "آشنایی با مدل‌های زبانی بزرگ (LLM)\nنوشتن اسکریپت‌های خودکارسازی کارهای تکراری\nاتصال به API هوش مصنوعی\nساخت دستیار هوشمند اختصاصی",
-                "prerequisites": "آشنایی پایه با پایتون",
+                "what_you_will_learn": "شناخت دستگاه شور و متعلقات آن (دشتی، ابوعطا، افشاری)\nکاربرد مقام همایون و شوشتری در نوحه‌های محرم\nتکنیک‌های انتقال از یک گوشه به گوشه دیگر (مدولاسیون)\nتطبیق اشعار کهن با نغمات مذهبی",
+                "prerequisites": "گذراندن دوره صداسازی پایه یا آشنایی مقدماتی با زیر و بم صدا.",
                 "is_published": True,
             }
         )
-        sec_ai, _ = Section.objects.get_or_create(course=c2, title="فصل اول: ورود به دنیای هوش مصنوعی کاربردی", defaults={"order": 1})
+        sec_c2, _ = Section.objects.get_or_create(course=c2, title="فصل اول: آواز دشتی و حزن در مرثیه", defaults={"order": 1})
         Lesson.objects.get_or_create(
             course=c2,
-            section=sec_ai,
+            section=sec_c2,
             order=1,
             defaults={
-                "title": "انقلاب هوش مصنوعی و فرصت‌های بی‌نظیر درآمدی",
-                "duration": "10:30",
+                "title": "مقدمه گوشه اوج و فرود در دشتی",
+                "duration": "12:50",
                 "is_free_preview": True,
                 "video_url": sample_intro,
-                "description": "چرا باید هم‌اکنون به سراغ ادغام هوش مصنوعی با تخصص خود بروید؟"
-            }
-        )
-        Lesson.objects.get_or_create(
-            course=c2,
-            section=sec_ai,
-            order=2,
-            defaults={
-                "title": "اولین پروژه عملی: اتصال پایتون به API",
-                "duration": "16:45",
-                "is_free_preview": False,
-                "video_url": sample_vid1,
-                "description": "نوشتن اولین خطوط کلاینت هوش مصنوعی در پایتون."
+                "description": "چرا آواز دشتی پایه اصلی روضه‌خوانی سنتی در ایران است؟"
             }
         )
 
-        # Course 3: UI/UX Figma
+        # Course 3: مقتل‌شناسی تحلیلی
         c3, _ = Course.objects.get_or_create(
-            slug="ui-ux-figma-mastery",
+            slug="authentic-maqtal-analysis",
             defaults={
-                "title": "صفر تا صد طراحی رابط کاربری (UI/UX) با فیگما",
-                "category": cat_design,
-                "short_description": "آموزش اصول دیزاین سیستم، وایرفریم، پروتوتایپ و تحویل اصولی طرح به برنامه‌نویسان",
-                "description": """طراحی رابط کاربری یکی از پرتقاضاترین مهارت‌های دنیای دیجیتال است. در این دوره صفر تا صد فیگما و اصول روانشناسی رنگ، چیدمان و ساخت دیزاین سیستم را یاد می‌گیرید.""",
-                "instructor_name": "سارا طاهری",
-                "instructor_title": "طراح ارشد محصول (Product Designer)",
-                "instructor_bio": "بیش از ۶ سال سابقه طراحی محصول برای شرکت‌های فین‌تک",
-                "price": 540000,
+                "title": "مقتل‌شناسی مستند و تطبیق روایات در مرثیه‌خوانی",
+                "category": cat_maqtal,
+                "short_description": "شناخت مقاتل دست‌اول، تفکیک روایات معتبر از تحریفات، و ساختاردهی به روضه",
+                "description": """اخلاص و صداقت در نقل وقایع اهل‌بیت، جوهره مداحی با برکت است.
+در این دوره کتب کهن نظیر مقتل ابومخنف، لهوف، نفس‌المهموم و روضه‌الشهدا با دیدی پژوهشی و کاربردی بررسی می‌شوند.""",
+                "instructor_name": "حجت‌الاسلام دکتر موسوی",
+                "instructor_title": "پژوهشگر تاریخ اسلام و متون آیینی",
+                "instructor_bio": "نویسنده مقالات متعدد در حوزه بازشناسی متون مقتل کهن",
+                "price": 620000,
                 "discount_price": 380000,
-                "level": "beginner",
-                "duration": "۱۸ ساعت",
-                "students_count": 185,
+                "level": "all",
+                "duration": "۱۲ ساعت",
+                "students_count": 225,
                 "rating": 5.0,
-                "cover_image_url": "/media/courses/covers/course-3-figma.jpg",
+                "cover_image_url": "/media/courses/covers/course-3-uiux.jpg",
                 "intro_video_url": sample_intro,
-                "what_you_will_learn": "اصول طراحی رابط کاربری مدرن\nکار با نرم‌افزار فیگما از مقدماتی تا حرفه‌ای\nساخت کامپوننت‌ها و واریانت‌های هوشمند\nطراحی ریسپانسیو برای وب و موبایل",
+                "what_you_will_learn": "آشنایی با سیر تحول مقاتل از قرن دوم تا عصر حاضر\nنحوه مطالعه و استخراج نکات عاطفی بدون تحریف\nتنظیم متن گریز روضه با اسناد معتبر\nادب مواجهه با مصائب اولیای الهی",
                 "prerequisites": "بدون پیش‌نیاز",
                 "is_published": True,
             }
         )
-        sec_des, _ = Section.objects.get_or_create(course=c3, title="فصل اول: پایه‌های طراحی محصول", defaults={"order": 1})
+        sec_c3, _ = Section.objects.get_or_create(course=c3, title="فصل اول: اعتبارشناسی کتب تاریخی", defaults={"order": 1})
         Lesson.objects.get_or_create(
             course=c3,
-            section=sec_des,
+            section=sec_c3,
             order=1,
             defaults={
-                "title": "آشنایی با محیط Figma و ابزارهای کلیدی",
-                "duration": "12:10",
+                "title": "شاخصه‌های مقتل مستند و معیارهای پذیرش روایت",
+                "duration": "14:15",
                 "is_free_preview": True,
                 "video_url": sample_intro,
-                "description": "راهنمای گام‌به‌گام اولین تجربه در محیط فیگما."
+                "description": "اصول بررسی رجال و متن روایات کربلا."
             }
         )
 
-        # Course 4: Freelancing & Career (Free Course!)
+        # Course 4: فن بیان و آداب مجلس‌داری (رایگان)
         c4, _ = Course.objects.get_or_create(
-            slug="freelancing-and-market-entrance",
+            slug="majles-etiquette-and-speech-free",
             defaults={
-                "title": "راهنمای جامع ورود به بازار کار و جذب اولین پروژه‌ها (رایگان)",
-                "category": cat_career,
-                "short_description": "چگونه اولین مشتری و اولین شغل حوزه نرم‌افزار و طراحی را بدون سابقه رسمی بگیریم؟",
-                "description": """بسیاری از افراد مهارت فنی دارند اما نحوه ارائه، ارتباط با کارفرما، قیمت‌گذاری و بستن قرارداد را نمی‌دانند. این دوره هدیه تیم جهش کار برای شماست تا سد ورود به بازار را بشکنید.""",
-                "instructor_name": "تیم جهش کار",
-                "instructor_title": "مربیان شغلی و کوچ‌های استخدام",
-                "instructor_bio": "هدایت بیش از ۱۰۰۰ کارجو به سمت استخدام و فریلنسری موفق",
+                "title": "اصول و آداب مجلس‌داری و فن بیان در ستایشگری (رایگان)",
+                "category": cat_majles,
+                "short_description": "چگونه محفل را گرم کنیم؟ مدیریت زمان، احترام به مستمع و آداب نوکری اهل‌بیت",
+                "description": """مداحی فقط خواندن نیست؛ اداره یک محفل معنوی است.
+این دوره هدیه آکادمی آواز آموز است برای تمامی مادحین نوپا و ذاکران علاقه‌مند تا با آداب ظاهری و باطنی این مسیر آشنا شوند.""",
+                "instructor_name": "اساتید آکادمی آواز آموز",
+                "instructor_title": "هیئت علمی و پیشکسوتان مداحی",
+                "instructor_bio": "جمعی از ذاکران باسابقه و اساتید فن بیان",
                 "price": 0,
                 "discount_price": None,
-                "level": "all",
-                "duration": "۵ ساعت",
-                "students_count": 890,
+                "level": "beginner",
+                "duration": "۶ ساعت",
+                "students_count": 940,
                 "rating": 4.9,
                 "cover_image_url": "/media/courses/covers/course-4-career.jpg",
                 "intro_video_url": sample_intro,
-                "what_you_will_learn": "اصول ساخت رزومه جذاب و متقاعدکننده\nنحوه ارسال پیشنهاد (پروپوزال) موثر برای پروژه‌ها\nتکنیک‌های مذاکره مالی و افزایش دستمزد\nمدیریت زمان و تعهدات کاری",
-                "prerequisites": "بدون پیش‌نیاز",
+                "what_you_will_learn": "آداب ورود، شروع، اوج و دعای پایان مجلس\nارتباط موثر چشمی و روانشناسی جمعیتی مستمعین\nنحوه غلبه بر استرس و اضطراب صحنه\nاخلاق مداحی و پرهیز از آسیب‌های رایج",
+                "prerequisites": "بدون نیاز به پیش‌نیاز",
                 "is_published": True,
             }
         )
-        sec_free, _ = Section.objects.get_or_create(course=c4, title="فصل اول: ذهنیت موفقیت در بازار کار", defaults={"order": 1})
+        sec_c4, _ = Section.objects.get_or_create(course=c4, title="فصل اول: آداب نوکری و روانشناسی مستمع", defaults={"order": 1})
         Lesson.objects.get_or_create(
             course=c4,
-            section=sec_free,
+            section=sec_c4,
             order=1,
             defaults={
-                "title": "از کجا شروع کنیم؟ شناسایی توانمندی‌های پنهان",
-                "duration": "15:00",
+                "title": "آغاز مجلس: انتخاب شعر و نحوه ورود متین",
+                "duration": "11:20",
                 "is_free_preview": True,
                 "video_url": sample_intro,
-                "description": "چگونه داشته‌های خود را به ارزش قابل فروش تبدیل کنیم."
-            }
-        )
-        Lesson.objects.get_or_create(
-            course=c4,
-            section=sec_free,
-            order=2,
-            defaults={
-                "title": "فوت‌وفن رزومه‌نویسی حرفه‌ای برای جذب کارفرما",
-                "duration": "18:20",
-                "is_free_preview": True,
-                "video_url": sample_vid2,
-                "description": "بررسی نمونه رزومه‌های پذیرفته شده و رد شده."
+                "description": "چگونه در ۳ دقیقه اول آرامش و توجه مجلس را جلب کنیم؟"
             }
         )
 
@@ -308,39 +280,53 @@ class Command(BaseCommand):
         order.save()
         Enrollment.objects.get_or_create(user=student_user, course=c1, defaults={"order": order})
 
-        # 6. Site Settings & FAQs
-        from core.models import SiteSetting, FAQ
-        SiteSetting.get_settings()
+        # 6. Site Settings & Dynamic FAQs
+        setting = SiteSetting.get_settings()
+        setting.site_title = "آواز آموز"
+        setting.hero_badge = "نخستین آکادمی تخصصی آموزش مداحی و صداسازی مذهبی"
+        setting.hero_title = "آموزش اصولی مداحی، فن بیان و صداسازی با اساتید برجسته"
+        setting.hero_subtitle = "از پرورش و تقویت حنجره تا تسلط بر دستگاه‌های آوازی، مقتل‌خوانی، نوحه‌سرایی و مجلس‌داری را به صورت گام‌به‌گام بیاموزید."
+        setting.features_badge = "چرا آکادمی آواز آموز؟"
+        setting.features_title = "تربیت ذاکران و مداحان اهل‌بیت با اصیل‌ترین متدهای صوتی و معرفتی"
+        setting.features_subtitle = "آموزش‌های کاربردی متناسب با اصول صداسازی علمی، لحن‌شناسی، ادعیه‌خوانی و آداب نوکری به همراه رفع اشکال و تمرین‌های صوتی هدفمند."
+        setting.contact_phone = "۰۲۱-۹۱۰۰۰۰۰۰"
+        setting.contact_email = "info@avazamouz.ir"
+        setting.telegram_url = "https://t.me/avazamouz"
+        setting.footer_about = "آواز آموز، مرجع تخصصی آموزش نوین و اصولی مداحی، صداسازی و فن بیان مذهبی است. رسالت ما توانمندسازی علاقه‌مندان به ستایشگری اهل‌بیت (ع) با تکیه بر علم صداسازی و اصالت‌های سنتی است."
+        setting.enamad_html = "<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq' alt='' style='cursor:pointer' code='1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'></a>"
+        setting.save()
 
+        # Dynamic FAQs for AvazAmuz
+        FAQ.objects.all().delete()
         faqs_data = [
             (
-                "چگونه می‌توانم در یک دوره آموزشی ثبت‌نام کنم؟",
-                "فرآیند ثبت‌نام در جهش کار بسیار ساده است. کافیست شماره همراه خود را وارد کنید تا کد تایید پیامکی ارسال شود. سپس در صفحه دوره مورد نظرتان، دکمه خرید و شروع یادگیری را بزنید تا دسترسی شما بلافاصله فعال گردد.",
+                "آیا برای شرکت در دوره‌ها نیاز به صدای خاص یا زمینه قبلی دارم؟",
+                "خیر، دوره‌ها به ویژه دوره «صداسازی جامع و پرورش حنجره» از پایه و صفر مطلق، با آموزش صحیح تنفس دیافراگمی، تلفظ حروف و باز کردن حجم صدا آغاز می‌شود. هر فرد با تمرین مستمر می‌تواند صدای خود را به زیبایی پرورش دهد.",
                 1
             ),
             (
-                "آیا ویدیوهای دوره‌ها قابل دانلود هستند؟",
-                "بله! علاوه بر اینکه ویدیوها در پلیر آنلاین اختصاصی و با کیفیت بالا قابل تماشا هستند، تمامی جلسات و فایل‌های سورس‌کد و تمرین‌ها به صورت فایل مستقیم در بخش پلیر در دسترس دانشجویان قرار دارد.",
+                "آیا آموزش دستگاه‌های آوازی منطبق با سبک‌های مداحی است؟",
+                "بله، در آواز آموز برخلاف کلاس‌های سنتی آواز که تئوریک هستند، تمامی گوشه‌ها و مقامات (شور، دشتی، همایون، چهارگاه و...) مستقیماً روی اشعار مرثیه، نوحه و مولودی شبیه‌سازی و اجرا می‌شوند.",
                 2
             ),
             (
                 "آیا امکان مشاهده نمونه جلسات قبل از خرید دوره وجود دارد؟",
-                "بله، در تمامی دوره‌ها یک یا چند جلسه با برچسب «پیش‌نمایش رایگان» مشخص شده‌اند که هر کاربری حتی بدون پرداخت هزینه و قبل از ثبت‌نام می‌تواند آن‌ها را تماشا کرده و از کیفیت تدریس اطمینان حاصل کند.",
+                "بله، در تمامی دوره‌ها جلسات با نشان «پیش‌نمایش رایگان» مشخص شده‌اند که هر علاقه‌مندی بدون پرداخت هزینه می‌تواند آن‌ها را تماشا کرده و با کیفیت تدریس اساتید آشنا شود.",
                 3
             ),
             (
-                "آیا بعد از خرید دوره، به آپدیت‌های آینده دسترسی خواهم داشت؟",
-                "بله، دسترسی به دوره‌ها دائمی و همیشگی است. در صورتی که مدرس محتوای جدید، سرفصل تکمیلی یا پروژه‌ای به دوره اضافه کند، این موارد به صورت کاملاً رایگان در پنل شما قرار می‌گیرد.",
+                "آیا دوره‌ها دارای تمرین‌های عملی و صوتی هستند؟",
+                "بله، در هر جلسه الگوهای صوتی و تمرینات حنجره به همراه سورس و فایل‌های صوتی ضمیمه قرار دارند که به صورت روزانه می‌توانید همراه با استاد تمرین کنید.",
                 4
             ),
             (
-                "در صورت بروز مشکل فنی یا سوال آموزشی چگونه پشتیبانی دریافت کنم؟",
-                "پشتیبانی مستقیم مدرس، کانال اختصاصی دانشجویان و همچنین پشتیبانی فنی سایت از طریق شماره تماس و تلگرام در تمام روزهای هفته آماده پاسخگویی به شماست.",
+                "پس از ثبت‌نام، دسترسی به ویدیوها تا چه زمانی برقرار است؟",
+                "دسترسی شما به دوره‌های ثبت‌نام شده همیشگی و نامحدود است و در تمام ۲۴ ساعت شبانه‌روز از طریق گوشی یا کامپیوتر می‌توانید ویدیوها را تماشا کنید.",
                 5
             ),
         ]
 
         for q, a, o in faqs_data:
-            FAQ.objects.get_or_create(question=q, defaults={"answer": a, "order": o, "is_active": True})
+            FAQ.objects.create(question=q, answer=a, order=o, is_active=True)
 
-        self.stdout.write(self.style.SUCCESS("All initial seed data created successfully!"))
+        self.stdout.write(self.style.SUCCESS("All AvazAmuz seed data created successfully!"))

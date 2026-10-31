@@ -112,6 +112,7 @@ export interface SiteSetting {
   telegram_url: string;
   instagram_url: string;
   footer_about: string;
+  enamad_html?: string;
 }
 
 export interface FAQ {

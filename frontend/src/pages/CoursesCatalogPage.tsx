@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import api from '../api/client';
 import { Course, Category } from '../types';
 import { CourseCard } from '../components/CourseCard';
-import { Search, Filter, BookOpen, RotateCcw } from 'lucide-react';
+import { Search, BookOpen, RotateCcw } from 'lucide-react';
 
 export const CoursesCatalogPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -80,45 +80,45 @@ export const CoursesCatalogPage: React.FC = () => {
       
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-black text-slate-900">بانک دوره‌های آموزشی</h1>
-        <p className="text-sm text-slate-500">
-          جدیدترین و کاربردی‌ترین دوره‌های تخصصی جهش کار برای تسلط بر مهارت‌های روز
+        <h1 className="text-3xl font-black text-stone-900">بانک دوره‌های تخصصی مداحی</h1>
+        <p className="text-sm text-stone-500">
+          مجموعه کامل آموزش‌های عملی صداسازی، ردیف‌های آوازی، مقتل‌شناسی و فن بیان در ستایشگری
         </p>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+      <div className="bg-white p-5 rounded-3xl border border-stone-200/90 shadow-xs space-y-4">
         
         {/* Search input */}
         <form onSubmit={handleSearchSubmit} className="flex gap-2">
           <div className="relative flex-1">
-            <Search className="w-5 h-5 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2" />
+            <Search className="w-5 h-5 text-stone-400 absolute right-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="جستجوی نام دوره، مهارت یا مدرس..."
+              placeholder="جستجوی نام دوره، دستگاه آوازی یا استاد..."
               value={inputSearch}
               onChange={(e) => setInputSearch(e.target.value)}
-              className="w-full pr-12 pl-4 py-3 text-sm bg-slate-50 rounded-2xl border border-slate-200 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
+              className="w-full pr-12 pl-4 py-3 text-sm bg-stone-50 rounded-2xl border border-stone-200 focus:bg-white focus:ring-2 focus:ring-emerald-700 focus:border-transparent outline-none transition-all placeholder:text-stone-400"
             />
           </div>
           <button
             type="submit"
-            className="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition-colors cursor-pointer"
+            className="px-6 py-3 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-amber-300 font-bold text-sm transition-colors cursor-pointer border border-emerald-700/60 shadow-xs"
           >
             اعمال جستجو
           </button>
         </form>
 
         {/* Categories Pills */}
-        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
-          <span className="text-xs font-bold text-slate-400 ml-2">دسته‌بندی:</span>
+        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-stone-100">
+          <span className="text-xs font-bold text-stone-400 ml-2">دسته‌بندی:</span>
           
           <button
             onClick={() => updateParam('category', '')}
             className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
               !selectedCategory
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-emerald-800 text-amber-300 shadow-xs'
+                : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
             }`}
           >
             همه موارد
@@ -130,8 +130,8 @@ export const CoursesCatalogPage: React.FC = () => {
               onClick={() => updateParam('category', c.slug)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 selectedCategory === c.slug
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-emerald-800 text-amber-300 shadow-xs'
+                  : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
               }`}
             >
               {c.title}
@@ -140,35 +140,35 @@ export const CoursesCatalogPage: React.FC = () => {
         </div>
 
         {/* Secondary filters: Level & Price */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-slate-100 text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-stone-100 text-xs">
           <div className="flex flex-wrap items-center gap-4">
             
             {/* Level */}
             <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-500">سطح:</span>
+              <span className="font-bold text-stone-500">سطح آموزشی:</span>
               <select
                 value={selectedLevel}
                 onChange={(e) => updateParam('level', e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-700 font-medium outline-none focus:ring-1 focus:ring-indigo-500"
+                className="bg-stone-50 border border-stone-200 rounded-xl px-3 py-1.5 text-stone-700 font-medium outline-none focus:ring-1 focus:ring-emerald-700 cursor-pointer"
               >
                 <option value="all">همه سطوح</option>
-                <option value="beginner">مقدماتی</option>
-                <option value="intermediate">متوسط</option>
-                <option value="advanced">پیشرفته</option>
+                <option value="beginner">مقدماتی و پایه</option>
+                <option value="intermediate">متوسط و تکمیلی</option>
+                <option value="advanced">پیشرفته و تخصصی</option>
               </select>
             </div>
 
             {/* Price */}
             <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-500">نوع دوره:</span>
+              <span className="font-bold text-stone-500">نوع دوره:</span>
               <select
                 value={selectedPrice}
                 onChange={(e) => updateParam('price', e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-700 font-medium outline-none focus:ring-1 focus:ring-indigo-500"
+                className="bg-stone-50 border border-stone-200 rounded-xl px-3 py-1.5 text-stone-700 font-medium outline-none focus:ring-1 focus:ring-emerald-700 cursor-pointer"
               >
                 <option value="">همه دوره‌ها</option>
-                <option value="free">فقط دوره‌های رایگان</option>
-                <option value="paid">دوره‌های تخصصی جامع</option>
+                <option value="free">فقط آموزش‌های رایگان</option>
+                <option value="paid">دوره‌های جامع تخصصی</option>
               </select>
             </div>
 
@@ -191,25 +191,25 @@ export const CoursesCatalogPage: React.FC = () => {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((n) => (
-            <div key={n} className="bg-white rounded-3xl p-4 border border-slate-100 animate-pulse space-y-4">
-              <div className="aspect-video bg-slate-200 rounded-2xl" />
-              <div className="h-4 bg-slate-200 rounded-md w-3/4" />
-              <div className="h-3 bg-slate-200 rounded-md w-1/2" />
+            <div key={n} className="bg-white rounded-3xl p-4 border border-stone-100 animate-pulse space-y-4">
+              <div className="aspect-video bg-stone-200 rounded-2xl" />
+              <div className="h-4 bg-stone-200 rounded-md w-3/4" />
+              <div className="h-3 bg-stone-200 rounded-md w-1/2" />
             </div>
           ))}
         </div>
       ) : courses.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-3xl border border-slate-200/80 p-8 space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+        <div className="text-center py-16 bg-white rounded-3xl border border-stone-200/90 p-8 space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center mx-auto border border-emerald-100">
             <BookOpen className="w-8 h-8" />
           </div>
-          <h3 className="text-lg font-bold text-slate-800">هیچ دوره‌ای با این مشخصات یافت نشد</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+          <h3 className="text-lg font-bold text-stone-800">هیچ دوره‌ای با این مشخصات یافت نشد</h3>
+          <p className="text-xs text-stone-500 max-w-sm mx-auto">
             می‌توانید کلمات جستجو یا فیلترهای اعمال شده را تغییر دهید تا به دوره‌های دلخواه برسید.
           </p>
           <button
             onClick={clearFilters}
-            className="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-700 transition-colors"
+            className="px-5 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-amber-300 font-bold text-xs transition-colors cursor-pointer border border-emerald-700/60"
           >
             مشاهده تمام دوره‌ها
           </button>

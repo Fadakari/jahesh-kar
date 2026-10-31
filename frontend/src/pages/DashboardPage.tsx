@@ -14,6 +14,7 @@ import {
   ExternalLink, 
   ShieldAlert,
   Loader2,
+  Mic,
   Sparkles
 } from 'lucide-react';
 
@@ -105,7 +106,7 @@ export const DashboardPage: React.FC = () => {
   if (isLoading || !user) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-        <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto" />
+        <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
       </div>
     );
   }
@@ -117,13 +118,13 @@ export const DashboardPage: React.FC = () => {
       {paymentStatus === 'success' && (
         <div className="bg-emerald-50 border-2 border-emerald-500/40 rounded-3xl p-6 sm:p-8 text-emerald-900 shadow-lg shadow-emerald-500/10 space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-lg font-black text-emerald-950">پرداخت شما با موفقیت انجام شد!</h2>
+              <h2 className="text-lg font-black text-emerald-950">ثبت‌نام شما با موفقیت انجام شد!</h2>
               <p className="text-xs text-emerald-700 mt-0.5">
-                دسترسی کامل به دوره برای شما فعال شد. کد رهگیری: <span className="font-mono font-bold">{trackingParam}</span>
+                دسترسی به تمامی جلسات و فایل‌های دوره برای شما فعال گردید. کد رهگیری: <span className="font-mono font-bold">{trackingParam}</span>
               </p>
             </div>
           </div>
@@ -131,10 +132,10 @@ export const DashboardPage: React.FC = () => {
             <div className="pt-2">
               <Link
                 to={`/course/${courseSlugParam}/watch`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-amber-300 text-xs font-bold shadow-md transition-colors border border-emerald-700/60"
               >
                 <PlayCircle className="w-4 h-4" />
-                <span>شروع تماشای دوره</span>
+                <span>ورود به کلاس و شروع تماشا</span>
               </Link>
             </div>
           )}
@@ -142,17 +143,17 @@ export const DashboardPage: React.FC = () => {
       )}
 
       {/* User Header Profile Card */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/90 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 text-white flex items-center justify-center font-black text-2xl shadow-md">
-            {user.full_name ? user.full_name.charAt(0) : user.username.charAt(0).toUpperCase()}
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-900 via-emerald-800 to-teal-800 text-amber-300 flex items-center justify-center font-black text-2xl shadow-md border border-amber-500/30">
+            {user.full_name ? user.full_name.charAt(0) : 'ذ'}
           </div>
           <div className="space-y-1">
-            <h1 className="text-xl font-black text-slate-900">
+            <h1 className="text-xl font-black text-stone-900">
               {user.full_name || user.username}
             </h1>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
-              {user.phone_number && <span>شماره موبایل: {user.phone_number}</span>}
+            <div className="flex flex-wrap items-center gap-3 text-xs text-stone-500">
+              {user.phone_number && <span>شماره همراه: {user.phone_number}</span>}
               <span>نام کاربری: @{user.username}</span>
             </div>
           </div>
@@ -164,23 +165,23 @@ export const DashboardPage: React.FC = () => {
             href="http://127.0.0.1:8000/admin/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold text-xs transition-colors shadow-md"
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-stone-900 hover:bg-stone-800 text-amber-400 font-bold text-xs transition-colors shadow-md border border-stone-700"
           >
             <ShieldAlert className="w-4 h-4 text-amber-400" />
-            <span>ورود به پنل ادمین جنگو</span>
+            <span>ورود به پنل مدیریت دوره و اساتید</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         )}
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-slate-200 pb-3 text-sm font-bold text-slate-600">
+      <div className="flex gap-2 border-b border-stone-200 pb-3 text-sm font-bold text-stone-600">
         <button
           onClick={() => setActiveTab('courses')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl transition-all cursor-pointer ${
             activeTab === 'courses'
-              ? 'bg-indigo-600 text-white shadow-xs'
-              : 'hover:bg-slate-100'
+              ? 'bg-emerald-800 text-amber-300 shadow-xs'
+              : 'hover:bg-stone-100'
           }`}
         >
           <GraduationCap className="w-4 h-4" />
@@ -191,24 +192,24 @@ export const DashboardPage: React.FC = () => {
           onClick={() => setActiveTab('orders')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl transition-all cursor-pointer ${
             activeTab === 'orders'
-              ? 'bg-indigo-600 text-white shadow-xs'
-              : 'hover:bg-slate-100'
+              ? 'bg-emerald-800 text-amber-300 shadow-xs'
+              : 'hover:bg-stone-100'
           }`}
         >
           <Receipt className="w-4 h-4" />
-          <span>تراکنش‌ها و فاکتورها</span>
+          <span>سفارشات و رسیدها</span>
         </button>
 
         <button
           onClick={() => setActiveTab('profile')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl transition-all cursor-pointer ${
             activeTab === 'profile'
-              ? 'bg-indigo-600 text-white shadow-xs'
-              : 'hover:bg-slate-100'
+              ? 'bg-emerald-800 text-amber-300 shadow-xs'
+              : 'hover:bg-stone-100'
           }`}
         >
           <UserIcon className="w-4 h-4" />
-          <span>مشخصات حساب</span>
+          <span>ویرایش مشخصات</span>
         </button>
       </div>
 
@@ -218,26 +219,26 @@ export const DashboardPage: React.FC = () => {
           {loadingData ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="bg-white rounded-3xl p-4 border border-slate-100 animate-pulse space-y-4">
-                  <div className="aspect-video bg-slate-200 rounded-2xl" />
-                  <div className="h-4 bg-slate-200 rounded-md w-3/4" />
+                <div key={n} className="bg-white rounded-3xl p-4 border border-stone-100 animate-pulse space-y-4">
+                  <div className="aspect-video bg-stone-200 rounded-2xl" />
+                  <div className="h-4 bg-stone-200 rounded-md w-3/4" />
                 </div>
               ))}
             </div>
           ) : enrollments.length === 0 ? (
-            <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8 space-y-4">
-              <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+            <div className="text-center py-16 bg-white rounded-3xl border border-stone-200 p-8 space-y-4">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center mx-auto border border-emerald-100">
                 <GraduationCap className="w-8 h-8" />
               </div>
-              <h3 className="text-base font-bold text-slate-800">شما هنوز در هیچ دوره‌ای ثبت‌نام نکرده‌اید</h3>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                از میان دوره‌های کاربردی جهش کار انتخاب کنید و یادگیری را همین امروز شروع کنید.
+              <h3 className="text-base font-bold text-stone-800">شما هنوز در هیچ دوره‌ای ثبت‌نام نکرده‌اید</h3>
+              <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                از میان دوره‌های تخصصی آواز آموز انتخاب کنید و یادگیری را همین امروز آغاز نمایید.
               </p>
               <Link
                 to="/courses"
-                className="inline-block px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-700 transition-colors shadow-md"
+                className="inline-block px-5 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-amber-300 font-bold text-xs transition-colors shadow-md border border-emerald-700/60"
               >
-                مشاهده دوره‌ها
+                مشاهده دوره‌های مداحی
               </Link>
             </div>
           ) : (
@@ -251,35 +252,35 @@ export const DashboardPage: React.FC = () => {
                     className={`bg-white rounded-3xl overflow-hidden border transition-all flex flex-col justify-between ${
                       isJustEnrolled
                         ? 'border-emerald-500 ring-2 ring-emerald-500 shadow-xl shadow-emerald-500/10'
-                        : 'border-slate-200/90 shadow-xs'
+                        : 'border-stone-200/90 shadow-xs'
                     }`}
                   >
                     <div>
-                      <div className="aspect-video relative bg-slate-900">
+                      <div className="aspect-video relative bg-stone-900">
                         <img
                           src={c.cover_image_url || '/courses/default-course.jpg'}
                           alt={c.title}
                           className="w-full h-full object-cover"
                         />
-                        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500 text-white flex items-center gap-1 shadow-md">
+                        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-600 text-white flex items-center gap-1 shadow-md">
                           <CheckCircle2 className="w-3.5 h-3.5" />
-                          {isJustEnrolled ? 'ثبت‌نام جدید' : 'فعال'}
+                          {isJustEnrolled ? 'ثبت‌نام جدید' : 'دسترسی فعال'}
                         </div>
                       </div>
 
                       <div className="p-5 space-y-2">
                         {isJustEnrolled && (
-                          <div className="inline-block px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-bold">
-                            🎉 دوره تازه خریداری شده شما
+                          <div className="inline-block px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 text-[11px] font-bold">
+                            🎉 دوره تازه فعال‌شده شما
                           </div>
                         )}
-                        <h3 className="text-base font-bold text-slate-900 line-clamp-2">
+                        <h3 className="text-base font-bold text-stone-900 line-clamp-2">
                           {c.title}
                         </h3>
-                        <p className="text-xs text-slate-500 line-clamp-2">
+                        <p className="text-xs text-stone-500 line-clamp-2 font-normal">
                           {c.short_description}
                         </p>
-                        <div className="flex items-center gap-2 pt-2 text-xs text-slate-400">
+                        <div className="flex items-center gap-2 pt-2 text-xs text-stone-400">
                           <Clock className="w-3.5 h-3.5" />
                           <span>{c.duration}</span>
                         </div>
@@ -289,10 +290,10 @@ export const DashboardPage: React.FC = () => {
                     <div className="p-5 pt-0">
                       <Link
                         to={`/course/${c.slug}/watch`}
-                        className="w-full py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
+                        className="w-full py-3.5 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-amber-300 font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 border border-emerald-700/60"
                       >
                         <PlayCircle className="w-4 h-4" />
-                        تماشای ویدیوها و دانلود فایل‌ها
+                        ورود به کلاس و تماشای جلسات
                       </Link>
                     </div>
                   </div>
@@ -305,19 +306,19 @@ export const DashboardPage: React.FC = () => {
 
       {/* Tab 2: Orders */}
       {activeTab === 'orders' && (
-        <div className="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-xs">
-          <div className="p-6 border-b border-slate-100">
-            <h3 className="text-base font-bold text-slate-900">تاریخچه سفارشات و تراکنش‌ها</h3>
+        <div className="bg-white rounded-3xl border border-stone-200/90 overflow-hidden shadow-xs">
+          <div className="p-6 border-b border-stone-100">
+            <h3 className="text-base font-bold text-stone-900">تاریخچه سفارشات و تراکنش‌ها</h3>
           </div>
 
           {orders.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-400">
+            <div className="p-8 text-center text-xs text-stone-400">
               هنوز هیچ تراکنشی ثبت نشده است.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-right text-xs">
-                <thead className="bg-slate-50 text-slate-500 font-bold border-b border-slate-100">
+                <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-100">
                   <tr>
                     <th className="p-4">کد رهگیری</th>
                     <th className="p-4">عنوان دوره</th>
@@ -326,18 +327,18 @@ export const DashboardPage: React.FC = () => {
                     <th className="p-4">تاریخ ثبت</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-700">
+                <tbody className="divide-y divide-stone-100 text-stone-700">
                   {orders.map((o) => (
-                    <tr key={o.id} className="hover:bg-slate-50/50">
-                      <td className="p-4 font-mono font-bold text-indigo-600">{o.tracking_code}</td>
-                      <td className="p-4 font-semibold text-slate-900">{o.course_title}</td>
+                    <tr key={o.id} className="hover:bg-stone-50/50">
+                      <td className="p-4 font-mono font-bold text-emerald-800">{o.tracking_code}</td>
+                      <td className="p-4 font-semibold text-stone-900">{o.course_title}</td>
                       <td className="p-4">{o.amount === 0 ? 'رایگان' : `${o.amount.toLocaleString('fa-IR')} تومان`}</td>
                       <td className="p-4">
-                        <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700">
+                        <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800">
                           {o.status === 'completed' ? 'پرداخت شده' : o.status}
                         </span>
                       </td>
-                      <td className="p-4 text-slate-400">
+                      <td className="p-4 text-stone-400">
                         {new Date(o.created_at).toLocaleDateString('fa-IR')}
                       </td>
                     </tr>
@@ -351,42 +352,42 @@ export const DashboardPage: React.FC = () => {
 
       {/* Tab 3: Profile settings */}
       {activeTab === 'profile' && (
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 max-w-lg shadow-xs space-y-6">
-          <h3 className="text-base font-bold text-slate-900">ویرایش مشخصات فردی</h3>
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/90 max-w-lg shadow-xs space-y-6">
+          <h3 className="text-base font-bold text-stone-900">ویرایش مشخصات فردی</h3>
 
           {profileMsg && (
-            <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold">
+            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
               {profileMsg}
             </div>
           )}
 
           <form onSubmit={handleUpdateProfile} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">نام و نام خانوادگی</label>
+              <label className="text-xs font-bold text-stone-700">نام و نام خانوادگی</label>
               <input
                 type="text"
                 value={fullNameInput}
                 onChange={(e) => setFullNameInput(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-2xl text-sm font-medium text-stone-900 focus:bg-white focus:ring-2 focus:ring-emerald-700 outline-none"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">آدرس ایمیل</label>
+              <label className="text-xs font-bold text-stone-700">آدرس ایمیل</label>
               <input
                 type="email"
                 dir="ltr"
                 placeholder="you@example.com"
                 value={emailInput}
                 onChange={(e) => setEmailInput(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-2xl text-sm font-medium text-stone-900 focus:bg-white focus:ring-2 focus:ring-emerald-700 outline-none"
               />
             </div>
 
             <button
               type="submit"
               disabled={savingProfile}
-              className="py-3 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+              className="py-3 px-6 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-amber-300 font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 border border-emerald-700/60"
             >
               {savingProfile ? <Loader2 className="w-4 h-4 animate-spin" /> : 'ذخیره تغییرات'}
             </button>

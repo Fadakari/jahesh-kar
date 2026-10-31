@@ -8,21 +8,90 @@ body {
   font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   direction: rtl;
   text-align: right;
-  background-color: #f8fafc;
+  background-color: #faf9f5;
+  color: #1c1917;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar with emerald & gold touches */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f5f3ec;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #cbd5c8;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #93a38d;
+}
+
+/* Subtle Persian Girih (Geometric Octagonal Islamic star lattice) pattern */
+.bg-girih-subtle {
+  background-color: #faf8f5;
+  background-image: radial-gradient(rgba(180, 150, 80, 0.08) 1px, transparent 1px),
+                    radial-gradient(rgba(16, 120, 80, 0.05) 1px, #faf8f5 1px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+/* Dark Imperial Jade texture for Hero & Featured sections */
+.bg-imperial-jade {
+  background-color: #071c16;
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(217, 119, 6, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(5, 150, 105, 0.08) 0%, transparent 60%);
+}
+
+/* Delicate Golden Shimmer Border */
+.border-gold-glow {
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.06);
+}
+
+.border-gold-glow:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.12);
+}
+
+/* Animated Equalizer Soundwaves */
+@keyframes vocalWave {
+  0%, 100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.animate-vocal-1 {
+  animation: vocalWave 1.2s ease-in-out infinite;
+}
+.animate-vocal-2 {
+  animation: vocalWave 0.8s ease-in-out infinite 0.2s;
+}
+.animate-vocal-3 {
+  animation: vocalWave 1.4s ease-in-out infinite 0.4s;
+}
+.animate-vocal-4 {
+  animation: vocalWave 1.0s ease-in-out infinite 0.1s;
+}
+.animate-vocal-5 {
+  animation: vocalWave 0.9s ease-in-out infinite 0.3s;
+}
+
+/* Hardened video protection styles */
+video::-webkit-media-controls {
+  display: none !important;
+}
+video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+video {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }

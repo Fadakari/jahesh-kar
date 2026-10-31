@@ -39,7 +39,7 @@ class Course(models.Model):
     description = models.TextField(verbose_name="توضیحات جامع دوره")
     
     # مدرس
-    instructor_name = models.CharField(max_length=120, default="مدرس جهش کار", verbose_name="نام مدرس")
+    instructor_name = models.CharField(max_length=120, default="استاد آواز آموز", verbose_name="نام مدرس")
     instructor_title = models.CharField(max_length=150, default="متخصص و توسعه‌دهنده ارشد", blank=True, verbose_name="عنوان یا تخصص مدرس")
     instructor_bio = models.TextField(blank=True, verbose_name="بیوگرافی کوتاه مدرس")
     instructor_avatar = models.ImageField(upload_to="instructors/", null=True, blank=True, verbose_name="تصویر مدرس")

@@ -8,7 +8,7 @@ class SiteSetting(models.Model):
     """
     site_title = models.CharField(
         max_length=150,
-        default="جهش کار",
+        default="آواز آموز",
         verbose_name="عنوان و نام برند سایت"
     )
     logo = models.ImageField(
@@ -21,32 +21,32 @@ class SiteSetting(models.Model):
     # بخش هیرو (Hero) در صفحه اصلی
     hero_badge = models.CharField(
         max_length=150,
-        default="پلتفرم ورود به بازار کار و اشتغال",
+        default="نخستین آکادمی تخصصی آموزش مداحی و صداسازی مذهبی",
         verbose_name="نشان / بج بالای عنوان اصلی"
     )
     hero_title = models.CharField(
         max_length=255,
-        default="شروع یادگیری مهارتی، ورود سریع به بازار کار",
+        default="آموزش اصولی مداحی، فن بیان و صداسازی با اساتید برجسته",
         verbose_name="عنوان اصلی هیرو"
     )
     hero_subtitle = models.TextField(
-        default="با دوره‌های تخصصی، پروژه‌محور و مهارت‌های موردنیاز صنعت، مسیر شغلی خود را سریع‌تر و مطمئن‌تر بسازید.",
+        default="از پرورش و تقویت حنجره تا تسلط بر دستگاه‌های آوازی، مقتل‌خوانی، نوحه‌سرایی و مجلس‌داری را به صورت گام‌به‌گام بیاموزید.",
         verbose_name="توضیحات زیر عنوان هیرو"
     )
 
-    # بخش بنر مزایا و چرا جهش کار؟
+    # بخش بنر مزایا و چرا آواز آموز؟
     features_badge = models.CharField(
         max_length=150,
-        default="چرا یادگیری با جهش کار؟",
+        default="چرا آکادمی آواز آموز؟",
         verbose_name="نشان بنر مزایا"
     )
     features_title = models.CharField(
         max_length=255,
-        default="از آموزش تئوری خسته شدید؟ اینجا فقط روی پروژه‌های واقعی کار می‌کنید",
+        default="تربیت ذاکران و مداحان اهل‌بیت با اصیل‌ترین متدهای صوتی و معرفتی",
         verbose_name="عنوان بنر مزایا"
     )
     features_subtitle = models.TextField(
-        default="تمام دوره‌ها متناسب با نیاز روز بازار کار و به همراه پشتیبانی مستقیم مدرسان و فایل‌های سورس‌کد تهیه شده‌اند.",
+        default="آموزش‌های کاربردی متناسب با اصول صداسازی علمی، لحن‌شناسی، ادعیه‌خوانی و آداب نوکری به همراه رفع اشکال و تمرین‌های صوتی هدفمند.",
         verbose_name="توضیحات بنر مزایا"
     )
 
@@ -60,13 +60,13 @@ class SiteSetting(models.Model):
     contact_email = models.CharField(
         max_length=100,
         blank=True,
-        default="support@jaheshkar.ir",
+        default="info@avazamouz.ir",
         verbose_name="ایمیل پشتیبانی"
     )
     telegram_url = models.CharField(
         max_length=255,
         blank=True,
-        default="https://t.me/jaheshkar",
+        default="https://t.me/avazamouz",
         verbose_name="لینک کانال یا پشتیبانی تلگرام"
     )
     instagram_url = models.CharField(
@@ -79,8 +79,16 @@ class SiteSetting(models.Model):
     # متن درباره ما در فوتر
     footer_about = models.TextField(
         blank=True,
-        default="جهش کار پلتفرم آموزش آنلاین و تخصصی مهارت‌های اشتغال است. ما به شما کمک می‌کنیم تا مسیر تبدیل شدن از یک مبتدی به یک فرد متخصص را در کوتاه‌ترین زمان ممکن طی کنید.",
+        default="آواز آموز، مرجع تخصصی آموزش نوین و اصولی مداحی، صداسازی و فن بیان مذهبی است. رسالت ما توانمندسازی علاقه‌مندان به ستایشگری اهل‌بیت (ع) با تکیه بر علم صداسازی و اصالت‌های سنتی است.",
         verbose_name="متن درباره ما در فوتر"
+    )
+
+    # نماد اعتماد الکترونیکی (اینماد)
+    enamad_html = models.TextField(
+        blank=True,
+        default="<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq' alt='' style='cursor:pointer' code='1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'></a>",
+        verbose_name="کد اینماد (HTML)",
+        help_text="کد HTML رسمی اینماد دریافتی از سامانه اینماد"
     )
 
     updated_at = models.DateTimeField(auto_now=True, verbose_name="آخرین به‌روزرسانی")

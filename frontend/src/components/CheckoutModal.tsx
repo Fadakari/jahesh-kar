@@ -85,45 +85,45 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         {!isSuccess ? (
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
-                <CreditCard className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold border border-emerald-100">
+                <CreditCard className="w-6 h-6 text-emerald-700" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-slate-900">
-                  {course.is_free ? 'ثبت‌نام در دوره رایگان' : 'تایید سفارش و پرداخت'}
+                <h3 className="text-lg font-black text-stone-900">
+                  {course.is_free ? 'ثبت‌نام در دوره رایگان' : 'تایید ثبت‌نام و پرداخت'}
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">آموزشگاه آنلاین جهش کار</p>
+                <p className="text-xs text-stone-500 mt-0.5">آکادمی آموزش مداحی آواز آموز</p>
               </div>
             </div>
 
             {/* Course mini overview */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 mb-6">
-              <div className="text-sm font-bold text-slate-800 leading-snug">
+            <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200 mb-6">
+              <div className="text-sm font-bold text-stone-900 leading-snug">
                 {course.title}
               </div>
-              <div className="text-xs text-slate-500 mt-2 flex items-center justify-between">
-                <span>مدرس: {course.instructor_name}</span>
+              <div className="text-xs text-stone-500 mt-2 flex items-center justify-between">
+                <span>استاد: {course.instructor_name}</span>
                 <span>مدت: {course.duration}</span>
               </div>
             </div>
 
             {/* Price breakdown */}
-            <div className="space-y-3 py-3 border-y border-slate-100 text-sm mb-6">
-              <div className="flex items-center justify-between text-slate-600">
-                <span>قیمت دوره:</span>
+            <div className="space-y-3 py-3 border-y border-stone-100 text-sm mb-6">
+              <div className="flex items-center justify-between text-stone-600">
+                <span>شهریه دوره:</span>
                 <span>{course.price === 0 ? 'رایگان' : `${course.price.toLocaleString('fa-IR')} تومان`}</span>
               </div>
 
               {course.discount_price && course.discount_price < course.price && (
-                <div className="flex items-center justify-between text-rose-600">
+                <div className="flex items-center justify-between text-amber-600 font-semibold">
                   <span>تخفیف ویژه:</span>
                   <span>-{(course.price - course.discount_price).toLocaleString('fa-IR')} تومان</span>
                 </div>
               )}
 
-              <div className="flex items-center justify-between font-black text-slate-900 pt-2 border-t border-slate-200">
-                <span>مبلغ قابل پرداخت:</span>
-                <span className="text-lg text-indigo-600">
+              <div className="flex items-center justify-between font-black text-stone-900 pt-2 border-t border-stone-200">
+                <span>مبلغ نهایی:</span>
+                <span className="text-lg text-emerald-800">
                   {course.final_price === 0 ? 'رایگان' : `${course.final_price.toLocaleString('fa-IR')} تومان`}
                 </span>
               </div>
@@ -137,27 +137,27 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
             {!user ? (
               <div className="space-y-3">
-                <div className="text-xs text-amber-700 bg-amber-50 p-3 rounded-xl border border-amber-200 text-center font-medium">
-                  برای تکمیل ثبت نام، ابتدا وارد حساب کاربری خود شوید یا با شماره موبایل ثبت نام کنید.
+                <div className="text-xs text-amber-800 bg-amber-50 p-3 rounded-xl border border-amber-200 text-center font-medium">
+                  برای تکمیل ثبت‌نام، ابتدا وارد حساب کاربری خود شوید یا با شماره همراه ثبت‌نام فرمایید.
                 </div>
                 <button
                   onClick={() => navigate('/login?redirect=' + encodeURIComponent(window.location.pathname))}
-                  className="w-full py-3.5 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md transition-all text-center"
+                  className="w-full py-3.5 px-4 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-amber-300 font-bold text-sm shadow-md transition-all text-center border border-emerald-700/60"
                 >
-                  ورود یا ثبت‌نام سریع
+                  ورود یا عضویت سریع
                 </button>
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="flex items-center justify-center gap-1.5 text-xs text-slate-500 font-medium">
+                <div className="flex items-center justify-center gap-1.5 text-xs text-stone-500 font-medium">
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <span>دسترسی آنی و بدون محدودیت به تمام ویدیوها و فایل‌ها</span>
+                  <span>دسترسی آنی و دائمی به تمامی ویدیوها و فایل‌های تمرینی</span>
                 </div>
 
                 <button
                   onClick={handleCheckout}
                   disabled={loading}
-                  className="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-black text-base shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/40 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
+                  className="w-full py-4 px-4 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-amber-300 font-black text-base shadow-lg shadow-emerald-950/20 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 border border-emerald-700/60"
                 >
                   {loading ? (
                     <>
@@ -166,12 +166,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     </>
                   ) : course.is_free ? (
                     <>
-                      <Sparkles className="w-5 h-5" />
+                      <Sparkles className="w-5 h-5 text-amber-400" />
                       شروع یادگیری رایگان
                     </>
                   ) : (
                     <>
-                      <CreditCard className="w-5 h-5" />
+                      <CreditCard className="w-5 h-5 text-amber-400" />
                       تایید و پرداخت آنلاین
                     </>
                   )}
@@ -194,7 +194,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               دسترسی به تمامی ویدیوها و محتوای دوره برای شما فعال شد. کد پیگیری شما:
             </p>
 
-            <div className="p-3 rounded-xl bg-slate-100 font-mono font-bold text-indigo-700 text-base tracking-wider inline-block">
+            <div className="p-3 rounded-xl bg-emerald-50 font-mono font-bold text-emerald-800 text-base tracking-wider inline-block border border-emerald-200">
               {trackingCode}
             </div>
 

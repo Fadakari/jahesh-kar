@@ -24,8 +24,9 @@ class SiteSettingAdmin(admin.ModelAdmin):
             "fields": ("contact_phone", "contact_email", "telegram_url", "instagram_url"),
             "description": "این اطلاعات در فوتر و هدر سایت نمایش داده می‌شوند."
         }),
-        ("متن درباره ما (فوتر)", {
-            "fields": ("footer_about",),
+        ("متن درباره ما و اینماد (فوتر)", {
+            "fields": ("footer_about", "enamad_html"),
+            "description": "متن معرفی در فوتر و کد HTML رسمی نماد اعتماد الکترونیکی (اینماد)."
         }),
     )
 
@@ -45,7 +46,7 @@ class SiteSettingAdmin(admin.ModelAdmin):
                 '</div>',
                 obj.logo.url
             )
-        return "هنوز لوگویی آپلود نشده است (لوگوی پیش‌فرض جهش کار نمایش داده می‌شود)."
+        return "هنوز لوگویی آپلود نشده است (لوگوی پیش‌فرض آواز آموز نمایش داده می‌شود)."
     logo_preview_large.short_description = "لوگوی فعلی"
 
     def has_add_permission(self, request):

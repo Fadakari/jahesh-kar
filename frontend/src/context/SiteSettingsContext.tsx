@@ -9,19 +9,20 @@ interface SiteSettingsContextType {
 }
 
 const defaultSettings: SiteSetting = {
-  site_title: 'جهش کار',
+  site_title: 'آواز آموز',
   logo_url: null,
-  hero_badge: 'پلتفرم ورود به بازار کار و اشتغال',
-  hero_title: 'شروع یادگیری مهارتی، ورود سریع به بازار کار',
-  hero_subtitle: 'با دوره‌های تخصصی، پروژه‌محور و مهارت‌های موردنیاز صنعت، مسیر شغلی خود را سریع‌تر و مطمئن‌تر بسازید.',
-  features_badge: 'چرا یادگیری با جهش کار؟',
-  features_title: 'از آموزش تئوری خسته شدید؟ اینجا فقط روی پروژه‌های واقعی کار می‌کنید',
-  features_subtitle: 'تمام دوره‌ها متناسب با نیاز روز بازار کار و به همراه پشتیبانی مستقیم مدرسان و فایل‌های سورس‌کد تهیه شده‌اند.',
+  hero_badge: 'نخستین آکادمی تخصصی آموزش مداحی و صداسازی مذهبی',
+  hero_title: 'آموزش اصولی مداحی، فن بیان و صداسازی با اساتید برجسته',
+  hero_subtitle: 'از پرورش و تقویت حنجره تا تسلط بر دستگاه‌های آوازی، مقتل‌خوانی، نوحه‌سرایی و مجلس‌داری را به صورت گام‌به‌گام بیاموزید.',
+  features_badge: 'چرا آکادمی آواز آموز؟',
+  features_title: 'تربیت ذاکران و مداحان اهل‌بیت با اصیل‌ترین متدهای صوتی و معرفتی',
+  features_subtitle: 'آموزش‌های کاربردی متناسب با اصول صداسازی علمی، لحن‌شناسی، ادعیه‌خوانی و آداب نوکری به همراه رفع اشکال و تمرین‌های صوتی هدفمند.',
   contact_phone: '۰۲۱-۹۱۰۰۰۰۰۰',
-  contact_email: 'support@jaheshkar.ir',
-  telegram_url: 'https://t.me/jaheshkar',
+  contact_email: 'info@avazamouz.ir',
+  telegram_url: 'https://t.me/avazamouz',
   instagram_url: '',
-  footer_about: 'جهش کار پلتفرم آموزش آنلاین و تخصصی مهارت‌های اشتغال است. ما به شما کمک می‌کنیم تا مسیر تبدیل شدن از یک مبتدی به یک فرد متخصص را در کوتاه‌ترین زمان ممکن طی کنید.',
+  footer_about: 'آواز آموز، مرجع تخصصی آموزش نوین و اصولی مداحی، صداسازی و فن بیان مذهبی است. رسالت ما توانمندسازی علاقه‌مندان به ستایشگری اهل‌بیت (ع) با تکیه بر علم صداسازی و اصالت‌های سنتی است.',
+  enamad_html: "<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq' alt='' style='cursor:pointer' code='1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'></a>",
 };
 
 const SiteSettingsContext = createContext<SiteSettingsContextType>({

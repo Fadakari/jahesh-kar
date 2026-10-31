@@ -6,10 +6,10 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   isLoading: boolean;
-  sendOtp: (phone: string) => Promise<{ success: boolean; message: string; dev_code?: string }>;
-  verifyOtp: (phone: string, code: string, fullName?: string) => Promise<void>;
-  loginWithPassword: (identifier: string, password: string) => Promise<void>;
-  registerWithPassword: (username: string, password: string, fullName?: string, phone?: string) => Promise<void>;
+  sendOtp: (phone: string, extraData?: Record<string, any>) => Promise<any>;
+  verifyOtp: (phone: string, code: string, fullName?: string, extraData?: Record<string, any>) => Promise<any>;
+  loginWithPassword: (identifier: string, password: string) => Promise<any>;
+  registerWithPassword: (username: string, password: string, fullName?: string, phone?: string) => Promise<any>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -18,11 +18,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('jaheshkar_token'));
+  const [token, setToken] = useState<string | null>(
+    () => localStorage.getItem('avazamouz_token') || localStorage.getItem('jaheshkar_token')
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const refreshUser = async () => {
-    const savedToken = localStorage.getItem('jaheshkar_token');
+    const savedToken =
+      localStorage.getItem('avazamouz_token') || localStorage.getItem('jaheshkar_token');
     if (!savedToken) {
       setUser(null);
       setIsLoading(false);
@@ -30,8 +33,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     try {
       const res = await api.get('/accounts/me/');
-      setUser(res.data.user);
+      // Support either { user: {...} } or direct user object
+      const userData = res.data?.user || res.data;
+      if (userData && (userData.id || userData.username || userData.phone_number)) {
+        setUser(userData);
+      }
     } catch {
+      localStorage.removeItem('avazamouz_token');
       localStorage.removeItem('jaheshkar_token');
       setToken(null);
       setUser(null);
@@ -44,32 +52,88 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshUser();
   }, [token]);
 
-  const sendOtp = async (phone: string) => {
-    const res = await api.post('/accounts/send-otp/', { phone_number: phone });
+  // Decoupled Send OTP (compatible with any backend payload format)
+  const sendOtp = async (phone: string, extraData: Record<string, any> = {}) => {
+    const payload = {
+      phone_number: phone,
+      phone: phone,
+      mobile: phone,
+      ...extraData,
+    };
+    const res = await api.post('/accounts/send-otp/', payload);
     return res.data;
   };
 
-  const verifyOtp = async (phone: string, code: string, fullName?: string) => {
-    const res = await api.post('/accounts/verify-otp/', {
+  // Decoupled Verify OTP (handles JWT access tokens, Token auth, or Session IDs)
+  const verifyOtp = async (
+    phone: string,
+    code: string,
+    fullName?: string,
+    extraData: Record<string, any> = {}
+  ) => {
+    const payload = {
       phone_number: phone,
+      phone: phone,
+      mobile: phone,
       code,
+      otp: code,
+      token: code,
       full_name: fullName,
-    });
-    const newToken = res.data.token;
-    localStorage.setItem('jaheshkar_token', newToken);
-    setToken(newToken);
-    setUser(res.data.user);
+      ...extraData,
+    };
+
+    const res = await api.post('/accounts/verify-otp/', payload);
+
+    // Support standard token variations returned by different backend frameworks
+    const newToken =
+      res.data?.token ||
+      res.data?.access ||
+      res.data?.key ||
+      res.data?.access_token ||
+      res.data?.data?.token;
+
+    if (newToken && typeof newToken === 'string') {
+      localStorage.setItem('avazamouz_token', newToken);
+      setToken(newToken);
+    }
+
+    if (res.data?.user) {
+      setUser(res.data.user);
+    } else {
+      await refreshUser();
+    }
+
+    return res.data;
   };
 
   const loginWithPassword = async (identifier: string, password: string) => {
-    const res = await api.post('/accounts/login/', {
+    const payload = {
       identifier,
+      username: identifier,
+      phone_number: identifier,
       password,
-    });
-    const newToken = res.data.token;
-    localStorage.setItem('jaheshkar_token', newToken);
-    setToken(newToken);
-    setUser(res.data.user);
+    };
+    const res = await api.post('/accounts/login/', payload);
+
+    const newToken =
+      res.data?.token ||
+      res.data?.access ||
+      res.data?.key ||
+      res.data?.access_token ||
+      res.data?.data?.token;
+
+    if (newToken && typeof newToken === 'string') {
+      localStorage.setItem('avazamouz_token', newToken);
+      setToken(newToken);
+    }
+
+    if (res.data?.user) {
+      setUser(res.data.user);
+    } else {
+      await refreshUser();
+    }
+
+    return res.data;
   };
 
   const registerWithPassword = async (
@@ -83,15 +147,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       password,
       full_name: fullName,
       phone_number: phone,
+      phone: phone,
     });
-    const newToken = res.data.token;
-    localStorage.setItem('jaheshkar_token', newToken);
-    setToken(newToken);
-    setUser(res.data.user);
+
+    const newToken =
+      res.data?.token ||
+      res.data?.access ||
+      res.data?.key ||
+      res.data?.access_token;
+
+    if (newToken && typeof newToken === 'string') {
+      localStorage.setItem('avazamouz_token', newToken);
+      setToken(newToken);
+    }
+
+    if (res.data?.user) {
+      setUser(res.data.user);
+    } else {
+      await refreshUser();
+    }
+
+    return res.data;
   };
 
   const logout = () => {
     api.post('/accounts/logout/').catch(() => {});
+    localStorage.removeItem('avazamouz_token');
     localStorage.removeItem('jaheshkar_token');
     setToken(null);
     setUser(null);

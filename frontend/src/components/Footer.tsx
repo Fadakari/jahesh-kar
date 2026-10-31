@@ -1,44 +1,51 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSiteSettings } from '../context/SiteSettingsContext';
-import { Sparkles, ShieldCheck, Headphones, Award, Heart, Phone, Mail, Send } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
+import { ShieldCheck, Award, Headphones, Phone, Mail, Send, Sparkles, Music } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const { settings } = useSiteSettings();
 
+  const defaultEnamad = `<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq' alt='' style='cursor:pointer' code='1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'></a>`;
+
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-16 pb-12 mt-24 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="bg-[#051712] text-stone-300 pt-16 pb-12 mt-24 border-t border-amber-900/20 relative overflow-hidden">
+      {/* Delicate background ambient light */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[radial-gradient(circle,rgba(217,119,6,0.06)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[radial-gradient(circle,rgba(16,185,129,0.08)_0%,transparent_70%)] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Features bar */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 border-b border-slate-800">
-          <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-800/50 border border-slate-800">
-            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-12 border-b border-emerald-900/50">
+          <div className="flex items-center gap-4 p-5 rounded-2xl bg-emerald-950/50 border border-amber-500/20 shadow-md">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/30">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-white font-bold text-base">تضمین کیفیت آموزش</h4>
-              <p className="text-xs text-slate-400 mt-1">سرفصل‌های منطبق با جدیدترین نیاز بازار کار</p>
+              <h4 className="text-white font-bold text-base">آموزش اصولی و علمی</h4>
+              <p className="text-xs text-stone-400 mt-1">سرفصل‌های منطبق با استاندارد صداسازی و الحان کهن</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-800/50 border border-slate-800">
-            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-4 p-5 rounded-2xl bg-emerald-950/50 border border-emerald-800/40 shadow-md">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
               <Award className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-white font-bold text-base">دسترسی همیشگی به ویدیوها</h4>
-              <p className="text-xs text-slate-400 mt-1">مشاهده آنلاین و نامحدود در هر زمان و دستگاه</p>
+              <h4 className="text-white font-bold text-base">دسترسی نامحدود و مادام‌العمر</h4>
+              <p className="text-xs text-stone-400 mt-1">مشاهده جلسات با اینترنت نیم‌بهاء و بدون محدودیت زمانی</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-800/50 border border-slate-800">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-4 p-5 rounded-2xl bg-emerald-950/50 border border-teal-800/40 shadow-md">
+            <div className="w-12 h-12 rounded-xl bg-teal-500/15 text-teal-400 flex items-center justify-center shrink-0 border border-teal-500/30">
               <Headphones className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-white font-bold text-base">پشتیبانی و پاسخگویی</h4>
-              <p className="text-xs text-slate-400 mt-1">همراهی با شما تا رسیدن به نتیجه مطلوب</p>
+              <h4 className="text-white font-bold text-base">پشتیبانی و رفع اشکال صوتی</h4>
+              <p className="text-xs text-stone-400 mt-1">ارسال فایل صوتی و بررسی تکنیک تحریر توسط اساتید</p>
             </div>
           </div>
         </div>
@@ -47,37 +54,22 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 py-12">
           
           <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              {settings?.logo_url ? (
-                <img
-                  src={settings.logo_url}
-                  alt={settings.site_title || 'جهش کار'}
-                  className="h-10 w-auto max-w-[160px] object-contain brightness-0 invert"
-                />
-              ) : (
-                <>
-                  <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
-                    <Sparkles className="w-5 h-5" />
-                  </div>
-                  <span className="text-2xl font-black text-white">{settings?.site_title || 'جهش کار'}</span>
-                </>
-              )}
-            </div>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-md">
-              {settings?.footer_about || 'جهش کار مرجع تخصصی دوره‌های مهارتی و پروژه‌محور برای ورود پرقدرت به بازار کار تکنولوژی و کسب درآمد است. ما فاصله بین یادگیری تئوری و شغل واقعی را به حداقل رسانده‌ایم.'}
+            <BrandLogo variant="dark" size="md" />
+            <p className="text-stone-400 text-sm leading-relaxed max-w-md mt-3">
+              {settings?.footer_about || 'آواز آموز، مرجع تخصصی آموزش نوین و اصولی مداحی، صداسازی و فن بیان مذهبی است. رسالت ما توانمندسازی علاقه‌مندان به ستایشگری اهل‌بیت (ع) با تکیه بر علم صداسازی و اصالت‌های سنتی است.'}
             </p>
 
             {/* Dynamic Contacts */}
-            <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-400">
+            <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-stone-300">
               {settings?.contact_phone && (
-                <div className="flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-indigo-400" />
+                <div className="flex items-center gap-1.5 bg-emerald-950/70 px-3.5 py-2 rounded-xl border border-emerald-800/50">
+                  <Phone className="w-3.5 h-3.5 text-amber-400" />
                   <span dir="ltr">{settings.contact_phone}</span>
                 </div>
               )}
               {settings?.contact_email && (
-                <div className="flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                <div className="flex items-center gap-1.5 bg-emerald-950/70 px-3.5 py-2 rounded-xl border border-emerald-800/50">
+                  <Mail className="w-3.5 h-3.5 text-teal-400" />
                   <span>{settings.contact_email}</span>
                 </div>
               )}
@@ -86,55 +78,64 @@ export const Footer: React.FC = () => {
                   href={settings.telegram_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-sky-400 hover:underline"
+                  className="flex items-center gap-1.5 text-amber-300 hover:text-amber-200 bg-emerald-950/70 px-3.5 py-2 rounded-xl border border-amber-500/30 transition-colors"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>کانال تلگرام</span>
+                  <Send className="w-3.5 h-3.5 text-amber-400" />
+                  <span>کانال تلگرام آواز آموز</span>
                 </a>
               )}
             </div>
           </div>
 
           <div>
-            <h5 className="text-white font-bold text-base mb-4">دسترسی سریع</h5>
-            <ul className="space-y-2.5 text-sm text-slate-400">
+            <h5 className="text-white font-bold text-base mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              دسترسی سریع
+            </h5>
+            <ul className="space-y-2.5 text-sm text-stone-400">
               <li>
-                <Link to="/courses" className="hover:text-indigo-400 transition-colors">لیست همه دوره‌ها</Link>
+                <Link to="/courses" className="hover:text-amber-300 transition-colors">بانک دوره‌های مداحی</Link>
               </li>
               <li>
-                <Link to="/courses?price=free" className="hover:text-indigo-400 transition-colors">دوره‌های رایگان</Link>
+                <a href="#maqamat" className="hover:text-amber-300 transition-colors">آزمایشگاه نغمه‌شناسی</a>
               </li>
               <li>
-                <Link to="/login" className="hover:text-indigo-400 transition-colors">ورود / ثبت‌نام</Link>
+                <Link to="/courses?price=free" className="hover:text-amber-300 transition-colors">آموزش‌های صوتی رایگان</Link>
               </li>
               <li>
-                <Link to="/dashboard" className="hover:text-indigo-400 transition-colors">پنل کاربری و دوره‌های من</Link>
+                <Link to="/login" className="hover:text-amber-300 transition-colors">ورود به حساب کاربری</Link>
+              </li>
+              <li>
+                <Link to="/dashboard" className="hover:text-amber-300 transition-colors">میز کار و دوره‌های من</Link>
               </li>
             </ul>
           </div>
 
+          {/* Dynamic Enamad Section */}
           <div className="space-y-4">
-            <h5 className="text-white font-bold text-base mb-2">نماد اعتماد الکترونیکی</h5>
-            <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl border border-white/10 inline-flex items-center justify-center hover:bg-white/20 transition-all [&_img]:w-24 [&_img]:h-24 [&_img]:bg-white [&_img]:rounded-xl [&_img]:p-1">
+            <h5 className="text-white font-bold text-base mb-2 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              نماد اعتماد الکترونیکی
+            </h5>
+            <div className="bg-white/5 backdrop-blur-xs p-3.5 rounded-2xl border border-amber-500/30 inline-flex items-center justify-center hover:bg-white/10 transition-all [&_img]:w-24 [&_img]:h-24 [&_img]:bg-white [&_img]:rounded-xl [&_img]:p-1 shadow-lg shadow-black/30">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: `<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq' alt='' style='cursor:pointer' code='1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'></a>`
+                  __html: settings?.enamad_html || defaultEnamad
                 }}
               />
             </div>
-            <p className="text-[11px] text-slate-400">
-              دارای نماد اعتماد الکترونیکی معتبر از مرکز توسعه تجارت الکترونیکی
+            <p className="text-[11px] text-stone-400 leading-normal">
+              دارای تاییدیه و نماد اعتماد الکترونیکی معتبر جهت ثبت‌نام و خرید امن دوره‌ها
             </p>
           </div>
         </div>
 
         {/* Bottom copyright */}
-        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-          <p>© تمامی حقوق مادی و معنوی برای «{settings?.site_title || 'جهش کار'}» محفوظ است.</p>
-          <div className="flex items-center gap-1">
-            <span>توسعه یافته با</span>
-            <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
-            <span>برای ارتقای دانش متخصصان فارسی زبان</span>
+        <div className="pt-8 border-t border-emerald-900/60 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 gap-4">
+          <p>© تمامی حقوق مادی و معنوی برای آکادمی «{settings?.site_title || 'آواز آموز'}» محفوظ است.</p>
+          <div className="flex items-center gap-1.5 text-amber-400/90 font-medium">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>ویژه علاقه‌مندان به ستایشگری و نوکری آستان اهل‌بیت (ع)</span>
           </div>
         </div>
 

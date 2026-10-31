@@ -10,7 +10,7 @@ class CustomUserAdmin(BaseUserAdmin):
     search_fields = ["username", "full_name", "phone_number", "email"]
     ordering = ["-date_joined"]
     fieldsets = BaseUserAdmin.fieldsets + (
-        ("اطلاعات تکمیلی جهش کار", {
+        ("اطلاعات تکمیلی آواز آموز", {
             "fields": ("phone_number", "full_name", "avatar", "is_verified"),
         }),
     )

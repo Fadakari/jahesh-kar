@@ -24,7 +24,7 @@ class RayganSMSService:
         cls._reload_env()
         username = os.environ.get("SMS_USERNAME", "").strip()
         password = os.environ.get("SMS_PASSWORD", "").strip()
-        footer = os.environ.get("SMS_FOOTER", "جهش کار").strip()
+        footer = os.environ.get("SMS_FOOTER", "آواز آموز").strip()
         url = os.environ.get("SMS_URL", "http://smspanel.trez.ir/FastSend.asmx").strip()
         return username, password, footer, url
 
@@ -65,7 +65,7 @@ class RayganSMSService:
         if not cls.is_configured():
             otp = PhoneOTP.generate_otp(phone)
             print("\n==========================================")
-            print(f"[شبیه‌ساز پیامک جهش کار] کد ورود برای {phone}: {otp.code}")
+            print(f"[شبیه‌ساز پیامک آواز آموز] کد ورود برای {phone}: {otp.code}")
             print("مشخصات SMS_USERNAME و SMS_PASSWORD را در .env قرار دهید.")
             print("==========================================\n")
             return {
