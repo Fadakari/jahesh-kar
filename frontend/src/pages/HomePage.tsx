@@ -23,14 +23,11 @@ import {
   X, 
   Send, 
   Phone, 
-  Rocket,
-  Check,
-  Award,
-  Flame,
-  GraduationCap,
-  Sparkles,
-  Zap,
-  PlayCircle
+  Rocket, 
+  Check, 
+  Award, 
+  Flame, 
+  GraduationCap 
 } from 'lucide-react';
 
 const categoryIcons: Record<string, any> = {
@@ -53,6 +50,102 @@ const featureIcons: Record<string, any> = {
   community: Users,
   code: Terminal,
 };
+
+const defaultFeatures: SiteFeature[] = [
+  {
+    id: 1,
+    title: 'آموزش کاربردی و تمرین‌محور',
+    description: 'دوره‌ها بر مبنای نیازهای واقعی و عملی طراحی شده‌اند؛ یاد می‌گیرید چطور تکنیک‌ها و اصول را مستقیماً اجرا کنید.',
+    badge: 'تمرین عملی',
+    tag: 'حل سناریوهای واقعی و مهارتی',
+    icon_type: 'practical',
+    order: 1,
+  },
+  {
+    id: 2,
+    title: 'پشتیبانی مستقیم و رفع اشکال',
+    description: 'ارتباط مستقیم با یاسین دهقان و تیم پشتیبانی؛ هیچ سوال و ابهامی در طول مسیر یادگیری بی‌پاسخ نمی‌ماند.',
+    badge: 'همراهی مستمر',
+    tag: 'پاسخگویی سریع و راهنمایی گام‌به‌گام',
+    icon_type: 'mentor',
+    order: 2,
+  },
+  {
+    id: 3,
+    title: 'دسترسی همیشگی و آپدیت رایگان',
+    description: 'با ثبت‌نام در هر دوره، دسترسی مادام‌العمر به فایل‌ها، چک‌لیست‌ها و آپدیت‌های تکمیلی دوره خواهید داشت.',
+    badge: 'سرمایه‌گذاری پایدار',
+    tag: 'مشاهده آنلاین و نامحدود در هر زمان',
+    icon_type: 'update',
+    order: 3,
+  },
+  {
+    id: 4,
+    title: 'آمادگی ورود به بازار کار و ارتقای مهارت',
+    description: 'تمام سرفصل‌ها با تمرکز بر درآمدزایی، جذب پروژه یا ارتقای جایگاه شغلی تدوین شده است.',
+    badge: 'نتیجه‌محور',
+    tag: 'توسعه فردی و حرفه‌ای',
+    icon_type: 'certificate',
+    order: 4,
+  },
+];
+
+const defaultSteps: LearningStep[] = [
+  {
+    id: 1,
+    step_number: '۰۱',
+    title: 'تسلط بر مبانی و اصول کاربردی',
+    description: 'بدون حاشیه و تئوری‌های خسته‌کننده، اصول اولیه و کلیدی مهارت را به زبان ساده و روان یاد می‌گیرید.',
+    badge: 'پایه‌ریزی اصولی',
+    order: 1,
+  },
+  {
+    id: 2,
+    step_number: '۰۲',
+    title: 'تمرین عملی و اجرای سناریوها',
+    description: 'همراه با مدرس، مباحث را به شکل عملی تمرین کرده و چالش‌های واقعی را گام‌به‌گام حل می‌کنید.',
+    badge: 'تثبیت مهارت',
+    order: 2,
+  },
+  {
+    id: 3,
+    step_number: '۰۳',
+    title: 'رفع اشکال، خروجی‌گیری و ورود به بازار',
+    description: 'با رفع اشکال مستمر و بازخورد مستقیم مدرس، آماده اجرای مستقل پروژه‌ها و کسب درآمد می‌شوید.',
+    badge: 'تسلط کامل',
+    order: 3,
+  },
+];
+
+const defaultTestimonials: Testimonial[] = [
+  {
+    id: 1,
+    student_name: 'علیرضا حسینی',
+    student_role: 'دانشجوی دوره جامع',
+    avatar_initials: 'ع.ح',
+    comment: 'رویکرد عملی دوره یاسین دهقان واقعاً شگفت‌انگیز بود. بدون حاشیه مستقیم رفتیم سراغ اصل موضوع و بعد از اتمام دوره تونستم نتایج فوق‌العاده‌ای در کارم بگیرم.',
+    rating: 5,
+    order: 1,
+  },
+  {
+    id: 2,
+    student_name: 'مهسا محمدی',
+    student_role: 'متخصص و فعال بازار',
+    avatar_initials: 'م.م',
+    comment: 'نکته متمایز تدریس یاسین دهقان اینه که فقط به آموزش ختم نمیشه؛ پشتیبانی و راهنمایی‌های دلسوزانه‌شون باعث شد در اجرا به اعتماد به نفس کامل برسم.',
+    rating: 5,
+    order: 2,
+  },
+  {
+    id: 3,
+    student_name: 'پوریا راد',
+    student_role: 'فارغ‌التحصیل دوره پیشرفته',
+    avatar_initials: 'پ.ر',
+    comment: 'کیفیت محتوا و تعهد مدرس فراتر از انتظارم بود. هر جا به سوالی برخوردم سریع راهنمایی گرفتم. ارزش این دوره چندین برابر مبلغی بود که پرداختم.',
+    rating: 5,
+    order: 3,
+  },
+];
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -90,10 +183,14 @@ export const HomePage: React.FC = () => {
     fetchData();
   }, []);
 
+  const displayFeatures = features.length > 0 ? features : defaultFeatures;
+  const displaySteps = steps.length > 0 ? steps : defaultSteps;
+  const displayTestimonials = testimonials.length > 0 ? testimonials : defaultTestimonials;
+
   return (
     <div className="space-y-24 pb-20 overflow-x-hidden">
       
-      {/* 1. Dynamic Top Announcement Ribbon (نوار اعلان بالای صفحه) */}
+      {/* 1. Dynamic Top Announcement Ribbon */}
       {settings?.announcement_active && !announcementDismissed && (
         <aside aria-label="اعلان و پیشنهاد ویژه" className="bg-gradient-to-r from-brand-navy via-indigo-950 to-brand-blue text-white text-xs sm:text-sm py-2.5 px-4 shadow-sm border-b border-indigo-500/20">
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -128,18 +225,16 @@ export const HomePage: React.FC = () => {
         </aside>
       )}
 
-      {/* 2. Bespoke Editorial Hero Section (هیرو منعطف و انطباق‌پذیر با هر حوزه آموزشی) */}
+      {/* 2. Bespoke Editorial Hero Section */}
       <section className="relative pt-6 sm:pt-10 lg:pt-14">
-        {/* Subtle architectural background grid */}
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#000a4d08_1px,transparent_1px),linear-gradient(to_bottom,#000a4d08_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
-            {/* Right Column: Hero Content & Scope (ستون معرفی و تیترها) */}
+            {/* Right Column: Hero Content & Scope */}
             <div className="lg:col-span-7 space-y-6 text-right">
               
-              {/* Badge & Academy Scope */}
               <div className="flex flex-wrap items-center gap-2">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-indigo-50/90 border border-indigo-200/70 text-indigo-900 text-xs font-bold shadow-xs">
                   <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
@@ -152,17 +247,14 @@ export const HomePage: React.FC = () => {
                 )}
               </div>
 
-              {/* Main Headline */}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.25] sm:leading-[1.25]">
                 {settings?.hero_title || 'یادگیری عمیق، کاربردی و مهارت‌های مورد نیاز بازار کار'}
               </h1>
 
-              {/* Editorial Subtitle */}
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-2xl">
                 {settings?.hero_subtitle || 'مسیر یادگیری طراحی شده بر پایه تجربیات عملی و نیازهای واقعی روز؛ بدون اتلاف وقت، مستقیم مهارت‌های اصلی را بیاموزید و به کار ببندید.'}
               </p>
 
-              {/* Dual Action CTAs */}
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
                 <Link
                   to={settings?.hero_cta_primary_link || '/courses'}
@@ -183,7 +275,6 @@ export const HomePage: React.FC = () => {
 
               {/* Trust & Proof Stack */}
               <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-slate-600 border-t border-slate-200/70">
-                {/* Overlapping student avatar circles */}
                 <div className="flex items-center gap-3">
                   <div className="flex -space-x-2 space-x-reverse overflow-hidden">
                     <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-700 text-white font-bold ring-2 ring-white text-[11px]">ع.ح</span>
@@ -199,7 +290,6 @@ export const HomePage: React.FC = () => {
 
                 <div className="h-7 w-px bg-slate-200 hidden sm:block" />
 
-                {/* Rating */}
                 <div className="flex items-center gap-1.5">
                   <div className="flex text-amber-400">
                     {[1, 2, 3, 4, 5].map((s) => (
@@ -212,7 +302,6 @@ export const HomePage: React.FC = () => {
 
                 <div className="h-7 w-px bg-slate-200 hidden sm:block" />
 
-                {/* Mentorship indicator */}
                 <div className="flex items-center gap-2 text-slate-700 font-semibold">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                   <span>پشتیبانی مستقیم یاسین دهقان</span>
@@ -221,11 +310,10 @@ export const HomePage: React.FC = () => {
 
             </div>
 
-            {/* Left Column: Hero Visual Showcase (کارت شاخص یا تصویر اختصاصی هیرو) */}
+            {/* Left Column: Hero Visual Showcase */}
             <div className="lg:col-span-5 relative">
               
               {settings?.hero_image_url ? (
-                /* Custom Uploaded Hero Image */
                 <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-2xl group">
                   <img
                     src={settings.hero_image_url}
@@ -239,10 +327,8 @@ export const HomePage: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                /* Bespoke Interactive Academy Feature Card (پرزنتیشن هوشمند آکادمی) */
                 <div className="rounded-3xl bg-gradient-to-br from-[#000a4d] via-[#050b20] to-[#037298] text-white p-7 sm:p-9 shadow-2xl shadow-indigo-950/25 border border-indigo-800/40 relative overflow-hidden text-right space-y-6">
                   
-                  {/* Subtle decorative glow */}
                   <div className="absolute -top-16 -left-16 w-44 h-44 rounded-full bg-cyan-500/20 blur-3xl pointer-events-none" />
                   <div className="absolute -bottom-16 -right-16 w-44 h-44 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none" />
 
@@ -302,7 +388,6 @@ export const HomePage: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Bottom Footer Note */}
                   <div className="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-indigo-800/40">
                     <span>دسترسی آنی به دوره‌ها</span>
                     <span className="text-cyan-300 font-bold">بدون پیش‌نیاز پیچیده</span>
@@ -317,7 +402,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. Integrated Trust Metrics Strip (نوار آمار و اعتبار سنجی داینامیک) */}
+      {/* 3. Integrated Trust Metrics Strip */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-xl border border-slate-800">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 divide-y lg:divide-y-0 lg:divide-x lg:divide-x-reverse divide-slate-800">
@@ -362,7 +447,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. Bento Grid of Academy Strengths (مزیت‌های رقابتی آکادمی - کاملاً داینامیک از بک‌اند) */}
+      {/* 4. Bento Grid of Academy Strengths */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -381,8 +466,16 @@ export const HomePage: React.FC = () => {
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.length > 0 ? (
-            features.map((feature, idx) => {
+          {loading ? (
+            [1, 2, 3, 4].map((n) => (
+              <div key={n} className="p-6 rounded-3xl bg-white border border-slate-100 animate-pulse space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-slate-200" />
+                <div className="h-5 bg-slate-200 rounded-md w-3/4" />
+                <div className="h-16 bg-slate-200 rounded-md" />
+              </div>
+            ))
+          ) : (
+            displayFeatures.map((feature, idx) => {
               const IconComponent = featureIcons[feature.icon_type] || Flame;
               return (
                 <div
@@ -419,20 +512,12 @@ export const HomePage: React.FC = () => {
                 </div>
               );
             })
-          ) : (
-            [1, 2, 3, 4].map((n) => (
-              <div key={n} className="p-6 rounded-3xl bg-white border border-slate-100 animate-pulse space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-slate-200" />
-                <div className="h-5 bg-slate-200 rounded-md w-3/4" />
-                <div className="h-16 bg-slate-200 rounded-md" />
-              </div>
-            ))
           )}
         </div>
       </section>
 
-      {/* 5. Dynamic Methodology & Learning Steps (مسیر گام‌به‌گام یادگیری - کاملاً داینامیک) */}
-      {settings?.steps_active && steps.length > 0 && (
+      {/* 5. Dynamic Methodology & Learning Steps */}
+      {settings?.steps_active && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl bg-gradient-to-br from-indigo-50/70 via-white to-cyan-50/50 border border-indigo-100/80 p-8 sm:p-12">
             
@@ -449,7 +534,7 @@ export const HomePage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-              {steps.map((st) => (
+              {displaySteps.map((st) => (
                 <div key={st.id} className="relative p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3 flex flex-col justify-between">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
@@ -477,7 +562,7 @@ export const HomePage: React.FC = () => {
         </section>
       )}
 
-      {/* 6. Featured Courses Section (دوره‌های برگزیده) */}
+      {/* 6. Featured Courses Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 text-right">
           <div>
@@ -515,7 +600,7 @@ export const HomePage: React.FC = () => {
         )}
       </section>
 
-      {/* 7. Student Success Stories & Testimonials (نظرات و تجربیات دانشجویان - کاملاً داینامیک) */}
+      {/* 7. Student Success Stories & Testimonials */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
@@ -532,27 +617,32 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.length > 0 ? (
-            testimonials.map((t, idx) => (
+          {loading ? (
+            [1, 2, 3].map((n) => (
+              <div key={n} className="p-6 rounded-3xl bg-white border border-slate-100 animate-pulse space-y-4">
+                <div className="h-4 bg-slate-200 rounded-md w-1/3" />
+                <div className="h-16 bg-slate-200 rounded-md" />
+                <div className="h-8 bg-slate-200 rounded-full w-1/2" />
+              </div>
+            ))
+          ) : (
+            displayTestimonials.map((t, idx) => (
               <div
                 key={t.id || idx}
                 className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-xs hover:shadow-lg hover:border-slate-300 transition-all flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
-                  {/* Rating Stars */}
                   <div className="flex items-center gap-1 text-amber-400">
                     {Array.from({ length: t.rating || 5 }).map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-amber-400" />
                     ))}
                   </div>
 
-                  {/* Comment */}
                   <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
                     «{t.comment}»
                   </p>
                 </div>
 
-                {/* Student Info */}
                 <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center font-black text-xs">
                     {t.avatar_initials || t.student_name.slice(0, 2)}
@@ -564,20 +654,12 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
             ))
-          ) : (
-            [1, 2, 3].map((n) => (
-              <div key={n} className="p-6 rounded-3xl bg-white border border-slate-100 animate-pulse space-y-4">
-                <div className="h-4 bg-slate-200 rounded-md w-1/3" />
-                <div className="h-16 bg-slate-200 rounded-md" />
-                <div className="h-8 bg-slate-200 rounded-full w-1/2" />
-              </div>
-            ))
           )}
         </div>
 
       </section>
 
-      {/* 8. Direct Mentorship & Support Banner (ارتباط مستقیم با یاسین دهقان) */}
+      {/* 8. Direct Mentorship & Support Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl bg-gradient-to-r from-brand-navy via-indigo-950 to-brand-blue text-white p-8 sm:p-12 relative overflow-hidden shadow-2xl">
           <div className="relative z-10 max-w-2xl space-y-4 text-right">
