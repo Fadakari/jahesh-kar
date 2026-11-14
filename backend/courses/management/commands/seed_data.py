@@ -343,4 +343,11 @@ class Command(BaseCommand):
         for q, a, o in faqs_data:
             FAQ.objects.get_or_create(question=q, defaults={"answer": a, "order": o, "is_active": True})
 
+        # 7. Seed Landing Page Customizations (Features, Steps, Testimonials, Settings)
+        try:
+            import seed_landing_content
+            seed_landing_content.seed()
+        except Exception as e:
+            self.stdout.write(f"Warning seeding landing content: {e}")
+
         self.stdout.write(self.style.SUCCESS("All initial seed data created successfully!"))
