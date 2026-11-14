@@ -9,19 +9,19 @@ interface SiteSettingsContextType {
 }
 
 const defaultSettings: SiteSetting = {
-  site_title: 'جهش کار',
-  logo_url: null,
-  hero_badge: 'پلتفرم ورود به بازار کار و اشتغال',
+  site_title: 'یاسین دهقان',
+  logo_url: '/logo.png',
+  hero_badge: 'آکادمی تخصصی یاسین دهقان',
   hero_title: 'شروع یادگیری مهارتی، ورود سریع به بازار کار',
-  hero_subtitle: 'با دوره‌های تخصصی، پروژه‌محور و مهارت‌های موردنیاز صنعت، مسیر شغلی خود را سریع‌تر و مطمئن‌تر بسازید.',
-  features_badge: 'چرا یادگیری با جهش کار؟',
+  hero_subtitle: 'با دوره‌های تخصصی، پروژه‌محور و مهارت‌های موردنیاز صنعت با تدریس یاسین دهقان، مسیر شغلی خود را مطمئن‌تر بسازید.',
+  features_badge: 'چرا یادگیری با یاسین دهقان؟',
   features_title: 'از آموزش تئوری خسته شدید؟ اینجا فقط روی پروژه‌های واقعی کار می‌کنید',
   features_subtitle: 'تمام دوره‌ها متناسب با نیاز روز بازار کار و به همراه پشتیبانی مستقیم مدرسان و فایل‌های سورس‌کد تهیه شده‌اند.',
   contact_phone: '۰۲۱-۹۱۰۰۰۰۰۰',
-  contact_email: 'support@jaheshkar.ir',
-  telegram_url: 'https://t.me/jaheshkar',
+  contact_email: 'support@yasindehqan.ir',
+  telegram_url: 'https://t.me/yasindehqan',
   instagram_url: '',
-  footer_about: 'جهش کار پلتفرم آموزش آنلاین و تخصصی مهارت‌های اشتغال است. ما به شما کمک می‌کنیم تا مسیر تبدیل شدن از یک مبتدی به یک فرد متخصص را در کوتاه‌ترین زمان ممکن طی کنید.',
+  footer_about: 'آکادمی یاسین دهقان مرجع تخصصی دوره‌های مهارتی و پروژه‌محور برای ورود به بازار کار تکنولوژی و کسب درآمد است. ما فاصله بین یادگیری تئوری و اجرای پروژه‌های واقعی را به حداقل رسانده‌ایم.',
 };
 
 const SiteSettingsContext = createContext<SiteSettingsContextType>({

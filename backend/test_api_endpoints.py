@@ -20,7 +20,7 @@ from accounts.models import PhoneOTP
 User = get_user_model()
 client = APIClient()
 
-print("--- Starting JaheshKar API Verification ---")
+print("--- Starting Yasin Dehqan API Verification ---")
 
 # 1. Test Categories
 res = client.get('/api/courses/categories/')

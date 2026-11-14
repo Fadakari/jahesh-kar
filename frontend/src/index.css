@@ -2,6 +2,32 @@
 
 @theme {
   --font-sans: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Yasin Dehqan Logo Brand Colors */
+  --color-brand-navy: #000a4d;
+  --color-brand-blue: #1d4ed8;
+  --color-brand-cobalt: #2563eb;
+  --color-brand-teal: #037298;
+  --color-brand-cyan: #0284c7;
+
+  /* Harmonize Indigo with Logo's Royal Blue & Deep Midnight Navy */
+  --color-indigo-50: #f0f7ff;
+  --color-indigo-100: #e0f0fe;
+  --color-indigo-200: #bae0fd;
+  --color-indigo-300: #7dc6fc;
+  --color-indigo-400: #38a5f8;
+  --color-indigo-500: #0ea5e9;
+  --color-indigo-600: #1d4ed8; /* Electric Royal Blue from logo */
+  --color-indigo-700: #1e40af; /* Deep Royal from logo */
+  --color-indigo-800: #172554; /* Navy */
+  --color-indigo-900: #0a194f; /* Midnight Navy from logo */
+  --color-indigo-950: #000a4d; /* Deep Dark Navy from logo */
+
+  /* Harmonize Cyan with Logo's Ocean Blue & Deep Teal */
+  --color-cyan-500: #0284c7;
+  --color-cyan-600: #037298;
+  --color-cyan-700: #0369a1;
+  --color-cyan-800: #075985;
 }
 
 body {

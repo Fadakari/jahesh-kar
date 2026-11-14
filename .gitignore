@@ -19,6 +19,11 @@ __pycache__/
 *$py.class
 *.sqlite3
 backend/media/
+!backend/media/site/
+!backend/media/site/**
+!backend/media/courses/
+!backend/media/courses/covers/
+!backend/media/courses/covers/**
 backend/staticfiles/
 
 # Node

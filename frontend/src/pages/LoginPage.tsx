@@ -138,11 +138,13 @@ export const LoginPage: React.FC = () => {
         
         {/* Header Branding */}
         <div className="text-center space-y-3">
-          <Link to="/" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 text-white flex items-center justify-center shadow-md">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <span className="text-2xl font-black text-slate-900">جهش کار</span>
+          <Link to="/" className="inline-flex items-center gap-3">
+            <img
+              src="/logo.png"
+              alt="یاسین دهقان"
+              className="w-12 h-12 object-contain drop-shadow-sm"
+            />
+            <span className="text-2xl font-black text-slate-900">یاسین دهقان</span>
           </Link>
 
           <div>

@@ -231,7 +231,7 @@ export const DashboardPage: React.FC = () => {
               </div>
               <h3 className="text-base font-bold text-slate-800">شما هنوز در هیچ دوره‌ای ثبت‌نام نکرده‌اید</h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                از میان دوره‌های کاربردی جهش کار انتخاب کنید و یادگیری را همین امروز شروع کنید.
+                از میان دوره‌های کاربردی یاسین دهقان انتخاب کنید و یادگیری را همین امروز شروع کنید.
               </p>
               <Link
                 to="/courses"

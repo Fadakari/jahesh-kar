@@ -77,7 +77,7 @@ class PaymentGatewayService:
             payload = {
                 "merchant_id": gateway_setting.merchant_id,
                 "amount": amount_in_rial,
-                "description": f"خرید دوره {order.course.title} در جهش کار",
+                "description": f"خرید دوره {order.course.title} در آکادمی یاسین دهقان",
                 "callback_url": callback_url,
                 "metadata": {
                     "mobile": getattr(order.user, "phone_number", "") or "",

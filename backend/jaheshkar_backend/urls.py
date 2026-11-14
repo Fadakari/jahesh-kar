@@ -7,8 +7,8 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse
 
 # Custom Admin Branding
-admin.site.site_header = "مدیریت آموزشگاه جهش کار"
-admin.site.site_title = "جهش کار"
+admin.site.site_header = "مدیریت آموزشگاه یاسین دهقان"
+admin.site.site_title = "یاسین دهقان"
 admin.site.index_title = "پنل مدیریت دوره‌ها، ویدیوها و کاربران"
 
 urlpatterns = [
@@ -35,7 +35,7 @@ else:
     def dev_welcome_view(request):
         return HttpResponse("""
         <div style="font-family: sans-serif; direction: rtl; text-align: center; padding: 50px;">
-            <h1 style="color: #4f46e5;">بک‌اند جهش کار با موفقیت در حال اجرا است</h1>
+            <h1 style="color: #1d4ed8;">بک‌اند آموزشگاه یاسین دهقان با موفقیت در حال اجرا است</h1>
             <p>جهت ورود به پنل ادمین جنگو به <a href="/admin/">/admin/</a> مراجعه فرمایید.</p>
             <p>جهت اجرای فرانت‌اند در حالت توسعه، دستور <code>npm run dev</code> را در پوشه frontend اجرا کنید.</p>
         </div>

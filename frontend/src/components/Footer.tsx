@@ -48,23 +48,17 @@ export const Footer: React.FC = () => {
           
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              {settings?.logo_url ? (
+              <div className="w-11 h-11 rounded-2xl bg-white/10 p-1.5 flex items-center justify-center border border-white/10">
                 <img
-                  src={settings.logo_url}
-                  alt={settings.site_title || 'جهش کار'}
-                  className="h-10 w-auto max-w-[160px] object-contain brightness-0 invert"
+                  src={settings?.logo_url || '/logo.png'}
+                  alt={settings?.site_title || 'یاسین دهقان'}
+                  className="h-full w-full object-contain drop-shadow"
                 />
-              ) : (
-                <>
-                  <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
-                    <Sparkles className="w-5 h-5" />
-                  </div>
-                  <span className="text-2xl font-black text-white">{settings?.site_title || 'جهش کار'}</span>
-                </>
-              )}
+              </div>
+              <span className="text-2xl font-black text-white">{settings?.site_title || 'یاسین دهقان'}</span>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-md">
-              {settings?.footer_about || 'جهش کار مرجع تخصصی دوره‌های مهارتی و پروژه‌محور برای ورود پرقدرت به بازار کار تکنولوژی و کسب درآمد است. ما فاصله بین یادگیری تئوری و شغل واقعی را به حداقل رسانده‌ایم.'}
+              {settings?.footer_about || 'آکادمی یاسین دهقان مرجع تخصصی دوره‌های مهارتی و پروژه‌محور برای ورود به بازار کار تکنولوژی و کسب درآمد است. ما فاصله بین یادگیری تئوری و اجرای پروژه‌های واقعی را به حداقل رسانده‌ایم.'}
             </p>
 
             {/* Dynamic Contacts */}
@@ -130,7 +124,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom copyright */}
         <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-          <p>© تمامی حقوق مادی و معنوی برای «{settings?.site_title || 'جهش کار'}» محفوظ است.</p>
+          <p>© تمامی حقوق مادی و معنوی برای «{settings?.site_title || 'یاسین دهقان'}» محفوظ است.</p>
           <div className="flex items-center gap-1">
             <span>توسعه یافته با</span>
             <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />

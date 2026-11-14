@@ -92,7 +92,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <h3 className="text-lg font-black text-slate-900">
                   {course.is_free ? 'ثبت‌نام در دوره رایگان' : 'تایید سفارش و پرداخت'}
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">آموزشگاه آنلاین جهش کار</p>
+                <p className="text-xs text-slate-500 mt-0.5">آموزشگاه آنلاین یاسین دهقان</p>
               </div>
             </div>
 

@@ -58,7 +58,7 @@ class PaymentGatewaySetting(models.Model):
             setting, _ = cls.objects.get_or_create(
                 id=1,
                 defaults={
-                    "title": "تنظیمات درگاه پرداخت جهش کار",
+                    "title": "تنظیمات درگاه پرداخت یاسین دهقان",
                     "gateway_provider": "simulation",
                     "is_active": True,
                 }
@@ -128,7 +128,7 @@ class Order(models.Model):
 
     @classmethod
     def create_order(cls, user, course):
-        tracking_code = "JK-" + uuid.uuid4().hex[:8].upper()
+        tracking_code = "YD-" + uuid.uuid4().hex[:8].upper()
         amount = course.final_price
         order = cls.objects.create(
             user=user,

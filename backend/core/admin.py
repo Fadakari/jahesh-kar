@@ -45,7 +45,7 @@ class SiteSettingAdmin(admin.ModelAdmin):
                 '</div>',
                 obj.logo.url
             )
-        return "هنوز لوگویی آپلود نشده است (لوگوی پیش‌فرض جهش کار نمایش داده می‌شود)."
+        return "هنوز لوگویی آپلود نشده است (لوگوی پیش‌فرض یاسین دهقان نمایش داده می‌شود)."
     logo_preview_large.short_description = "لوگوی فعلی"
 
     def has_add_permission(self, request):

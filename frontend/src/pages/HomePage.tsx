@@ -74,7 +74,7 @@ export const HomePage: React.FC = () => {
             {/* Pill */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs font-bold shadow-xs">
               <Sparkles className="w-4 h-4 text-indigo-600 animate-spin" />
-              <span>{settings?.hero_badge || 'پلتفرم تخصصی جهش به سمت شغل دلخواه'}</span>
+              <span>{settings?.hero_badge || 'آکادمی تخصصی یاسین دهقان'}</span>
             </div>
 
             {/* Headline */}
@@ -83,14 +83,14 @@ export const HomePage: React.FC = () => {
                 <span>{settings.hero_title}</span>
               ) : (
                 <>
-                  با <span className="bg-gradient-to-l from-indigo-600 via-indigo-700 to-cyan-600 bg-clip-text text-transparent">جهش کار</span>، مهارت‌های پولساز یاد بگیر و وارد بازار کار شو
+                  با <span className="bg-gradient-to-l from-indigo-950 via-indigo-700 to-cyan-600 bg-clip-text text-transparent">یاسین دهقان</span>، مهارت‌های پولساز یاد بگیر و وارد بازار کار شو
                 </>
               )}
             </h1>
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
-              {settings?.hero_subtitle || 'آموزش‌های ویدیویی صفر تا صد، کاربردی و پروژه‌محور در حوزه‌های برنامه‌نویسی، هوش مصنوعی، طراحی و مهارت‌های فریلنسری با بالاترین استانداردهای آموزشی'}
+              {settings?.hero_subtitle || 'آموزش‌های ویدیویی صفر تا صد، کاربردی و پروژه‌محور با تدریس یاسین دهقان با تمرکز بر ورود موفق به بازار کار و پروژه‌های واقعی'}
             </p>
 
             {/* Search Bar */}
@@ -217,12 +217,12 @@ export const HomePage: React.FC = () => {
         )}
       </section>
 
-      {/* Why JaheshKar Banner */}
+      {/* Why Yasin Dehqan Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 p-8 sm:p-12 text-white relative overflow-hidden">
+        <div className="rounded-3xl bg-gradient-to-r from-indigo-950 via-indigo-900 to-cyan-950 p-8 sm:p-12 text-white relative overflow-hidden">
           <div className="relative z-10 max-w-2xl space-y-4">
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/30 text-indigo-300 border border-indigo-500/40">
-              {settings?.features_badge || 'چرا یادگیری با جهش کار؟'}
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+              {settings?.features_badge || 'چرا یادگیری با یاسین دهقان؟'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black leading-snug">
               {settings?.features_title || 'از آموزش تئوری خسته شدید؟ اینجا فقط روی پروژه‌های واقعی کار می‌کنید'}

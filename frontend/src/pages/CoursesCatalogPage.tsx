@@ -82,7 +82,7 @@ export const CoursesCatalogPage: React.FC = () => {
       <div className="space-y-2">
         <h1 className="text-3xl font-black text-slate-900">بانک دوره‌های آموزشی</h1>
         <p className="text-sm text-slate-500">
-          جدیدترین و کاربردی‌ترین دوره‌های تخصصی جهش کار برای تسلط بر مهارت‌های روز
+          جدیدترین و کاربردی‌ترین دوره‌های تخصصی یاسین دهقان برای تسلط بر مهارت‌های روز
         </p>
       </div>
 

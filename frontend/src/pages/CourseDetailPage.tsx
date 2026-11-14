@@ -337,7 +337,7 @@ export const CourseDetailPage: React.FC = () => {
                 <div className="text-base font-black text-slate-900">{course.instructor_name}</div>
                 <div className="text-xs font-semibold text-indigo-600">{course.instructor_title}</div>
                 <p className="text-xs text-slate-500 leading-relaxed pt-1">
-                  {course.instructor_bio || 'مدرس و مشاور تخصصی جهش کار، با تمرکز بر آموزش پروژه‌محور و مهارت‌های استخدام.'}
+                  {course.instructor_bio || 'مدرس و مشاور تخصصی آکادمی یاسین دهقان، با تمرکز بر آموزش پروژه‌محور و مهارت‌های استخدام.'}
                 </p>
               </div>
             </div>

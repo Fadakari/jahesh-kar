@@ -8,20 +8,21 @@ class SiteSetting(models.Model):
     """
     site_title = models.CharField(
         max_length=150,
-        default="جهش کار",
+        default="یاسین دهقان",
         verbose_name="عنوان و نام برند سایت"
     )
     logo = models.ImageField(
         upload_to="site/logo/",
         blank=True,
         null=True,
+        default="site/logo/yasin-dehqan-logo.png",
         verbose_name="تصویر لوگوی سایت (PNG, SVG, JPG)"
     )
 
     # بخش هیرو (Hero) در صفحه اصلی
     hero_badge = models.CharField(
         max_length=150,
-        default="پلتفرم ورود به بازار کار و اشتغال",
+        default="آکادمی تخصصی یاسین دهقان",
         verbose_name="نشان / بج بالای عنوان اصلی"
     )
     hero_title = models.CharField(
@@ -30,14 +31,14 @@ class SiteSetting(models.Model):
         verbose_name="عنوان اصلی هیرو"
     )
     hero_subtitle = models.TextField(
-        default="با دوره‌های تخصصی، پروژه‌محور و مهارت‌های موردنیاز صنعت، مسیر شغلی خود را سریع‌تر و مطمئن‌تر بسازید.",
+        default="با دوره‌های تخصصی، پروژه‌محور و مهارت‌های موردنیاز صنعت با تدریس یاسین دهقان، مسیر شغلی خود را مطمئن‌تر بسازید.",
         verbose_name="توضیحات زیر عنوان هیرو"
     )
 
-    # بخش بنر مزایا و چرا جهش کار؟
+    # بخش بنر مزایا و چرا یاسین دهقان؟
     features_badge = models.CharField(
         max_length=150,
-        default="چرا یادگیری با جهش کار؟",
+        default="چرا یادگیری با یاسین دهقان؟",
         verbose_name="نشان بنر مزایا"
     )
     features_title = models.CharField(
@@ -60,13 +61,13 @@ class SiteSetting(models.Model):
     contact_email = models.CharField(
         max_length=100,
         blank=True,
-        default="support@jaheshkar.ir",
+        default="support@yasindehqan.ir",
         verbose_name="ایمیل پشتیبانی"
     )
     telegram_url = models.CharField(
         max_length=255,
         blank=True,
-        default="https://t.me/jaheshkar",
+        default="https://t.me/yasindehqan",
         verbose_name="لینک کانال یا پشتیبانی تلگرام"
     )
     instagram_url = models.CharField(
@@ -79,7 +80,7 @@ class SiteSetting(models.Model):
     # متن درباره ما در فوتر
     footer_about = models.TextField(
         blank=True,
-        default="جهش کار پلتفرم آموزش آنلاین و تخصصی مهارت‌های اشتغال است. ما به شما کمک می‌کنیم تا مسیر تبدیل شدن از یک مبتدی به یک فرد متخصص را در کوتاه‌ترین زمان ممکن طی کنید.",
+        default="آکادمی یاسین دهقان مرجع تخصصی دوره‌های مهارتی و پروژه‌محور برای ورود به بازار کار تکنولوژی و کسب درآمد است. ما فاصله بین یادگیری تئوری و اجرای پروژه‌های واقعی را به حداقل رسانده‌ایم.",
         verbose_name="متن درباره ما در فوتر"
     )
 
