@@ -16,7 +16,13 @@ const getBaseURL = () => {
     }
     url = window.__API_URL__;
   } else {
-    url = import.meta.env.VITE_API_URL || 'https://api.yasindehqan.ir';
+    url = import.meta.env.VITE_API_URL || 'http://api.yasindehqan.ir';
+  }
+
+  // Handle protocol-relative URLs (e.g. "//api.yasindehqan.ir")
+  if (url.startsWith('//')) {
+    const proto = typeof window !== 'undefined' ? window.location.protocol : 'http:';
+    url = `${proto}${url}`;
   }
 
   // Strip trailing slashes
@@ -25,6 +31,7 @@ const getBaseURL = () => {
 
 const api = axios.create({
   baseURL: getBaseURL(),
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -33,7 +40,10 @@ const api = axios.create({
 // Interceptor to dynamically update baseURL if window.__API_URL__ changes
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined' && window.__API_URL__) {
-    const cleaned = window.__API_URL__.replace(/\/+$/, '');
+    let cleaned = window.__API_URL__.replace(/\/+$/, '');
+    if (cleaned.startsWith('//')) {
+      cleaned = `${window.location.protocol}${cleaned}`;
+    }
     if (config.baseURL !== cleaned && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       config.baseURL = cleaned;
     }
@@ -46,7 +56,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor to guard against HTML pages (like index.html rewrite or 404 HTML)
+// Interceptor to guard against HTML pages and auto-fallback between HTTP and HTTPS
 api.interceptors.response.use(
   (response) => {
     if (typeof response.data === 'string' && response.data.trim().startsWith('<')) {
@@ -63,7 +73,36 @@ api.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Auto-fallback between HTTP and HTTPS if network connection fails
+    if (
+      originalRequest &&
+      !originalRequest._retryProtocol &&
+      typeof window !== 'undefined' &&
+      (error.code === 'ERR_NETWORK' || error.message === 'Network Error' || !error.response)
+    ) {
+      originalRequest._retryProtocol = true;
+      const currentBase = originalRequest.baseURL || '';
+
+      // If requested https and failed, try fallback to http
+      if (currentBase.startsWith('https://')) {
+        const httpBase = currentBase.replace('https://', 'http://');
+        console.warn(`[API Fallback] اتصال امن به بک‌اند ناموفق بود. تلاش مجدد با پروتکل عادی (HTTP): ${httpBase}`);
+        originalRequest.baseURL = httpBase;
+        return api(originalRequest);
+      }
+
+      // If requested http and failed, try fallback to https
+      if (currentBase.startsWith('http://')) {
+        const httpsBase = currentBase.replace('http://', 'https://');
+        console.warn(`[API Fallback] اتصال عادی ناموفق بود. تلاش مجدد با پروتکل امن (HTTPS): ${httpsBase}`);
+        originalRequest.baseURL = httpsBase;
+        return api(originalRequest);
+      }
+    }
+
     return Promise.reject(error);
   }
 );
