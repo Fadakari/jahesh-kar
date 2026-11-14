@@ -101,9 +101,25 @@ export interface Order {
 export interface SiteSetting {
   site_title: string;
   logo_url: string | null;
+  announcement_active: boolean;
+  announcement_badge: string;
+  announcement_text: string;
+  announcement_link: string;
   hero_badge: string;
   hero_title: string;
   hero_subtitle: string;
+  hero_cta_primary_text: string;
+  hero_cta_primary_link: string;
+  hero_cta_secondary_text: string;
+  hero_cta_secondary_link: string;
+  stat_1_number: string;
+  stat_1_label: string;
+  stat_2_number: string;
+  stat_2_label: string;
+  stat_3_number: string;
+  stat_3_label: string;
+  stat_4_number: string;
+  stat_4_label: string;
   features_badge: string;
   features_title: string;
   features_subtitle: string;
@@ -112,6 +128,26 @@ export interface SiteSetting {
   telegram_url: string;
   instagram_url: string;
   footer_about: string;
+}
+
+export interface SiteFeature {
+  id: number;
+  title: string;
+  description: string;
+  badge: string;
+  tag: string;
+  icon_type: string;
+  order: number;
+}
+
+export interface Testimonial {
+  id: number;
+  student_name: string;
+  student_role: string;
+  avatar_initials: string;
+  comment: string;
+  rating: number;
+  order: number;
 }
 
 export interface FAQ {
