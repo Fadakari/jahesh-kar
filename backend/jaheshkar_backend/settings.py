@@ -142,6 +142,13 @@ REST_FRAMEWORK = {
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://yasindehqan.ir',
+    'https://www.yasindehqan.ir',
+    'https://api.yasindehqan.ir',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+]
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
