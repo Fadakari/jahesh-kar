@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/client';
-import { Course, Category, SiteFeature, Testimonial } from '../types';
+import { Course, Category, SiteFeature, LearningStep, Testimonial } from '../types';
 import { CourseCard } from '../components/CourseCard';
 import { FaqSection } from '../components/FaqSection';
 import { useSiteSettings } from '../context/SiteSettingsContext';
@@ -17,19 +17,20 @@ import {
   ShieldCheck, 
   Users, 
   Terminal, 
-  Layers, 
   RefreshCw, 
   Headphones, 
   Star, 
   X, 
-  ExternalLink, 
   Send, 
   Phone, 
-  Sparkles,
   Rocket,
   Check,
-  FileCode2,
-  FolderGit2
+  Award,
+  Flame,
+  GraduationCap,
+  Sparkles,
+  Zap,
+  PlayCircle
 } from 'lucide-react';
 
 const categoryIcons: Record<string, any> = {
@@ -38,15 +39,19 @@ const categoryIcons: Record<string, any> = {
   Palette,
   Briefcase,
   BookOpen,
+  GraduationCap,
 };
 
 const featureIcons: Record<string, any> = {
-  code: Terminal,
+  practical: Flame,
   mentor: Headphones,
-  project: FolderGit2,
+  star: Award,
   update: RefreshCw,
   speed: Rocket,
   shield: ShieldCheck,
+  certificate: GraduationCap,
+  community: Users,
+  code: Terminal,
 };
 
 export const HomePage: React.FC = () => {
@@ -56,23 +61,25 @@ export const HomePage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [features, setFeatures] = useState<SiteFeature[]>([]);
+  const [steps, setSteps] = useState<LearningStep[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [announcementDismissed, setAnnouncementDismissed] = useState(false);
-  const [activeCodeTab, setActiveCodeTab] = useState<'backend' | 'frontend'>('backend');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [coursesRes, catRes, featRes, testRes] = await Promise.all([
+        const [coursesRes, catRes, featRes, stepsRes, testRes] = await Promise.all([
           api.get('/courses/'),
           api.get('/courses/categories/'),
           api.get('/core/features/'),
+          api.get('/core/steps/'),
           api.get('/core/testimonials/'),
         ]);
         setCourses(Array.isArray(coursesRes?.data) ? coursesRes.data : []);
         setCategories(Array.isArray(catRes?.data) ? catRes.data : []);
         setFeatures(Array.isArray(featRes?.data) ? featRes.data : []);
+        setSteps(Array.isArray(stepsRes?.data) ? stepsRes.data : []);
         setTestimonials(Array.isArray(testRes?.data) ? testRes.data : []);
       } catch (err) {
         console.error('Failed to load homepage data', err);
@@ -111,7 +118,7 @@ export const HomePage: React.FC = () => {
               )}
               <button
                 onClick={() => setAnnouncementDismissed(true)}
-                className="p-1 text-slate-400 hover:text-white rounded-md hover:bg-white/10 transition-colors"
+                className="p-1 text-slate-400 hover:text-white rounded-md hover:bg-white/10 transition-colors cursor-pointer"
                 title="بستن اعلان"
               >
                 <X className="w-3.5 h-3.5" />
@@ -121,31 +128,38 @@ export const HomePage: React.FC = () => {
         </aside>
       )}
 
-      {/* 2. Bespoke Editorial Hero Section (هیرو نامتقارن و صنعتی) */}
+      {/* 2. Bespoke Editorial Hero Section (هیرو منعطف و انطباق‌پذیر با هر حوزه آموزشی) */}
       <section className="relative pt-6 sm:pt-10 lg:pt-14">
-        {/* Subtle architectural background grid - not generic blurry blob */}
+        {/* Subtle architectural background grid */}
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#000a4d08_1px,transparent_1px),linear-gradient(to_bottom,#000a4d08_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
-            {/* Right Column: High-Impact Typography & Action (ستون محتوا و تیترها) */}
+            {/* Right Column: Hero Content & Scope (ستون معرفی و تیترها) */}
             <div className="lg:col-span-7 space-y-6 text-right">
               
-              {/* Verified Instructor Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-indigo-50/90 border border-indigo-200/70 text-indigo-900 text-xs font-bold shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-                <span>{settings?.hero_badge || 'آکادمی تخصصی برنامه‌نویسی و مهارت یاسین دهقان'}</span>
+              {/* Badge & Academy Scope */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-indigo-50/90 border border-indigo-200/70 text-indigo-900 text-xs font-bold shadow-xs">
+                  <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+                  <span>{settings?.hero_badge || 'آکادمی تخصصی یاسین دهقان'}</span>
+                </div>
+                {settings?.academy_scope && (
+                  <span className="px-3 py-1 rounded-xl bg-slate-100 text-slate-600 text-xs font-semibold border border-slate-200/70">
+                    {settings.academy_scope}
+                  </span>
+                )}
               </div>
 
               {/* Main Headline */}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.25] sm:leading-[1.25]">
-                {settings?.hero_title || 'یادگیری عمیق، پروژه‌محور و ورود سریع به بازار کار تکنولوژی'}
+                {settings?.hero_title || 'یادگیری عمیق، کاربردی و مهارت‌های مورد نیاز بازار کار'}
               </h1>
 
               {/* Editorial Subtitle */}
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-2xl">
-                {settings?.hero_subtitle || 'مسیر یادگیری طراحی شده بر پایه نیازهای واقعی استخدام؛ بدون مباحث تئوری اضافه، مستقیماً سورس‌کدهای پروژه‌های تجاری را پیاده‌سازی کنید.'}
+                {settings?.hero_subtitle || 'مسیر یادگیری طراحی شده بر پایه تجربیات عملی و نیازهای واقعی روز؛ بدون اتلاف وقت، مستقیم مهارت‌های اصلی را بیاموزید و به کار ببندید.'}
               </p>
 
               {/* Dual Action CTAs */}
@@ -163,7 +177,7 @@ export const HomePage: React.FC = () => {
                   className="px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-300/80 shadow-xs hover:border-slate-400 transition-all flex items-center justify-center gap-2"
                 >
                   <BookOpen className="w-4 h-4 text-indigo-600" />
-                  <span>{settings?.hero_cta_secondary_text || 'دوره‌های رایگان و نمونه درس‌ها'}</span>
+                  <span>{settings?.hero_cta_secondary_text || 'دوره‌های رایگان و آزمایشی'}</span>
                 </Link>
               </div>
 
@@ -179,7 +193,7 @@ export const HomePage: React.FC = () => {
                   </div>
                   <div>
                     <div className="font-black text-slate-900 text-sm">+{settings?.stat_1_number || '۱۲,۰۰۰'} دانشجو</div>
-                    <div className="text-[11px] text-slate-500">مشغول یادگیری و فعالیت در بازار</div>
+                    <div className="text-[11px] text-slate-500">مشغول یادگیری و کسب مهارت</div>
                   </div>
                 </div>
 
@@ -193,7 +207,7 @@ export const HomePage: React.FC = () => {
                     ))}
                   </div>
                   <span className="font-bold text-slate-800 text-sm">۴.۹</span>
-                  <span className="text-[11px] text-slate-500">(بیش از ۸۰۰ نظر ثبت‌شده)</span>
+                  <span className="text-[11px] text-slate-500">رضایت دانشجویان</span>
                 </div>
 
                 <div className="h-7 w-px bg-slate-200 hidden sm:block" />
@@ -207,120 +221,95 @@ export const HomePage: React.FC = () => {
 
             </div>
 
-            {/* Left Column: Interactive Real Code IDE Window (پنجره ادیتور کد و پیش‌نمایش پروژه) */}
+            {/* Left Column: Hero Visual Showcase (کارت شاخص یا تصویر اختصاصی هیرو) */}
             <div className="lg:col-span-5 relative">
               
-              {/* Sleek Dark Tech Card */}
-              <div className="rounded-3xl bg-[#000a4d] text-slate-200 shadow-2xl shadow-indigo-950/20 border border-indigo-900/60 overflow-hidden text-left" dir="ltr">
-                
-                {/* IDE Window Title Bar */}
-                <div className="bg-[#050b20] px-4 py-3 border-b border-indigo-900/40 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
+              {settings?.hero_image_url ? (
+                /* Custom Uploaded Hero Image */
+                <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-2xl group">
+                  <img
+                    src={settings.hero_image_url}
+                    alt={settings.hero_title}
+                    className="w-full h-auto object-cover max-h-[460px] group-hover:scale-102 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 right-4 left-4 p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-white/40 shadow-lg text-right">
+                    <span className="text-xs font-black text-indigo-700">{settings.hero_preview_badge}</span>
+                    <h4 className="text-sm font-bold text-slate-900 mt-0.5">{settings.hero_preview_title}</h4>
                   </div>
+                </div>
+              ) : (
+                /* Bespoke Interactive Academy Feature Card (پرزنتیشن هوشمند آکادمی) */
+                <div className="rounded-3xl bg-gradient-to-br from-[#000a4d] via-[#050b20] to-[#037298] text-white p-7 sm:p-9 shadow-2xl shadow-indigo-950/25 border border-indigo-800/40 relative overflow-hidden text-right space-y-6">
                   
-                  {/* File Tabs */}
-                  <div className="flex items-center gap-1 text-xs">
-                    <button
-                      onClick={() => setActiveCodeTab('backend')}
-                      className={`px-3 py-1 rounded-lg font-mono transition-colors ${
-                        activeCodeTab === 'backend'
-                          ? 'bg-indigo-950 text-cyan-300 border border-indigo-700/50'
-                          : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      server.py
-                    </button>
-                    <button
-                      onClick={() => setActiveCodeTab('frontend')}
-                      className={`px-3 py-1 rounded-lg font-mono transition-colors ${
-                        activeCodeTab === 'frontend'
-                          ? 'bg-indigo-950 text-cyan-300 border border-indigo-700/50'
-                          : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      App.tsx
-                    </button>
+                  {/* Subtle decorative glow */}
+                  <div className="absolute -top-16 -left-16 w-44 h-44 rounded-full bg-cyan-500/20 blur-3xl pointer-events-none" />
+                  <div className="absolute -bottom-16 -right-16 w-44 h-44 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none" />
+
+                  {/* Header */}
+                  <div className="flex items-center justify-between border-b border-indigo-800/50 pb-5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-white/10 p-1.5 flex items-center justify-center border border-white/20">
+                        <img
+                          src={settings?.logo_url || '/logo.png'}
+                          alt={settings?.site_title || 'یاسین دهقان'}
+                          className="h-full w-full object-contain"
+                        />
+                      </div>
+                      <div>
+                        <div className="text-sm font-black tracking-tight text-white">{settings?.site_title || 'یاسین دهقان'}</div>
+                        <div className="text-[11px] text-cyan-300 font-medium">{settings?.academy_scope || 'آکادمی تخصصی مهارت'}</div>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[11px] font-bold flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      آموزش فعال
+                    </span>
                   </div>
 
-                  <span className="text-[11px] font-mono text-slate-400">UTF-8</span>
-                </div>
-
-                {/* Code Body */}
-                <div className="p-5 font-mono text-xs leading-relaxed overflow-x-auto selection:bg-indigo-700">
-                  {activeCodeTab === 'backend' ? (
-                    <pre className="text-slate-300">
-                      <code>
-                        <span className="text-slate-500"># Production-grade Clean Architecture</span>{'\n'}
-                        <span className="text-indigo-300">from</span> core.services <span className="text-indigo-300">import</span> SmsOTP, PaymentGateway{'\n'}
-                        <span className="text-indigo-300">from</span> rest_framework.response <span className="text-indigo-300">import</span> Response{'\n'}
-                        {'\n'}
-                        <span className="text-cyan-400">@api_view</span>([<span className="text-emerald-300">'POST'</span>]){'\n'}
-                        <span className="text-indigo-300">def</span> <span className="text-amber-300">enroll_student</span>(request, course_id):{'\n'}
-                        {'    '}student = request.user{'\n'}
-                        {'    '}order = PaymentGateway.create_order({'\n'}
-                        {'        '}user=student,{'\n'}
-                        {'        '}course_id=course_id,{'\n'}
-                        {'        '}provider=<span className="text-emerald-300">'Zarinpal'</span>{'\n'}
-                        {'    '}){'\n'}
-                        {'    '}SmsOTP.send_welcome(student.phone){'\n'}
-                        {'    '}<span className="text-indigo-300">return</span> Response({'{'}{'\n'}
-                        {'        '}<span className="text-emerald-300">'status'</span>: <span className="text-emerald-300">'SUCCESS'</span>,{'\n'}
-                        {'        '}<span className="text-emerald-300">'career_ready'</span>: <span className="text-cyan-300">True</span>,{'\n'}
-                        {'        '}<span className="text-emerald-300">'mentor'</span>: <span className="text-emerald-300">'Yasin Dehqan'</span>{'\n'}
-                        {'    '}{'}'})
-                      </code>
-                    </pre>
-                  ) : (
-                    <pre className="text-slate-300">
-                      <code>
-                        <span className="text-slate-500">// Modern High-Speed React 18 & TypeScript</span>{'\n'}
-                        <span className="text-indigo-300">export const</span> <span className="text-amber-300">CareerPath</span> = () =&gt; {'{'}{'\n'}
-                        {'  '}<span className="text-indigo-300">const</span> {'{'} user {'}'} = useAuth();{'\n'}
-                        {'  '}<span className="text-indigo-300">const</span> [projects, setProjects] = useState([]);{'\n'}
-                        {'\n'}
-                        {'  '}&lt;<span className="text-cyan-400">div</span> className=<span className="text-emerald-300">"grid grid-cols-2 gap-4"</span>&gt;{'\n'}
-                        {'    '}&lt;<span className="text-cyan-400">CourseVideoPlayer</span> autoNext=<span className="text-cyan-300">{'{true}'}</span> /&gt;{'\n'}
-                        {'    '}&lt;<span className="text-cyan-400">GitHubRepoSync</span> commits=<span className="text-amber-300">{'{projects}'}</span> /&gt;{'\n'}
-                        {'  '}&lt;/<span className="text-cyan-400">div</span>&gt;{'\n'}
-                        {'}'};
-                      </code>
-                    </pre>
-                  )}
-                </div>
-
-                {/* Bottom Status Ribbon */}
-                <div className="bg-[#050b20] px-4 py-2.5 border-t border-indigo-900/40 flex items-center justify-between text-[11px] text-slate-400">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                    <span>Yasin Dehqan Academy Engine v2.0</span>
+                  {/* Card Title & Subtitle */}
+                  <div className="space-y-2">
+                    <span className="text-[11px] font-black text-cyan-400 px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-800/60 inline-block">
+                      {settings?.hero_preview_badge || 'متدولوژی اختصاصی آموزش'}
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-black text-white leading-snug">
+                      {settings?.hero_preview_title || 'آموزش کاربردی با پشتیبانی مستقیم مدرس'}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                      {settings?.hero_preview_subtitle || 'جلسات ویدیویی گام‌به‌گام با دسترسی همیشگی، تمرین‌های عملی و رفع اشکال مستمر.'}
+                    </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-cyan-300 font-mono">100% Production Ready</span>
+
+                  {/* 3 Dynamic Key Highlights */}
+                  <div className="space-y-3 pt-2">
+                    {settings?.hero_tagline_1 && (
+                      <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs text-xs sm:text-sm text-slate-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span className="font-semibold">{settings.hero_tagline_1}</span>
+                      </div>
+                    )}
+                    {settings?.hero_tagline_2 && (
+                      <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs text-xs sm:text-sm text-slate-200">
+                        <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+                        <span className="font-semibold">{settings.hero_tagline_2}</span>
+                      </div>
+                    )}
+                    {settings?.hero_tagline_3 && (
+                      <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs text-xs sm:text-sm text-slate-200">
+                        <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" />
+                        <span className="font-semibold">{settings.hero_tagline_3}</span>
+                      </div>
+                    )}
                   </div>
-                </div>
 
-              </div>
+                  {/* Bottom Footer Note */}
+                  <div className="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-indigo-800/40">
+                    <span>دسترسی آنی به دوره‌ها</span>
+                    <span className="text-cyan-300 font-bold">بدون پیش‌نیاز پیچیده</span>
+                  </div>
 
-              {/* Floating Overlay Badge on Hero Editor Card (به زبان فارسی) */}
-              <div 
-                className="absolute -bottom-6 -right-4 sm:-right-6 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-xl max-w-xs text-right space-y-1.5"
-                dir="rtl"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-black text-slate-900">سورس‌کدهای تست شده در بازار</span>
-                  <span className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
                 </div>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  بدون نمونه‌های ساده تئوری؛ مستقیم پروژه‌های آماده ارائه به شرکت‌ها را پیاده‌سازی می‌کنید.
-                </p>
-                <div className="flex items-center gap-1.5 pt-1 text-[10px] font-bold text-indigo-700">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>پروژه‌های پایان‌دوره با ارزش تجاری</span>
-                </div>
-              </div>
+              )}
 
             </div>
 
@@ -347,7 +336,7 @@ export const HomePage: React.FC = () => {
                 {settings?.stat_2_number || '+۸۵ ساعت'}
               </div>
               <div className="text-xs sm:text-sm font-medium text-slate-300">
-                {settings?.stat_2_label || 'آموزش کاملاً پروژه‌محور'}
+                {settings?.stat_2_label || 'آموزش کاملاً کاربردی و مهارتی'}
               </div>
             </div>
 
@@ -365,7 +354,7 @@ export const HomePage: React.FC = () => {
                 {settings?.stat_4_number || '۱۰۰٪'}
               </div>
               <div className="text-xs sm:text-sm font-medium text-slate-300">
-                {settings?.stat_4_label || 'آمادگی برای استخدام و جذب پروژه'}
+                {settings?.stat_4_label || 'آمادگی برای ورود به بازار کار و ارتقای شغلی'}
               </div>
             </div>
 
@@ -377,16 +366,16 @@ export const HomePage: React.FC = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-12 space-y-3">
+        <div className="max-w-3xl mb-12 space-y-3 text-right">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-cyan-50 border border-cyan-200/80 text-cyan-800 text-xs font-bold">
             <ShieldCheck className="w-4 h-4 text-cyan-600" />
             <span>{settings?.features_badge || 'چرا آکادمی یاسین دهقان؟'}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 leading-tight">
-            {settings?.features_title || 'تفاوت آموزش آکادمیک با تجربه واقعی بازار کار چیست؟'}
+            {settings?.features_title || 'ویژگی‌های متمایز دوره‌های آموزشی ما چیست؟'}
           </h2>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-            {settings?.features_subtitle || 'ما به جای آموزش‌های کش‌دار و تئوری‌های بی‌استفاده، سناریوهایی را حل می‌کنیم که هر روز در شرکت‌های نرم‌افزاری و پروژه‌های فریلنسری با آن‌ها مواجه می‌شوید.'}
+            {settings?.features_subtitle || 'ما به جای آموزش‌های کش‌دار و تئوری‌های بی‌استفاده، روی مهارت‌هایی تمرکز می‌کنیم که مستقیماً در کار و فعالیت حرفه‌ای به آنها نیاز دارید.'}
           </p>
         </div>
 
@@ -394,7 +383,7 @@ export const HomePage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.length > 0 ? (
             features.map((feature, idx) => {
-              const IconComponent = featureIcons[feature.icon_type] || Terminal;
+              const IconComponent = featureIcons[feature.icon_type] || Flame;
               return (
                 <div
                   key={feature.id || idx}
@@ -431,7 +420,6 @@ export const HomePage: React.FC = () => {
               );
             })
           ) : (
-            // Fallback skeleton if loading
             [1, 2, 3, 4].map((n) => (
               <div key={n} className="p-6 rounded-3xl bg-white border border-slate-100 animate-pulse space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-slate-200" />
@@ -443,77 +431,61 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. Practical 3-Step Methodology (متدولوژی ۳ گامی رسیدن به درآمد) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-gradient-to-br from-indigo-50/70 via-white to-cyan-50/50 border border-indigo-100/80 p-8 sm:p-12">
-          
-          <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-            <span className="text-xs font-black text-indigo-600 uppercase tracking-wider">
-              مسیر تضمین شده موفقیت
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
-              ۳ گام ساده تا بستن اولین قرارداد کاری یا استخدام
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600">
-              این همان نقشه‌راهی است که صدها دانشجوی آکادمی یاسین دهقان با آن وارد بازار کار شدند.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+      {/* 5. Dynamic Methodology & Learning Steps (مسیر گام‌به‌گام یادگیری - کاملاً داینامیک) */}
+      {settings?.steps_active && steps.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl bg-gradient-to-br from-indigo-50/70 via-white to-cyan-50/50 border border-indigo-100/80 p-8 sm:p-12">
             
-            {/* Step 1 */}
-            <div className="relative p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white font-black text-sm flex items-center justify-center">
-                ۰۱
-              </div>
-              <h3 className="text-base font-black text-slate-900">
-                تسلط بر نیازمندی‌های روز صنعت
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                به جای یادگیری سرسری مفاهیم، ساختار پروژه‌های واقعی، کلین کد و ارتباط استاندارد بین بخش‌های مختلف نرم‌افزار را می‌آموزید.
+            <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
+              <span className="text-xs font-black text-indigo-600 uppercase tracking-wider">
+                {settings.steps_badge || 'مسیر یادگیری تا تسلط'}
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+                {settings.steps_title || 'مسیر گام‌به‌گام یادگیری و رسیدن به هدف'}
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600">
+                {settings.steps_subtitle || 'این همان مسیری است که با برداشتن هر گام، یک سطح به تسلط کامل و نتیجه مطلوب نزدیک‌تر می‌شوید.'}
               </p>
             </div>
 
-            {/* Step 2 */}
-            <div className="relative p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-600 text-white font-black text-sm flex items-center justify-center">
-                ۰۲
-              </div>
-              <h3 className="text-base font-black text-slate-900">
-                پیاده‌سازی پورتفولیو و سورس‌کد تجاری
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                همراه یاسین دهقان، یک پروژه واقعی با احراز هویت پیامکی، درگاه پرداخت، پنل ادمین و دیتابیس را پیاده‌سازی و روی گیت‌هاب دیپلوی می‌کنید.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="relative p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center">
-                ۰۳
-              </div>
-              <h3 className="text-base font-black text-slate-900">
-                پشتیبانی، رزومه‌سازی و درآمدزایی
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                با رفع اشکال مستقیم در گروه اختصاصی تلگرام و هدایت رزومه، در مصاحبه‌های استخدامی و مناقصات فریلنسری با دست پر حاضر می‌شوید.
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+              {steps.map((st) => (
+                <div key={st.id} className="relative p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white font-black text-sm flex items-center justify-center">
+                        {st.step_number}
+                      </div>
+                      {st.badge && (
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700">
+                          {st.badge}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-base font-black text-slate-900">
+                      {st.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      {st.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
 
           </div>
+        </section>
+      )}
 
-        </div>
-      </section>
-
-      {/* 6. Featured Courses Section (دوره‌های برگزیده بازار کار) */}
+      {/* 6. Featured Courses Section (دوره‌های برگزیده) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 text-right">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 mb-1">
               <TrendingUp className="w-4 h-4" />
-              <span>پرمخاطب‌ترین دوره‌های آکادمی</span>
+              <span>پرمخاطب‌ترین دوره‌های آموزشی</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">دوره‌های تخصصی ورود به بازار کار</h2>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">دوره‌های تخصصی و کاربردی</h2>
           </div>
           <Link
             to="/courses"
@@ -549,13 +521,13 @@ export const HomePage: React.FC = () => {
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
             <Users className="w-3.5 h-3.5 text-emerald-600" />
-            <span>داستان‌های واقعی موفقیت</span>
+            <span>نظرات واقعی همراهان</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
             تجربه دانشجویان از دوره‌های یاسین دهقان
           </h2>
           <p className="text-xs sm:text-sm text-slate-600">
-            دانشجویانی که مهارت‌هایشان را ارتقا دادند و توانستند در شرکت‌های معتبر استخدام شوند یا پروژه‌های بین‌المللی بگیرند.
+            دانشجویانی که با آموزش‌های کاربردی توانستند به مهارت دلخواه و پیشرفت کاری دست یابند.
           </p>
         </div>
 
@@ -605,18 +577,18 @@ export const HomePage: React.FC = () => {
 
       </section>
 
-      {/* 8. Direct Mentorship & Telegram Banner (ارتباط مستقیم با یاسین دهقان) */}
+      {/* 8. Direct Mentorship & Support Banner (ارتباط مستقیم با یاسین دهقان) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl bg-gradient-to-r from-brand-navy via-indigo-950 to-brand-blue text-white p-8 sm:p-12 relative overflow-hidden shadow-2xl">
-          <div className="relative z-10 max-w-2xl space-y-4">
+          <div className="relative z-10 max-w-2xl space-y-4 text-right">
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
               پشتیبانی مستقیم و بی‌واسطه
             </span>
             <h2 className="text-2xl sm:text-3xl font-black leading-snug">
-              هیچ سوالی بی‌پاسخ نمی‌ماند؛ ارتباط مستقیم با یاسین دهقان
+              هیچ ابهامی بی‌پاسخ نمی‌ماند؛ همراهی مستقیم یاسین دهقان
             </h2>
             <p className="text-slate-300 text-sm leading-relaxed">
-              با ثبت‌نام در دوره‌ها، به گروه اختصاصی رفع اشکال تلگرام متصل می‌شوید و کدهایتان را مستقیماً با خود یاسین دهقان بررسی و دیباگ می‌کنید.
+              با ثبت‌نام در دوره‌ها، سوالات و چالش‌هایتان را در طول مسیر مستقیماً با خود مدرس مطرح کرده و راهنمایی دریافت می‌کنید.
             </p>
             <div className="pt-2 flex flex-wrap gap-4">
               {settings?.telegram_url && (
@@ -624,7 +596,7 @@ export const HomePage: React.FC = () => {
                   href={settings.telegram_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-6 py-3.5 rounded-xl bg-white text-indigo-950 font-black text-sm hover:bg-slate-100 transition-colors shadow-md flex items-center gap-2"
+                  className="px-6 py-3.5 rounded-xl bg-white text-indigo-950 font-black text-sm hover:bg-slate-100 transition-colors shadow-md flex items-center gap-2 cursor-pointer"
                 >
                   <Send className="w-4 h-4 text-sky-600" />
                   <span>عضویت در کانال و پشتیبانی تلگرام</span>
@@ -633,7 +605,7 @@ export const HomePage: React.FC = () => {
               {settings?.contact_phone && (
                 <a
                   href={`tel:${settings.contact_phone.replace(/[^0-9]/g, '')}`}
-                  className="px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 transition-colors flex items-center gap-2"
+                  className="px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   <Phone className="w-4 h-4 text-cyan-300" />
                   <span>مشاوره تلفنی: {settings.contact_phone}</span>

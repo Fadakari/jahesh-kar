@@ -1,22 +1,22 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import SiteSetting, SiteFeature, Testimonial, FAQ
+from .models import SiteSetting, SiteFeature, LearningStep, Testimonial, FAQ
 
 
 @admin.register(SiteSetting)
 class SiteSettingAdmin(admin.ModelAdmin):
-    list_display = ["site_title", "logo_preview", "announcement_active", "contact_phone", "updated_at"]
+    list_display = ["site_title", "academy_scope", "logo_preview", "announcement_active", "contact_phone", "updated_at"]
 
     fieldsets = (
-        ("هویت و برندینگ سایت", {
-            "fields": ("site_title", "logo", "logo_preview_large"),
-            "description": "نام برند و تصویر لوگوی سایت (با فرمت PNG شفاف یا SVG)."
+        ("هویت، نام و حوزه فعالیت آموزشگاه (تعریف شخصیت سایت)", {
+            "fields": ("site_title", "academy_scope", "logo", "logo_preview_large"),
+            "description": "نام برند، زمینه و موضوع اصلی آموزشگاه (مثلاً آموزش زبان، برنامه‌نویسی، طراحی، کسب‌وکار، مهارت‌های فردی و...) و لوگو."
         }),
-        ("نوار اعلان و تخفیف ویژه بالای سایت (Notice Banner)", {
+        ("نوار اعلان و پیشنهاد ویژه بالای سایت (Notice Banner)", {
             "fields": ("announcement_active", "announcement_badge", "announcement_text", "announcement_link"),
-            "description": "نوار باریک متحرک یا ثابت در بالاترین نقطه سایت جهت اطلاع‌رسانی تخفیف‌ها یا اخبار فوری."
+            "description": "نوار باریک در بالاترین نقطه سایت جهت اطلاع‌رسانی جشنواره‌ها، تخفیف‌ها یا اخبار فوری."
         }),
-        ("بخش هیرو (Hero) در بالای صفحه نخست", {
+        ("بخش هیرو (Hero) - معرفی موضوع و پیام اصلی", {
             "fields": (
                 "hero_badge",
                 "hero_title",
@@ -24,7 +24,18 @@ class SiteSettingAdmin(admin.ModelAdmin):
                 ("hero_cta_primary_text", "hero_cta_primary_link"),
                 ("hero_cta_secondary_text", "hero_cta_secondary_link"),
             ),
-            "description": "تیترها، نشان‌ها و دکمه‌های اقدام‌به‌عمل (Call to Action) در هیرو."
+            "description": "تیترها و دکمه‌های اصلی صفحه نخست که دقیقاً به کاربر توضیح می‌دهند این آموزشگاه چیست و چه چیزی یاد می‌دهد."
+        }),
+        ("کارت شاخص / المان بصری هیرو (سمت چپ صفحه اصلی)", {
+            "fields": (
+                "hero_image",
+                "hero_image_preview",
+                "hero_preview_badge",
+                "hero_preview_title",
+                "hero_preview_subtitle",
+                ("hero_tagline_1", "hero_tagline_2", "hero_tagline_3"),
+            ),
+            "description": "اگر تصویری آپلود کنید در هیرو نمایش می‌یابد. در غیر این صورت، کارت شیک پیش‌نمایش متدولوژی آموزشگاه با این ۳ نکته کلیدی نمایش داده می‌شود."
         }),
         ("نوار آمار و ارقام کلیدی (Trust Metrics Strip)", {
             "fields": (
@@ -33,11 +44,15 @@ class SiteSettingAdmin(admin.ModelAdmin):
                 ("stat_3_number", "stat_3_label"),
                 ("stat_4_number", "stat_4_label"),
             ),
-            "description": "آمارهای چشمگیر مانند تعداد دانشجویان، ساعات آموزش، رضایت‌مندی و..."
+            "description": "شاخص‌های اعتبار آموزشگاه (مثلاً تعداد دانشجویان، ساعت آموزش، درصد رضایت، قبولی و...)."
         }),
-        ("بخش بنر مزایا و معرفی ویژگی‌ها", {
+        ("تیترهای بخش مزیت‌های آموزشگاه (Bento Grid)", {
             "fields": ("features_badge", "features_title", "features_subtitle"),
-            "description": "متن و تیتر سرتیتر بخش مزیت‌های رقابتی در صفحه اصلی."
+            "description": "تیتر و مقدمه بخش «چرا این آموزشگاه؟». کارت‌های هر مزیت را از منوی «مزیت‌های رقابتی» می‌توانید اضافه کنید."
+        }),
+        ("تنظیمات بخش نقشه راه و گام‌های یادگیری (Methodology)", {
+            "fields": ("steps_active", "steps_badge", "steps_title", "steps_subtitle"),
+            "description": "تیتر بخش گام‌های آموزشی. مراحل آموزش از منوی «گام‌های مسیر یادگیری» به دلخواه قابل تغییر و تعریف هستند."
         }),
         ("اطلاعات تماس، پشتیبانی و شبکه‌های اجتماعی", {
             "fields": ("contact_phone", "contact_email", "telegram_url", "instagram_url"),
@@ -48,12 +63,12 @@ class SiteSettingAdmin(admin.ModelAdmin):
         }),
     )
 
-    readonly_fields = ["logo_preview_large", "updated_at"]
+    readonly_fields = ["logo_preview_large", "hero_image_preview", "updated_at"]
 
     def logo_preview(self, obj):
         if obj.logo:
             return format_html('<img src="{}" style="height: 30px; object-fit: contain;" />', obj.logo.url)
-        return format_html('<span style="color: #999;">لوگوی پیش‌فرض</span>')
+        return format_html('<span style="color: #999;">پیش‌فرض</span>')
     logo_preview.short_description = "پیش‌نمایش لوگو"
 
     def logo_preview_large(self, obj):
@@ -66,6 +81,15 @@ class SiteSettingAdmin(admin.ModelAdmin):
             )
         return "هنوز لوگویی آپلود نشده است (لوگوی پیش‌فرض یاسین دهقان نمایش داده می‌شود)."
     logo_preview_large.short_description = "لوگوی فعلی"
+
+    def hero_image_preview(self, obj):
+        if obj.hero_image:
+            return format_html(
+                '<img src="{}" style="max-height: 120px; border-radius: 8px; border: 1px solid #ddd;" />',
+                obj.hero_image.url
+            )
+        return "تصویری آپلود نشده است (کارت هوشمند معرفی آکادمی نمایش می‌یابد)."
+    hero_image_preview.short_description = "پیش‌نمایش تصویر هیرو"
 
     def has_add_permission(self, request):
         if SiteSetting.objects.exists():
@@ -85,6 +109,15 @@ class SiteFeatureAdmin(admin.ModelAdmin):
     ordering = ["order", "id"]
 
 
+@admin.register(LearningStep)
+class LearningStepAdmin(admin.ModelAdmin):
+    list_display = ["step_number", "title", "badge", "order", "is_active"]
+    list_editable = ["order", "is_active"]
+    list_filter = ["is_active"]
+    search_fields = ["step_number", "title", "description", "badge"]
+    ordering = ["order", "id"]
+
+
 @admin.register(Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
     list_display = ["student_name", "student_role", "rating", "order", "is_active", "created_at"]
@@ -98,6 +131,5 @@ class TestimonialAdmin(admin.ModelAdmin):
 class FAQAdmin(admin.ModelAdmin):
     list_display = ["question", "order", "is_active", "created_at"]
     list_editable = ["order", "is_active"]
-    list_filter = ["is_active", "created_at"]
     search_fields = ["question", "answer"]
     ordering = ["order", "id"]

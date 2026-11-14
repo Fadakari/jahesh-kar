@@ -100,6 +100,7 @@ export interface Order {
 
 export interface SiteSetting {
   site_title: string;
+  academy_scope: string;
   logo_url: string | null;
   announcement_active: boolean;
   announcement_badge: string;
@@ -112,6 +113,13 @@ export interface SiteSetting {
   hero_cta_primary_link: string;
   hero_cta_secondary_text: string;
   hero_cta_secondary_link: string;
+  hero_image_url: string | null;
+  hero_preview_badge: string;
+  hero_preview_title: string;
+  hero_preview_subtitle: string;
+  hero_tagline_1: string;
+  hero_tagline_2: string;
+  hero_tagline_3: string;
   stat_1_number: string;
   stat_1_label: string;
   stat_2_number: string;
@@ -123,6 +131,10 @@ export interface SiteSetting {
   features_badge: string;
   features_title: string;
   features_subtitle: string;
+  steps_active: boolean;
+  steps_badge: string;
+  steps_title: string;
+  steps_subtitle: string;
   contact_phone: string;
   contact_email: string;
   telegram_url: string;
@@ -137,6 +149,15 @@ export interface SiteFeature {
   badge: string;
   tag: string;
   icon_type: string;
+  order: number;
+}
+
+export interface LearningStep {
+  id: number;
+  step_number: string;
+  title: string;
+  description: string;
+  badge: string;
   order: number;
 }
 

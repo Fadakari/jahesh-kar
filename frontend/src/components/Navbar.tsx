@@ -38,7 +38,7 @@ export const Navbar: React.FC = () => {
                   {settings?.site_title || 'یاسین دهقان'}
                 </span>
                 <span className="text-[11px] font-medium text-slate-500 -mt-1">
-                  {settings?.hero_badge || 'آموزش تخصصی و ورود به بازار کار'}
+                  {settings?.academy_scope || settings?.hero_badge || 'آکادمی تخصصی مهارت و یادگیری'}
                 </span>
               </div>
             </Link>

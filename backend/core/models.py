@@ -5,11 +5,17 @@ class SiteSetting(models.Model):
     """
     تنظیمات داینامیک متون، لوگو، آمار و بخش‌های متغیر سایت
     طراحی شده به صورت Singleton (تنها یک رکورد فعال در سیستم وجود دارد)
+    به ادمین اجازه می‌دهد شخصیت، حوزه آموزشی و تمامی متون را به دلخواه تنظیم کند.
     """
     site_title = models.CharField(
         max_length=150,
         default="یاسین دهقان",
         verbose_name="عنوان و نام برند سایت"
+    )
+    academy_scope = models.CharField(
+        max_length=150,
+        default="آکادمی تخصصی مهارت و یادگیری",
+        verbose_name="حوزه و زمینه فعالیت آموزشگاه (مثلاً: آموزش طراحی، زبان‌های خارجی، توسعه فردی، مدیریت و...)"
     )
     logo = models.ImageField(
         upload_to="site/logo/",
@@ -31,7 +37,7 @@ class SiteSetting(models.Model):
     )
     announcement_text = models.CharField(
         max_length=255,
-        default="تخفیف ویژه دوره‌ها به مناسبت شروع فصل جدید آکادمی یاسین دهقان - دسترسی نامحدود به ویدیوها و سورس‌کدها",
+        default="تخفیف ویژه دوره‌ها به مناسبت شروع فصل جدید آکادمی یاسین دهقان - دسترسی نامحدود به ویدیوها و منابع",
         verbose_name="متن نوار بالای سایت"
     )
     announcement_link = models.CharField(
@@ -44,16 +50,16 @@ class SiteSetting(models.Model):
     # بخش هیرو (Hero) در صفحه اصلی
     hero_badge = models.CharField(
         max_length=150,
-        default="آکادمی تخصصی برنامه‌نویسی و مهارت یاسین دهقان",
+        default="آکادمی تخصصی یاسین دهقان",
         verbose_name="نشان / بج بالای عنوان اصلی"
     )
     hero_title = models.CharField(
         max_length=255,
-        default="یادگیری عمیق، پروژه‌محور و ورود سریع به بازار کار تکنولوژی",
+        default="یادگیری عمیق، کاربردی و مهارت‌های مورد نیاز بازار کار",
         verbose_name="عنوان اصلی هیرو"
     )
     hero_subtitle = models.TextField(
-        default="مسیر یادگیری طراحی شده بر پایه نیازهای واقعی استخدام؛ بدون مباحث تئوری اضافه، مستقیماً سورس‌کدهای پروژه‌های تجاری را پیاده‌سازی کنید.",
+        default="مسیر یادگیری طراحی شده بر پایه تجربیات عملی و نیازهای واقعی روز؛ بدون اتلاف وقت، مستقیم مهارت‌های اصلی را بیاموزید و به کار ببندید.",
         verbose_name="توضیحات زیر عنوان هیرو"
     )
     hero_cta_primary_text = models.CharField(
@@ -77,17 +83,54 @@ class SiteSetting(models.Model):
         verbose_name="لینک دکمه دوم هیرو"
     )
 
+    # المان بصری و کارت معرفی هیرو (سمت چپ هیرو)
+    hero_image = models.ImageField(
+        upload_to="site/hero/",
+        blank=True,
+        null=True,
+        verbose_name="تصویر اختصاصی بنر هیرو (اختیاری - در صورت آپلود، به جای کارت متنی نمایش می‌یابد)"
+    )
+    hero_preview_badge = models.CharField(
+        max_length=80,
+        default="متدولوژی اختصاصی آموزش",
+        verbose_name="برچسب کارت شاخص هیرو"
+    )
+    hero_preview_title = models.CharField(
+        max_length=150,
+        default="آموزش کاربردی با پشتیبانی مستقیم مدرس",
+        verbose_name="عنوان کارت شاخص هیرو"
+    )
+    hero_preview_subtitle = models.TextField(
+        default="جلسات ویدیویی گام‌به‌گام با دسترسی همیشگی، تمرین‌های عملی و رفع اشکال مستمر.",
+        verbose_name="توضیح کارت شاخص هیرو"
+    )
+    hero_tagline_1 = models.CharField(
+        max_length=100,
+        default="سرفصل‌های کاربردی و منطبق با نیاز روز",
+        verbose_name="نکته برجسته اول در کارت هیرو"
+    )
+    hero_tagline_2 = models.CharField(
+        max_length=100,
+        default="پشتیبانی و رفع اشکال اختصاصی",
+        verbose_name="نکته برجسته دوم در کارت هیرو"
+    )
+    hero_tagline_3 = models.CharField(
+        max_length=100,
+        default="دسترسی نامحدود و همیشگی به ویدیوها",
+        verbose_name="نکته برجسته سوم در کارت هیرو"
+    )
+
     # آمار و ارقام کلیدی (Trust Metrics Strip)
     stat_1_number = models.CharField(max_length=50, default="+۱۲,۰۰۰", verbose_name="عدد آمار اول")
     stat_1_label = models.CharField(max_length=120, default="دانشجوی فعال و رضایتمند", verbose_name="عنوان آمار اول")
     stat_2_number = models.CharField(max_length=50, default="+۸۵ ساعت", verbose_name="عدد آمار دوم")
-    stat_2_label = models.CharField(max_length=120, default="آموزش کاملاً پروژه‌محور", verbose_name="عنوان آمار دوم")
+    stat_2_label = models.CharField(max_length=120, default="آموزش کاملاً کاربردی و مهارتی", verbose_name="عنوان آمار دوم")
     stat_3_number = models.CharField(max_length=50, default="۹۸.۸٪", verbose_name="عدد آمار سوم")
     stat_3_label = models.CharField(max_length=120, default="رضایت دانشجویان از کیفیت تدریس", verbose_name="عنوان آمار سوم")
     stat_4_number = models.CharField(max_length=50, default="۱۰۰٪", verbose_name="عدد آمار چهارم")
-    stat_4_label = models.CharField(max_length=120, default="آمادگی برای استخدام و جذب پروژه", verbose_name="عنوان آمار چهارم")
+    stat_4_label = models.CharField(max_length=120, default="آمادگی برای ورود به بازار کار و ارتقای شغلی", verbose_name="عنوان آمار چهارم")
 
-    # بخش بنر مزایا و چرا یاسین دهقان؟
+    # بخش بنر مزایا و چرا این آموزشگاه؟
     features_badge = models.CharField(
         max_length=150,
         default="چرا آکادمی یاسین دهقان؟",
@@ -95,12 +138,32 @@ class SiteSetting(models.Model):
     )
     features_title = models.CharField(
         max_length=255,
-        default="تفاوت آموزش آکادمیک با تجربه واقعی بازار کار چیست؟",
+        default="ویژگی‌های متمایز دوره‌های آموزشی ما چیست؟",
         verbose_name="عنوان بخش مزایا"
     )
     features_subtitle = models.TextField(
-        default="ما به جای آموزش‌های کش‌دار و تئوری‌های بی‌استفاده، سناریوهایی را حل می‌کنیم که هر روز در شرکت‌های نرم‌افزاری و پروژه‌های فریلنسری با آن‌ها مواجه می‌شوید.",
+        default="ما به جای آموزش‌های کش‌دار و تئوری‌های بی‌استفاده، روی مهارت‌هایی تمرکز می‌کنیم که مستقیماً در کار و فعالیت حرفه‌ای به آنها نیاز دارید.",
         verbose_name="توضیحات بخش مزایا"
+    )
+
+    # بخش گام‌ها و متدولوژی یادگیری
+    steps_active = models.BooleanField(
+        default=True,
+        verbose_name="نمایش بخش گام‌های یادگیری"
+    )
+    steps_badge = models.CharField(
+        max_length=100,
+        default="مسیر یادگیری تا تسلط",
+        verbose_name="نشان بخش گام‌ها"
+    )
+    steps_title = models.CharField(
+        max_length=200,
+        default="مسیر گام‌به‌گام یادگیری و رسیدن به هدف",
+        verbose_name="عنوان بخش گام‌ها"
+    )
+    steps_subtitle = models.TextField(
+        default="این همان مسیری است که با برداشتن هر گام، یک سطح به تسلط کامل نزدیک‌تر می‌شوید.",
+        verbose_name="توضیحات بخش گام‌ها"
     )
 
     # اطلاعات تماس و شبکه‌های اجتماعی
@@ -132,7 +195,7 @@ class SiteSetting(models.Model):
     # متن درباره ما در فوتر
     footer_about = models.TextField(
         blank=True,
-        default="آکادمی یاسین دهقان مرجع تخصصی دوره‌های مهارتی و پروژه‌محور برای ورود به بازار کار تکنولوژی و کسب درآمد است. ما فاصله بین یادگیری تئوری و اجرای پروژه‌های واقعی را به حداقل رسانده‌ایم.",
+        default="آکادمی یاسین دهقان مرجع تخصصی دوره‌های مهارتی و کاربردی برای ارتقای توانمندی‌ها و ورود به بازار کار است. ما فاصله بین یادگیری تئوری و اجرای عملی را به حداقل رسانده‌ایم.",
         verbose_name="متن درباره ما در فوتر"
     )
 
@@ -153,22 +216,26 @@ class SiteSetting(models.Model):
 
 class SiteFeature(models.Model):
     """
-    ویژگی‌ها و مزیت‌های رقابتی آکادمی (Bento Grid)
+    ویژگی‌ها و مزیت‌های رقابتی آموزشگاه (Bento Grid)
+    ادمین می‌تواند متناسب با حوزه آموزشی، کارت‌های جدید اضافه یا ویرایش کند.
     """
     title = models.CharField(max_length=150, verbose_name="عنوان مزیت")
     description = models.TextField(verbose_name="توضیح کوتاه و دقیق")
-    badge = models.CharField(max_length=60, blank=True, verbose_name="برچسب کوچک بالای کارت (مثلا: تجاری / پشتیبانی)")
-    tag = models.CharField(max_length=100, blank=True, verbose_name="تگ فنی یا کلیدواژه (مثلا: Git, Clean Architecture)")
+    badge = models.CharField(max_length=60, blank=True, verbose_name="برچسب کوچک بالای کارت (مثلا: اختصاصی / پشتیبانی)")
+    tag = models.CharField(max_length=100, blank=True, verbose_name="تگ یا ویژگی کلیدی")
     icon_type = models.CharField(
         max_length=50,
-        default="code",
+        default="practical",
         choices=[
-            ("code", "کدنویسی و توسعه"),
-            ("mentor", "پشتیبانی و منتورینگ"),
-            ("project", "پروژه واقعی و تجاری"),
-            ("update", "آپدیت مداوم و مادام‌العمر"),
+            ("practical", "کاربردی و تمرین‌محور"),
+            ("mentor", "پشتیبانی و رفع اشکال مستقیم"),
+            ("star", "کیفیت و استاندارد بالا"),
+            ("update", "دسترسی همیشگی و آپدیت رایگان"),
             ("speed", "مسیر سریع و بدون حاشیه"),
             ("shield", "تضمین کیفیت محتوا"),
+            ("certificate", "آمادگی بازار کار و رزومه"),
+            ("community", "شبکه و جامعه همراهان"),
+            ("code", "تخصصی و فنی"),
         ],
         verbose_name="نوع آیکون"
     )
@@ -184,14 +251,35 @@ class SiteFeature(models.Model):
         return self.title
 
 
+class LearningStep(models.Model):
+    """
+    گام‌های نقشه راه آموزشی (۳ الی ۴ گام متدولوژی یادگیری)
+    قابل تعریف و ویرایش متناسب با هر نوع موضوع آموزشی
+    """
+    step_number = models.CharField(max_length=20, default="۰۱", verbose_name="شماره گام (مثلاً: ۰۱)")
+    title = models.CharField(max_length=150, verbose_name="عنوان گام")
+    description = models.TextField(verbose_name="توضیح کامل گام آموزشی")
+    badge = models.CharField(max_length=60, blank=True, verbose_name="برچسب یا خروجی این گام")
+    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
+    is_active = models.BooleanField(default=True, verbose_name="فعال")
+
+    class Meta:
+        verbose_name = "گام یادگیری (متدولوژی)"
+        verbose_name_plural = "گام‌های مسیر یادگیری (Methodology)"
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"گام {self.step_number}: {self.title}"
+
+
 class Testimonial(models.Model):
     """
     نظرات و تجربیات واقعی دانشجویان
     """
     student_name = models.CharField(max_length=120, verbose_name="نام و نام خانوادگی دانشجو")
-    student_role = models.CharField(max_length=150, default="توسعه‌دهنده فول‌استک", verbose_name="سمت کاری یا دوره گذرانده شده")
+    student_role = models.CharField(max_length=150, default="دانشجوی دوره جامع", verbose_name="دوره گذرانده شده یا سمت کاری")
     avatar_initials = models.CharField(max_length=10, blank=True, verbose_name="حروف اختصاری آواتار")
-    comment = models.TextField(verbose_name="متن نظر یا تجربه استخدام")
+    comment = models.TextField(verbose_name="متن نظر یا تجربه دانشجو")
     rating = models.PositiveSmallIntegerField(default=5, verbose_name="امتیاز (۱ تا ۵)")
     order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
     is_active = models.BooleanField(default=True, verbose_name="فعال")

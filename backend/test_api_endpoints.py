@@ -28,17 +28,23 @@ assert res.status_code == 200, f"Categories failed: {res.status_code}"
 categories = res.json()
 print(f"[OK] Categories fetched: {len(categories)} found")
 
-# 1.1 Test Site Settings & Dynamic FAQs & Bento Features & Testimonials
+# 1.1 Test Site Settings & Dynamic FAQs & Bento Features & Steps & Testimonials
 res = client.get('/api/core/settings/')
 assert res.status_code == 200, f"Settings failed: {res.status_code}"
 settings_data = res.json()
-print(f"[OK] Site Settings fetched: Title = '{settings_data.get('site_title')}', Hero = '{settings_data.get('hero_title')}'")
+print(f"[OK] Site Settings fetched: Title = '{settings_data.get('site_title')}', Scope = '{settings_data.get('academy_scope')}'")
 
 res = client.get('/api/core/features/')
 assert res.status_code == 200, f"Features failed: {res.status_code}"
 features_data = res.json()
 print(f"[OK] Dynamic Features fetched: {len(features_data)} features active")
 assert len(features_data) >= 1, "Expected at least 1 feature"
+
+res = client.get('/api/core/steps/')
+assert res.status_code == 200, f"Steps failed: {res.status_code}"
+steps_data = res.json()
+print(f"[OK] Dynamic Learning Steps fetched: {len(steps_data)} steps active")
+assert len(steps_data) >= 1, "Expected at least 1 step"
 
 res = client.get('/api/core/testimonials/')
 assert res.status_code == 200, f"Testimonials failed: {res.status_code}"
