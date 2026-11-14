@@ -9,6 +9,12 @@ if current_dir not in sys.path:
 # Set Django settings module
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'jaheshkar_backend.settings')
 
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except ImportError:
+    pass
+
 # Get Django WSGI application
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
