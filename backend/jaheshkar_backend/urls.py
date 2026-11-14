@@ -13,10 +13,16 @@ admin.site.index_title = "پنل مدیریت دوره‌ها، ویدیوها �
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # API endpoints (both with and without 'api/' prefix for seamless compatibility)
     path('api/accounts/', include('accounts.urls')),
     path('api/courses/', include('courses.urls')),
     path('api/orders/', include('orders.urls')),
     path('api/core/', include('core.urls')),
+
+    path('accounts/', include('accounts.urls')),
+    path('courses/', include('courses.urls')),
+    path('orders/', include('orders.urls')),
+    path('core/', include('core.urls')),
 ]
 
 # Serve media files in development / fallback
