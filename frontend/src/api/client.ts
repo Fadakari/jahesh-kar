@@ -6,27 +6,41 @@ declare global {
   }
 }
 
-// Read API URL from runtime config.js, then build-time env, then fallback
-const getBaseURL = () => {
-  let url = '';
-  if (typeof window !== 'undefined' && window.__API_URL__) {
-    // If testing on localhost, connect to local Django server
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-    }
-    url = window.__API_URL__;
-  } else {
-    url = import.meta.env.VITE_API_URL || 'http://api.yasindehqan.ir';
+// Normalize API URL to ensure it always targets the correct /api endpoint
+export const normalizeApiUrl = (rawUrl?: string): string => {
+  let url = (rawUrl || '').trim();
+  if (!url) {
+    return 'https://api.yasindehqan.ir/api';
   }
 
   // Handle protocol-relative URLs (e.g. "//api.yasindehqan.ir")
   if (url.startsWith('//')) {
-    const proto = typeof window !== 'undefined' ? window.location.protocol : 'http:';
+    const proto = typeof window !== 'undefined' ? window.location.protocol : 'https:';
     url = `${proto}${url}`;
   }
 
   // Strip trailing slashes
-  return url.replace(/\/+$/, '');
+  url = url.replace(/\/+$/, '');
+
+  // If full domain URL is provided without '/api' suffix, automatically append '/api'
+  if ((url.startsWith('http://') || url.startsWith('https://')) && !url.endsWith('/api')) {
+    url = `${url}/api`;
+  }
+
+  return url;
+};
+
+const getBaseURL = () => {
+  if (typeof window !== 'undefined') {
+    // If testing on localhost, connect to local Django server
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+    }
+    if (window.__API_URL__) {
+      return normalizeApiUrl(window.__API_URL__);
+    }
+  }
+  return normalizeApiUrl(import.meta.env.VITE_API_URL || 'https://api.yasindehqan.ir/api');
 };
 
 const api = axios.create({
@@ -40,10 +54,7 @@ const api = axios.create({
 // Interceptor to dynamically update baseURL if window.__API_URL__ changes
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined' && window.__API_URL__) {
-    let cleaned = window.__API_URL__.replace(/\/+$/, '');
-    if (cleaned.startsWith('//')) {
-      cleaned = `${window.location.protocol}${cleaned}`;
-    }
+    const cleaned = normalizeApiUrl(window.__API_URL__);
     if (config.baseURL !== cleaned && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       config.baseURL = cleaned;
     }
@@ -56,7 +67,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor to guard against HTML pages and auto-fallback between HTTP and HTTPS
+// Interceptor to guard against HTML pages and auto-fallback between HTTPS and HTTP
 api.interceptors.response.use(
   (response) => {
     if (typeof response.data === 'string' && response.data.trim().startsWith('<')) {
@@ -76,7 +87,7 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Auto-fallback between HTTP and HTTPS if network connection fails
+    // Auto-fallback between HTTPS and HTTP if connection fails
     if (
       originalRequest &&
       !originalRequest._retryProtocol &&
@@ -86,18 +97,18 @@ api.interceptors.response.use(
       originalRequest._retryProtocol = true;
       const currentBase = originalRequest.baseURL || '';
 
-      // If requested https and failed, try fallback to http
+      // If requested https and failed, try http
       if (currentBase.startsWith('https://')) {
         const httpBase = currentBase.replace('https://', 'http://');
-        console.warn(`[API Fallback] اتصال امن به بک‌اند ناموفق بود. تلاش مجدد با پروتکل عادی (HTTP): ${httpBase}`);
+        console.warn(`[API Fallback] اتصال امن ناموفق بود، تلاش با پروتکل HTTP: ${httpBase}`);
         originalRequest.baseURL = httpBase;
         return api(originalRequest);
       }
 
-      // If requested http and failed, try fallback to https
+      // If requested http and failed, try https
       if (currentBase.startsWith('http://')) {
         const httpsBase = currentBase.replace('http://', 'https://');
-        console.warn(`[API Fallback] اتصال عادی ناموفق بود. تلاش مجدد با پروتکل امن (HTTPS): ${httpsBase}`);
+        console.warn(`[API Fallback] تلاش با پروتکل امن HTTPS: ${httpsBase}`);
         originalRequest.baseURL = httpsBase;
         return api(originalRequest);
       }
