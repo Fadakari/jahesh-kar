@@ -6,6 +6,7 @@ from courses.serializers import CourseListSerializer
 class OrderSerializer(serializers.ModelSerializer):
     course_title = serializers.CharField(source="course.title", read_only=True)
     course_slug = serializers.CharField(source="course.slug", read_only=True)
+    coupon_code = serializers.CharField(source="coupon.code", read_only=True, default=None)
 
     class Meta:
         model = Order
@@ -14,6 +15,9 @@ class OrderSerializer(serializers.ModelSerializer):
             "tracking_code",
             "course_title",
             "course_slug",
+            "original_amount",
+            "discount_amount",
+            "coupon_code",
             "amount",
             "status",
             "created_at",

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, Enrollment, PaymentGatewaySetting
+from .models import Order, Enrollment, PaymentGatewaySetting, Coupon
 
 
 @admin.register(PaymentGatewaySetting)
@@ -27,16 +27,85 @@ class PaymentGatewaySettingAdmin(admin.ModelAdmin):
     has_merchant_display.short_description = "دارای مرچنت کد"
 
 
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_display = [
+        "code",
+        "discount_percent_display",
+        "usage_display",
+        "course",
+        "is_active",
+        "valid_until",
+        "created_at",
+    ]
+    list_filter = ["is_active", "course", "created_at"]
+    search_fields = ["code", "description", "course__title"]
+    fieldsets = (
+        ("اطلاعات اصلی کد تخفیف", {
+            "fields": ("code", "discount_percent", "is_active", "description"),
+            "description": "کد تخفیف را وارد کنید (حروف کوچک خودکار بزرگ می‌شوند) و درصد تخفیف بین ۱ تا ۱۰۰ را مشخص کنید."
+        }),
+        ("محدودیت تعداد استفاده", {
+            "fields": ("max_uses", "used_count"),
+            "description": "اگر می‌خواهید این کد بدون محدودیت تعداد استفاده باشد، فیلد «حداکثر تعداد استفاده مجاز» را کاملاً خالی بگذارید."
+        }),
+        ("محدودیت دوره و تاریخ اعتبار (اختیاری)", {
+            "fields": ("course", "valid_from", "valid_until"),
+            "description": "اگر می‌خواهید این کد روی تمام دوره‌ها معتبر باشد دوره را خالی بگذارید. تاریخ‌های شروع و پایان نیز اختیاری هستند."
+        }),
+    )
+    readonly_fields = ["used_count"]
+
+    def discount_percent_display(self, obj):
+        return f"{obj.discount_percent}٪"
+    discount_percent_display.short_description = "درصد تخفیف"
+
+    def usage_display(self, obj):
+        if obj.max_uses is None:
+            return f"{obj.used_count} بار (نامحدود)"
+        remaining = max(0, obj.max_uses - obj.used_count)
+        return f"{obj.used_count} از {obj.max_uses} ({remaining} باقی‌مانده)"
+    usage_display.short_description = "میزان استفاده"
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ["tracking_code", "user", "course", "amount_display", "status", "ref_id", "created_at"]
-    list_filter = ["status", "created_at"]
-    search_fields = ["tracking_code", "ref_id", "authority", "user__username", "user__phone_number", "course__title"]
+    list_display = [
+        "tracking_code",
+        "user",
+        "course",
+        "original_amount_display",
+        "discount_display",
+        "amount_display",
+        "status",
+        "ref_id",
+        "created_at",
+    ]
+    list_filter = ["status", "created_at", "coupon"]
+    search_fields = [
+        "tracking_code",
+        "ref_id",
+        "authority",
+        "user__username",
+        "user__phone_number",
+        "course__title",
+        "coupon__code",
+    ]
     readonly_fields = ["tracking_code", "authority", "ref_id", "card_pan", "created_at"]
+
+    def original_amount_display(self, obj):
+        return f"{obj.original_amount:,} تومان"
+    original_amount_display.short_description = "مبلغ اولیه"
+
+    def discount_display(self, obj):
+        if obj.coupon:
+            return f"{obj.discount_amount:,} تومان ({obj.coupon.code})"
+        return "-"
+    discount_display.short_description = "تخفیف"
 
     def amount_display(self, obj):
         return f"{obj.amount:,} تومان"
-    amount_display.short_description = "مبلغ"
+    amount_display.short_description = "مبلغ پرداختی"
 
 
 @admin.register(Enrollment)

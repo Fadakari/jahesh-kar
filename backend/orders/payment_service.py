@@ -30,6 +30,9 @@ class PaymentGatewayService:
             with transaction.atomic():
                 order.status = "completed"
                 order.save()
+                if order.coupon:
+                    order.coupon.used_count += 1
+                    order.coupon.save(update_fields=["used_count"])
                 enrollment, _ = Enrollment.objects.get_or_create(
                     user=order.user,
                     course=order.course,
@@ -163,6 +166,9 @@ class PaymentGatewayService:
                         order.ref_id = str(data.get("ref_id", ""))
                         order.card_pan = str(data.get("card_pan", ""))
                         order.save()
+                        if order.coupon:
+                            order.coupon.used_count += 1
+                            order.coupon.save(update_fields=["used_count"])
 
                         Enrollment.objects.get_or_create(
                             user=order.user,

@@ -4,13 +4,31 @@ import { Course } from '../types';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
 import confetti from 'canvas-confetti';
-import { X, CheckCircle, ShieldCheck, CreditCard, Sparkles, Loader2 } from 'lucide-react';
+import { 
+  X, 
+  CheckCircle, 
+  ShieldCheck, 
+  CreditCard, 
+  Sparkles, 
+  Loader2, 
+  Tag, 
+  Check, 
+  Trash2 
+} from 'lucide-react';
 
 interface CheckoutModalProps {
   course: Course;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+}
+
+interface AppliedCoupon {
+  code: string;
+  discount_percent: number;
+  discount_amount: number;
+  final_price: number;
+  message: string;
 }
 
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -26,7 +44,50 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [isSuccess, setIsSuccess] = useState(false);
   const [trackingCode, setTrackingCode] = useState<string>('');
 
+  // Coupon state
+  const [couponInput, setCouponInput] = useState('');
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(null);
+
   if (!isOpen) return null;
+
+  const handleApplyCoupon = async () => {
+    const code = couponInput.trim();
+    if (!code) {
+      setCouponError('لطفاً کد تخفیف را وارد کنید.');
+      return;
+    }
+
+    setValidatingCoupon(true);
+    setCouponError(null);
+
+    try {
+      const res = await api.post('/orders/validate-coupon/', {
+        code,
+        course_id: course.id,
+      });
+
+      if (res.data.valid) {
+        setAppliedCoupon(res.data);
+        setCouponError(null);
+      }
+    } catch (err: any) {
+      const msg = err.response?.data?.error || 'کد تخفیف وارد شده معتبر نیست.';
+      setCouponError(msg);
+      setAppliedCoupon(null);
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponInput('');
+    setCouponError(null);
+  };
+
+  const payablePrice = appliedCoupon ? appliedCoupon.final_price : course.final_price;
 
   const handleCheckout = async () => {
     if (!user) {
@@ -38,7 +99,15 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setError(null);
 
     try {
-      const res = await api.post('/orders/checkout/', { course_id: course.id });
+      const payload: { course_id: number; coupon_code?: string } = {
+        course_id: course.id,
+      };
+
+      if (appliedCoupon) {
+        payload.coupon_code = appliedCoupon.code;
+      }
+
+      const res = await api.post('/orders/checkout/', payload);
 
       // If bank gateway redirect (e.g. ZarinPal)
       if (res.data.mode === 'redirect' && res.data.payment_url) {
@@ -77,7 +146,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 left-4 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors"
+          className="absolute top-4 left-4 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -97,7 +166,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             </div>
 
             {/* Course mini overview */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 mb-6">
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 mb-5">
               <div className="text-sm font-bold text-slate-800 leading-snug">
                 {course.title}
               </div>
@@ -107,8 +176,82 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </div>
             </div>
 
+            {/* Discount Coupon Input (for non-free courses) */}
+            {!course.is_free && (
+              <div className="mb-5 space-y-2">
+                <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>کد تخفیف دارید؟</span>
+                </label>
+
+                {appliedCoupon ? (
+                  <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center">
+                        <Check className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-black text-emerald-800 font-mono">
+                          {appliedCoupon.code} ({appliedCoupon.discount_percent}٪ تخفیف)
+                        </div>
+                        <div className="text-[11px] text-emerald-600 font-medium">
+                          مبلغ {appliedCoupon.discount_amount.toLocaleString('fa-IR')} تومان کسر شد
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleRemoveCoupon}
+                      title="حذف کد تخفیف"
+                      className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-100 transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(e) => {
+                          setCouponInput(e.target.value);
+                          if (couponError) setCouponError(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleApplyCoupon();
+                          }
+                        }}
+                        placeholder="مثلاً: OFF50 یا NOWRUZ"
+                        className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 font-mono uppercase focus:outline-hidden focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all placeholder:font-sans placeholder:normal-case"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleApplyCoupon}
+                        disabled={validatingCoupon || !couponInput.trim()}
+                        className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-indigo-600 text-white text-xs font-bold transition-all disabled:opacity-40 disabled:pointer-events-none cursor-pointer flex items-center gap-1.5"
+                      >
+                        {validatingCoupon ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          'اعمال کد'
+                        )}
+                      </button>
+                    </div>
+
+                    {couponError && (
+                      <p className="text-[11px] text-rose-600 font-medium pt-0.5">
+                        {couponError}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Price breakdown */}
-            <div className="space-y-3 py-3 border-y border-slate-100 text-sm mb-6">
+            <div className="space-y-2.5 py-3 border-y border-slate-100 text-xs sm:text-sm mb-5">
               <div className="flex items-center justify-between text-slate-600">
                 <span>قیمت دوره:</span>
                 <span>{course.price === 0 ? 'رایگان' : `${course.price.toLocaleString('fa-IR')} تومان`}</span>
@@ -116,15 +259,22 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
               {course.discount_price && course.discount_price < course.price && (
                 <div className="flex items-center justify-between text-rose-600">
-                  <span>تخفیف ویژه:</span>
+                  <span>تخفیف ویژه دوره:</span>
                   <span>-{(course.price - course.discount_price).toLocaleString('fa-IR')} تومان</span>
+                </div>
+              )}
+
+              {appliedCoupon && appliedCoupon.discount_amount > 0 && (
+                <div className="flex items-center justify-between text-emerald-600 font-bold">
+                  <span>تخفیف کوپن ({appliedCoupon.discount_percent}٪):</span>
+                  <span>-{appliedCoupon.discount_amount.toLocaleString('fa-IR')} تومان</span>
                 </div>
               )}
 
               <div className="flex items-center justify-between font-black text-slate-900 pt-2 border-t border-slate-200">
                 <span>مبلغ قابل پرداخت:</span>
-                <span className="text-lg text-indigo-600">
-                  {course.final_price === 0 ? 'رایگان' : `${course.final_price.toLocaleString('fa-IR')} تومان`}
+                <span className="text-base sm:text-lg text-indigo-600">
+                  {payablePrice === 0 ? 'رایگان' : `${payablePrice.toLocaleString('fa-IR')} تومان`}
                 </span>
               </div>
             </div>
@@ -142,7 +292,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
                 <button
                   onClick={() => navigate('/login?redirect=' + encodeURIComponent(window.location.pathname))}
-                  className="w-full py-3.5 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md transition-all text-center"
+                  className="w-full py-3.5 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md transition-all text-center cursor-pointer"
                 >
                   ورود یا ثبت‌نام سریع
                 </button>
@@ -164,7 +314,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       <Loader2 className="w-5 h-5 animate-spin" />
                       در حال پردازش...
                     </>
-                  ) : course.is_free ? (
+                  ) : payablePrice === 0 ? (
                     <>
                       <Sparkles className="w-5 h-5" />
                       شروع یادگیری رایگان

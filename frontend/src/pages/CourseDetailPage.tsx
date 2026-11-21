@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import { Course } from '../types';
 import { CheckoutModal } from '../components/CheckoutModal';
+import { VideoPlayer } from '../components/VideoPlayer';
 import { 
   PlayCircle, 
   Lock, 
@@ -160,11 +161,10 @@ export const CourseDetailPage: React.FC = () => {
                   ویدیوی معرفی و سرفصل‌های دوره (رایگان)
                 </h3>
                 <div className="relative aspect-video rounded-2xl overflow-hidden bg-slate-950 shadow-inner">
-                  <video
-                    src={course.intro_video_url}
-                    controls
+                  <VideoPlayer
+                    url={course.intro_video_url}
                     poster={course.cover_image_url}
-                    className="w-full h-full object-contain"
+                    title={`معرفی دوره ${course.title}`}
                   />
                 </div>
               </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../api/client';
 import { Course, WatchLessonData } from '../types';
+import { VideoPlayer } from '../components/VideoPlayer';
 import { 
   ArrowRight, 
   PlayCircle, 
@@ -155,12 +156,11 @@ export const CourseWatchPlayerPage: React.FC = () => {
                   </Link>
                 </div>
               ) : currentLesson?.video_url ? (
-                <video
+                <VideoPlayer
                   key={currentLesson.video_url}
-                  src={currentLesson.video_url}
-                  controls
-                  autoPlay
-                  className="w-full h-full object-contain"
+                  url={currentLesson.video_url}
+                  autoPlay={true}
+                  title={currentLesson.title}
                 />
               ) : (
                 <div className="text-center p-6 space-y-2">

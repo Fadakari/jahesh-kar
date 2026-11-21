@@ -112,7 +112,7 @@ export const Footer: React.FC = () => {
             <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl border border-white/10 inline-flex items-center justify-center hover:bg-white/20 transition-all [&_img]:w-24 [&_img]:h-24 [&_img]:bg-white [&_img]:rounded-xl [&_img]:p-1">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: `<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=752620&Code=1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq' alt='' style='cursor:pointer' code='1jpueDeeZQVmkFdGo71Wt4m9mV0YnhDq'></a>`
+                  __html: `<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=730655&Code=xwiz64Rc64Z7YCaHWIp3rgpSFT703j2u'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=730655&Code=xwiz64Rc64Z7YCaHWIp3rgpSFT703j2u' alt='' style='cursor:pointer' code='xwiz64Rc64Z7YCaHWIp3rgpSFT703j2u'></a>`
                 }}
               />
             </div>
