@@ -22,12 +22,13 @@ if frontend_dist.exists():
 else:
     print(f"[ERROR] Frontend dist not found at {frontend_dist}")
 
-# 2. Package Backend
+# 2. Package Backend (Strictly exclude database, .env, and local media)
 backend_dir = BASE_DIR / "backend"
 backend_zip = UPLOAD_DIR / "jaheshkar_backend.zip"
 
-exclude_dirs = {"__pycache__", ".git", "venv", ".idea", ".vscode"}
-exclude_extensions = {".pyc", ".pyo", ".log"}
+exclude_dirs = {"__pycache__", ".git", "venv", ".idea", ".vscode", "media"}
+exclude_extensions = {".pyc", ".pyo", ".log", ".sqlite3"}
+exclude_filenames = {"db.sqlite3", ".env", "db.sqlite3-journal"}
 
 print(f"Compressing backend from {backend_dir} to {backend_zip}...")
 with zipfile.ZipFile(backend_zip, "w", zipfile.ZIP_DEFLATED) as zf:
@@ -35,6 +36,8 @@ with zipfile.ZipFile(backend_zip, "w", zipfile.ZIP_DEFLATED) as zf:
         # Exclude directories
         dirs[:] = [d for d in dirs if d not in exclude_dirs]
         for file in files:
+            if file in exclude_filenames:
+                continue
             file_path = Path(root) / file
             if file_path.suffix in exclude_extensions:
                 continue
